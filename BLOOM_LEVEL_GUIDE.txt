@@ -1,0 +1,99 @@
+puffpuff — current Bloom levels (November 1, 2026)
+60 playable levels. Levels 61–100 remain drafts.
+NEW marks the first appearance of a mechanic, board size or shaped footprint.
+Pearl targets are optional: finish within that many taps for +1 Glow.
+Pebbles cannot be tapped; gaps are empty water. All coral taps include the tapped coral.
+Up/down: self plus immediate above/below. Left/right: self plus immediate left/right.
+Diagonal coral begins at 52; whole-row/column coral begins at 60.
+Tap limits below exclude extra-move power-ups. Existing started saves retain their original footprint.
+
+01 | Single coral, 1×1 | 6 taps | ordinary coral
+     NEW: Single coral, tap to glow
+02 | Square, 2×2 | 10 taps | ordinary coral
+     NEW: 2×2 board, side neighbors
+03 | Square, 2×2 | 12 taps | ordinary coral
+     NEW: lit coral can turn off
+04 | Square, 3×3 | 14 taps | ordinary coral
+     NEW: 3×3 board, full cross-shaped ripple
+05 | Square, 3×3 | 18 taps | ordinary coral
+06 | Square, 3×3 | 18 taps | ordinary coral
+07 | Square, 3×3 | 18 taps | ordinary coral
+08 | Square, 3×3 | 18 taps | ordinary coral
+09 | Square, 3×3 | 18 taps | ordinary coral
+10 | Square, 4×4 | 24 taps | ordinary coral
+     NEW: 4×4 board
+11 | Square, 4×4 | 24 taps | pearl target 4
+     NEW: pearl bonus
+12 | Square, 4×4 | 24 taps | pearl target 4
+13 | Square, 4×4 | 24 taps | pearl target 5
+14 | Square, 4×4 | 24 taps | pearl target 5
+15 | Square, 4×4 | 24 taps | pearl target 5
+16 | Square, 4×4 | 24 taps | pearl target 5
+17 | Square, 4×4 | 24 taps | pearl target 5
+18 | Square, 4×4 | 24 taps | pearl target 5
+19 | Square, 4×4 | 24 taps | pearl target 5
+20 | Square, 4×4 | 30 taps | pearl target 5
+21 | Square, 4×4 | 30 taps | 2 pebbles
+     NEW: pebbles
+22 | Square, 4×4 | 30 taps | 2 pebbles
+23 | Square, 4×4 | 30 taps | 2 pebbles
+24 | Square, 4×4 | 30 taps | 2 pebbles
+25 | Square, 4×4 | 30 taps | 2 pebbles
+26 | Square, 4×4 | 30 taps | 2 pebbles
+27 | Round reef, 4×4 | 30 taps | ordinary coral
+     NEW: shaped board / open-water gaps, Round reef
+28 | Pebble lagoon, 4×4 | 30 taps | 2 pebbles, interior water gap
+     NEW: Pebble lagoon; first interior water gap
+29 | Coral fan, 4×4 | 30 taps | ordinary coral
+     NEW: Coral fan
+30 | Sloping shelf, 4×4 | 30 taps | 2 pebbles, pearl target 6
+     NEW: Sloping shelf
+31 | Crescent cove, 4×4 | 30 taps | ordinary coral
+     NEW: Crescent cove
+32 | Soft steps, 4×4 | 30 taps | ordinary coral
+     NEW: Soft steps
+33 | Round reef, 4×4 | 30 taps | 2 pebbles
+34 | Coral loop, 4×4 | 30 taps | ordinary coral, enclosed water pocket
+     NEW: Coral loop
+35 | Split lagoon, 4×4 | 30 taps | 2 pebbles, two interior water gaps
+     NEW: Split lagoon
+36 | Sloping shelf, 4×4 | 30 taps | 1 up/down coral
+     NEW: up/down coral
+37 | Square, 4×4 | 30 taps | 1 up/down coral
+38 | Soft steps, 4×4 | 30 taps | 2 pebbles, 2 up/down coral
+39 | Round reef, 4×4 | 30 taps | ordinary coral
+40 | Square, 4×4 | 30 taps | 2 pebbles, pearl target 7
+41 | Round reef, 5×5 | 34 taps | 1 left/right coral
+     NEW: left/right coral, 5×5 board
+42 | Sloping shelf, 5×5 | 34 taps | 1 left/right coral
+43 | Diamond reef, 5×5 | 34 taps | ordinary coral
+     NEW: Diamond reef
+44 | Reef ribbon, 5×5 | 34 taps | 2 pebbles
+     NEW: Reef ribbon
+45 | Little cove, 5×5 | 34 taps | 1 up/down coral
+     NEW: Little cove
+
+
+NEW PLAYABLE LEVELS 46–60
+First appearances are marked FIRST.
+46  Square reef    Up/down + left/right together — FIRST combination
+47  Round reef     Up/down + left/right + 2 pebbles
+48  Reef ribbon    Up/down + left/right
+49  Square reef    Ordinary coral
+50  Sloping shelf  Up/down + left/right + 2 pebbles; pearl target 8
+51  Coral arch     Up/down + left/right
+52  Small square   Diagonal coral — FIRST; free unnumbered practice
+53  Small square   Diagonal coral + 2 pebbles
+54  Small square   2 diagonal corals + 2 pebbles
+55  Round reef     Diagonal + up/down
+56  Square reef    Diagonal + left/right
+57  Little cove    Ordinary coral
+58  Square reef    Diagonal + up/down + left/right + 2 pebbles
+59  Coral arch     Diagonal coral + 2 pebbles
+60  Square reef    Whole row + whole column — FIRST; free unnumbered practice; pearl target 8
+
+Every new board has 34 taps. Shortest solutions are 3–6 taps.
+Diagonal: self and four immediate diagonal neighbors.
+Whole line: every coral in its row/column, including self; crosses gaps/pebbles without changing them.
+Lighter: one extra collectible on first clears of 7, 14, 21…; shown in success bubbles.
+Covers: planned after 100 as required permanent movable board tools, not collectible prizes.

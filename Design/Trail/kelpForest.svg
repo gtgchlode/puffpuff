@@ -1,0 +1,37 @@
+<svg xmlns:ns0="http://www.w3.org/2000/svg" xmlns="http://www.w3.org/2000/svg" width="600" height="600" viewBox="0 0 300 300"><ns0:g id="kelpForest">
+        <ns0:path id="lagoon-shadow" d="M261,257C261,265.837 211.304,273 150,273C88.696,273 39,265.837 39,257C39,248.163 88.696,241 150,241C211.304,241 261,248.163 261,257Z" style="fill:rgb(108,163,151);fill-rule:nonzero;" />
+        <ns0:path id="root-mound" d="M43,244C54,225 78,223 105,229C130,220 154,218 179,228C204,218 245,230 256,246C258,259 224,265 155,267C93,270 39,260 43,244Z" style="fill:rgb(204,206,160);fill-rule:nonzero;stroke:rgb(66,119,110);stroke-width:2.4px;" />
+        <ns0:path id="frond-0" d="M69,247C87,203 53,185 66,151C85,115 62,129 79,104C103,123 84,118 89,152C100,183 80,214 80,248L69,247Z" style="fill:rgb(87,155,130);fill-rule:nonzero;stroke:rgb(66,119,110);stroke-width:2.8px;" />
+        <ns0:path id="frond-vein-0" d="M74,246C91,208 64,180 76,151C91,115 74,136 81,114" style="fill:none;fill-rule:nonzero;stroke:rgb(196,223,192);stroke-width:1.8px;" />
+        <ns0:path id="leaf-0-0" d="M77,164C45,155 37,136 47,124C69,127 71,149 77,164Z" style="fill:rgb(150,205,165);fill-rule:nonzero;stroke:rgb(66,119,110);stroke-width:1.9px;" />
+        <ns0:path id="leaf-0-1" d="M77,194.333C99,185.333 107,166.333 97,154.333C75,157.333 73,179.333 77,194.333Z" style="fill:rgb(150,205,165);fill-rule:nonzero;stroke:rgb(66,119,110);stroke-width:1.9px;" />
+        <ns0:path id="leaf-0-2" d="M77,224.667C45,215.667 37,196.667 47,184.667C69,187.667 71,209.667 77,224.667Z" style="fill:rgb(150,205,165);fill-rule:nonzero;stroke:rgb(66,119,110);stroke-width:1.9px;" />
+        <ns0:path id="frond-1" d="M108,247C126,203 92,185 105,151C124,115 101,85 118,60C142,79 123,118 128,152C139,183 119,214 119,248L108,247Z" style="fill:rgb(113,183,152);fill-rule:nonzero;stroke:rgb(66,119,110);stroke-width:2.8px;" />
+        <ns0:path id="frond-vein-1" d="M113,246C130,208 103,180 115,151C130,115 113,92 120,70" style="fill:none;fill-rule:nonzero;stroke:rgb(196,223,192);stroke-width:1.8px;" />
+        <ns0:path id="leaf-1-0" d="M116,120C84,111 76,92 86,80C108,83 110,105 116,120Z" style="fill:rgb(150,205,165);fill-rule:nonzero;stroke:rgb(66,119,110);stroke-width:1.9px;" />
+        <ns0:path id="leaf-1-1" d="M116,165C138,156 146,137 136,125C114,128 112,150 116,165Z" style="fill:rgb(150,205,165);fill-rule:nonzero;stroke:rgb(66,119,110);stroke-width:1.9px;" />
+        <ns0:path id="leaf-1-2" d="M116,210C84,201 76,182 86,170C108,173 110,195 116,210Z" style="fill:rgb(150,205,165);fill-rule:nonzero;stroke:rgb(66,119,110);stroke-width:1.9px;" />
+        <ns0:path id="frond-2" d="M148,247C166,203 132,185 145,151C164,115 141,62 158,37C182,56 163,118 168,152C179,183 159,214 159,248L148,247Z" style="fill:rgb(132,199,162);fill-rule:nonzero;stroke:rgb(66,119,110);stroke-width:2.8px;" />
+        <ns0:path id="frond-vein-2" d="M153,246C170,208 143,180 155,151C170,115 153,69 160,47" style="fill:none;fill-rule:nonzero;stroke:rgb(196,223,192);stroke-width:1.8px;" />
+        <ns0:path id="leaf-2-0" d="M156,97C124,88 116,69 126,57C148,60 150,82 156,97Z" style="fill:rgb(150,205,165);fill-rule:nonzero;stroke:rgb(66,119,110);stroke-width:1.9px;" />
+        <ns0:path id="leaf-2-1" d="M156,149.667C178,140.667 186,121.667 176,109.667C154,112.667 152,134.667 156,149.667Z" style="fill:rgb(150,205,165);fill-rule:nonzero;stroke:rgb(66,119,110);stroke-width:1.9px;" />
+        <ns0:path id="leaf-2-2" d="M156,202.333C124,193.333 116,174.333 126,162.333C148,165.333 150,187.333 156,202.333Z" style="fill:rgb(150,205,165);fill-rule:nonzero;stroke:rgb(66,119,110);stroke-width:1.9px;" />
+        <ns0:path id="frond-3" d="M192,247C210,203 176,185 189,151C208,115 185,101 202,76C226,95 207,118 212,152C223,183 203,214 203,248L192,247Z" style="fill:rgb(94,170,140);fill-rule:nonzero;stroke:rgb(66,119,110);stroke-width:2.8px;" />
+        <ns0:path id="frond-vein-3" d="M197,246C214,208 187,180 199,151C214,115 197,108 204,86" style="fill:none;fill-rule:nonzero;stroke:rgb(196,223,192);stroke-width:1.8px;" />
+        <ns0:path id="leaf-3-0" d="M200,136C168,127 160,108 170,96C192,99 194,121 200,136Z" style="fill:rgb(150,205,165);fill-rule:nonzero;stroke:rgb(66,119,110);stroke-width:1.9px;" />
+        <ns0:path id="leaf-3-1" d="M200,175.667C222,166.667 230,147.667 220,135.667C198,138.667 196,160.667 200,175.667Z" style="fill:rgb(150,205,165);fill-rule:nonzero;stroke:rgb(66,119,110);stroke-width:1.9px;" />
+        <ns0:path id="leaf-3-2" d="M200,215.333C168,206.333 160,187.333 170,175.333C192,178.333 194,200.333 200,215.333Z" style="fill:rgb(150,205,165);fill-rule:nonzero;stroke:rgb(66,119,110);stroke-width:1.9px;" />
+        <ns0:path id="frond-4" d="M227,247C245,203 211,185 224,151C243,115 220,149 237,124C261,143 242,118 247,152C258,183 238,214 238,248L227,247Z" style="fill:rgb(117,175,145);fill-rule:nonzero;stroke:rgb(66,119,110);stroke-width:2.8px;" />
+        <ns0:path id="frond-vein-4" d="M232,246C249,208 222,180 234,151C249,115 232,156 239,134" style="fill:none;fill-rule:nonzero;stroke:rgb(196,223,192);stroke-width:1.8px;" />
+        <ns0:path id="leaf-4-0" d="M235,184C203,175 195,156 205,144C227,147 229,169 235,184Z" style="fill:rgb(150,205,165);fill-rule:nonzero;stroke:rgb(66,119,110);stroke-width:1.9px;" />
+        <ns0:path id="leaf-4-1" d="M235,207.667C257,198.667 265,179.667 255,167.667C233,170.667 231,192.667 235,207.667Z" style="fill:rgb(150,205,165);fill-rule:nonzero;stroke:rgb(66,119,110);stroke-width:1.9px;" />
+        <ns0:path id="leaf-4-2" d="M235,231.333C203,222.333 195,203.333 205,191.333C227,194.333 229,216.333 235,231.333Z" style="fill:rgb(150,205,165);fill-rule:nonzero;stroke:rgb(66,119,110);stroke-width:1.9px;" />
+        <ns0:path id="root-pebble-0" d="M71,249C71,251.209 67.866,253 64,253C60.134,253 57,251.209 57,249C57,246.791 60.134,245 64,245C67.866,245 71,246.791 71,249Z" style="fill:rgb(234,187,117);fill-rule:nonzero;stroke:rgb(66,119,110);stroke-width:1.3px;" />
+        <ns0:path id="root-pebble-1" d="M98,255C98,257.209 94.866,259 91,259C87.134,259 84,257.209 84,255C84,252.791 87.134,251 91,251C94.866,251 98,252.791 98,255Z" style="fill:rgb(234,187,117);fill-rule:nonzero;stroke:rgb(66,119,110);stroke-width:1.3px;" />
+        <ns0:path id="root-pebble-2" d="M144,254C144,256.209 140.866,258 137,258C133.134,258 130,256.209 130,254C130,251.791 133.134,250 137,250C140.866,250 144,251.791 144,254Z" style="fill:rgb(234,187,117);fill-rule:nonzero;stroke:rgb(66,119,110);stroke-width:1.3px;" />
+        <ns0:path id="root-pebble-3" d="M199,251C199,253.209 195.866,255 192,255C188.134,255 185,253.209 185,251C185,248.791 188.134,247 192,247C195.866,247 199,248.791 199,251Z" style="fill:rgb(234,187,117);fill-rule:nonzero;stroke:rgb(66,119,110);stroke-width:1.3px;" />
+        <ns0:path id="root-pebble-4" d="M229,249C229,251.209 225.866,253 222,253C218.134,253 215,251.209 215,249C215,246.791 218.134,245 222,245C225.866,245 229,246.791 229,249Z" style="fill:rgb(234,187,117);fill-rule:nonzero;stroke:rgb(66,119,110);stroke-width:1.3px;" />
+        <ns0:g transform="matrix(1,0,0,1,150,292)">
+            </ns0:g>
+    </ns0:g>
+    </svg>

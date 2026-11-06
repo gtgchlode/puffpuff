@@ -1,0 +1,13 @@
+// Matches Design/Powerups/Current-Changer.svg.
+import SwiftUI
+extension ReefPowerupArt {
+    static let current:[Layer] = [
+        Layer(path:{var p=Path();p.move(to:CGPoint(x:49,y:10));p.addCurve(to:CGPoint(x:88,y:52),control1:CGPoint(x:72,y:7),control2:CGPoint(x:92,y:28));p.addCurve(to:CGPoint(x:39,y:87),control1:CGPoint(x:85,y:76),control2:CGPoint(x:62,y:94));p.addCurve(to:CGPoint(x:14,y:37),control1:CGPoint(x:14,y:81),control2:CGPoint(x:7,y:58));p.addCurve(to:CGPoint(x:49,y:10),control1:CGPoint(x:20,y:21),control2:CGPoint(x:34,y:12));p.closeSubpath();return p}(),fill:Color(red:0.50196,green:0.79216,blue:0.73333),stroke:Color(red:0.15686,green:0.34902,blue:0.34118),width:3),
+        Layer(path:{var p=Path();p.move(to:CGPoint(x:21,y:41));p.addCurve(to:CGPoint(x:59,y:22),control1:CGPoint(x:26,y:23),control2:CGPoint(x:45,y:17));return p}(),fill:nil,stroke:Color(red:1.00000,green:0.94510,blue:0.78824),width:5),
+        Layer(path:{var p=Path();p.move(to:CGPoint(x:69,y:73));p.addQuadCurve(to:CGPoint(x:37,y:78),control:CGPoint(x:56,y:87));return p}(),fill:nil,stroke:Color(red:0.35686,green:0.66275,blue:0.61176),width:4),
+        Layer(path:{var p=Path();p.move(to:CGPoint(x:29,y:55));p.addCurve(to:CGPoint(x:60,y:33),control1:CGPoint(x:21,y:35),control2:CGPoint(x:43,y:25));p.addCurve(to:CGPoint(x:58,y:62),control1:CGPoint(x:73,y:40),control2:CGPoint(x:70,y:58));p.addCurve(to:CGPoint(x:44,y:47),control1:CGPoint(x:44,y:67),control2:CGPoint(x:35,y:54));p.addQuadCurve(to:CGPoint(x:56,y:48),control:CGPoint(x:51,y:41));return p}(),fill:nil,stroke:Color(red:0.15686,green:0.34902,blue:0.34118),width:10),
+        Layer(path:{var p=Path();p.move(to:CGPoint(x:29,y:55));p.addCurve(to:CGPoint(x:60,y:33),control1:CGPoint(x:21,y:35),control2:CGPoint(x:43,y:25));p.addCurve(to:CGPoint(x:58,y:62),control1:CGPoint(x:73,y:40),control2:CGPoint(x:70,y:58));p.addCurve(to:CGPoint(x:44,y:47),control1:CGPoint(x:44,y:67),control2:CGPoint(x:35,y:54));p.addQuadCurve(to:CGPoint(x:56,y:48),control:CGPoint(x:51,y:41));return p}(),fill:nil,stroke:Color(red:1.00000,green:0.94510,blue:0.78824),width:5),
+        Layer(path:{var p=Path();p.move(to:CGPoint(x:65,y:18));p.addLine(to:CGPoint(x:83,y:26));p.addLine(to:CGPoint(x:67,y:39));p.addLine(to:CGPoint(x:69,y:29));p.closeSubpath();return p}(),fill:Color(red:0.95686,green:0.77647,blue:0.41961),stroke:Color(red:0.15686,green:0.34902,blue:0.34118),width:2.5),
+        Layer(path:{var p=Path();p.move(to:CGPoint(x:23,y:63));p.addLine(to:CGPoint(x:38,y:74));p.addLine(to:CGPoint(x:20,y:81));p.addLine(to:CGPoint(x:24,y:72));p.closeSubpath();return p}(),fill:Color(red:0.95686,green:0.77647,blue:0.41961),stroke:Color(red:0.15686,green:0.34902,blue:0.34118),width:2.5),
+    ]
+}

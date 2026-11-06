@@ -1,0 +1,32 @@
+<svg xmlns:ns0="http://www.w3.org/2000/svg" xmlns="http://www.w3.org/2000/svg" width="600" height="600" viewBox="0 0 300 300"><ns0:g id="chestMint">
+        <ns0:path id="chest-shadow" d="M253,258C253,265.732 207.333,272 151,272C94.667,272 49,265.732 49,258C49,250.268 94.667,244 151,244C207.333,244 253,250.268 253,258Z" style="fill:rgb(108,163,151);fill-rule:nonzero;" />
+        <ns0:path id="rounded-lid" d="M53,167L54,141C54,93 88,80 147,81C205,77 243,96 246,143L246,166L53,167Z" style="fill:rgb(140,199,181);fill-rule:nonzero;stroke:rgb(130,102,83);stroke-width:3px;" />
+        <ns0:path id="lid-light" d="M67,140C67,105 96,94 143,94C195,87 228,106 232,135" style="fill:none;fill-rule:nonzero;stroke:rgb(255,232,184);stroke-width:4px;" />
+        <ns0:path id="lid-plank-0" d="M90,102C86,119 87,139 88,155" style="fill:none;fill-rule:nonzero;stroke:rgb(114,157,138);stroke-width:1.8px;" />
+        <ns0:path id="lid-plank-1" d="M122,102C118,119 119,139 120,155" style="fill:none;fill-rule:nonzero;stroke:rgb(114,157,138);stroke-width:1.8px;" />
+        <ns0:path id="lid-plank-2" d="M177,102C173,119 174,139 175,155" style="fill:none;fill-rule:nonzero;stroke:rgb(114,157,138);stroke-width:1.8px;" />
+        <ns0:path id="lid-plank-3" d="M210,102C206,119 207,139 208,155" style="fill:none;fill-rule:nonzero;stroke:rgb(114,157,138);stroke-width:1.8px;" />
+        <ns0:path id="chest-body" d="M54,153C114,143 191,144 244,153L238,234C230,255 84,261 61,235L54,153Z" style="fill:rgb(218,180,134);fill-rule:nonzero;stroke:rgb(130,102,83);stroke-width:3px;" />
+        <ns0:path id="body-shadow" d="M211,151L244,153L238,234C227,246 212,248 199,250L205,174L211,151Z" style="fill:rgb(188,144,105);fill-rule:nonzero;" />
+        <ns0:g id="wood-grain-0" transform="matrix(0.922581,0,0,1,17.496774,0)">
+            <ns0:path d="M71,177C105,170 130,182 158,177C184,171 203,180 226,175" style="fill:none;fill-rule:nonzero;stroke:rgb(185,140,100);stroke-width:1.7px;" />
+        </ns0:g>
+        <ns0:g id="wood-grain-1" transform="matrix(0.922581,0,0,0.810192,17.496774,38.103035)">
+            <ns0:path d="M71,203C105,196 130,208 158,203C184,197 203,206 226,201" style="fill:none;fill-rule:nonzero;stroke:rgb(185,140,100);stroke-width:1.7px;" />
+        </ns0:g>
+        <ns0:g id="wood-grain-2" transform="matrix(0.922581,0,0,1,17.496774,0)">
+            <ns0:path d="M71,228C105,221 130,233 158,228C184,222 203,231 226,226" style="fill:none;fill-rule:nonzero;stroke:rgb(185,140,100);stroke-width:1.7px;" />
+        </ns0:g>
+        <ns0:path id="left-band" d="M77,150L96,148L96,249L78,245L77,150Z" style="fill:rgb(140,199,181);fill-rule:nonzero;stroke:rgb(130,102,83);stroke-width:1.8px;" />
+        <ns0:path id="right-band" d="M201,148L219,151L218,245L201,249L201,148Z" style="fill:rgb(140,199,181);fill-rule:nonzero;stroke:rgb(130,102,83);stroke-width:1.8px;" />
+        <ns0:path id="rim" d="M54,151C107,142 194,143 244,151L244,167C182,159 105,159 55,167L54,151Z" style="fill:rgb(234,187,117);fill-rule:nonzero;stroke:rgb(130,102,83);stroke-width:2px;" />
+        <ns0:path id="shell-clasp" d="M145,205C129,195 123,181 133,174C135,161 149,160 154,166C165,159 176,170 173,181C180,192 164,203 155,206L145,205Z" style="fill:rgb(255,232,184);fill-rule:nonzero;stroke:rgb(167,122,79);stroke-width:2px;" />
+        <ns0:path id="clasp-ridges" d="M150,201L138,176M153,200L152,170M157,201L167,178" style="fill:none;fill-rule:nonzero;stroke:rgb(234,187,117);stroke-width:1.6px;" />
+        <ns0:path id="pearl-rivet-0" d="M88.8,180C88.8,181.546 87.546,182.8 86,182.8C84.454,182.8 83.2,181.546 83.2,180C83.2,178.454 84.454,177.2 86,177.2C87.546,177.2 88.8,178.454 88.8,180Z" style="fill:rgb(255,232,184);fill-rule:nonzero;stroke:rgb(155,121,85);stroke-width:0.7px;" />
+        <ns0:path id="pearl-rivet-1" d="M89.8,229C89.8,230.546 88.546,231.8 87,231.8C85.454,231.8 84.2,230.546 84.2,229C84.2,227.454 85.454,226.2 87,226.2C88.546,226.2 89.8,227.454 89.8,229Z" style="fill:rgb(255,232,184);fill-rule:nonzero;stroke:rgb(155,121,85);stroke-width:0.7px;" />
+        <ns0:path id="pearl-rivet-2" d="M211.8,180C211.8,181.546 210.546,182.8 209,182.8C207.454,182.8 206.2,181.546 206.2,180C206.2,178.454 207.454,177.2 209,177.2C210.546,177.2 211.8,178.454 211.8,180Z" style="fill:rgb(255,232,184);fill-rule:nonzero;stroke:rgb(155,121,85);stroke-width:0.7px;" />
+        <ns0:path id="pearl-rivet-3" d="M211.8,230C211.8,231.546 210.546,232.8 209,232.8C207.454,232.8 206.2,231.546 206.2,230C206.2,228.454 207.454,227.2 209,227.2C210.546,227.2 211.8,228.454 211.8,230Z" style="fill:rgb(255,232,184);fill-rule:nonzero;stroke:rgb(155,121,85);stroke-width:0.7px;" />
+        <ns0:g transform="matrix(1,0,0,1,150,292)">
+            </ns0:g>
+    </ns0:g>
+    </svg>

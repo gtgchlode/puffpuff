@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape" width="400" height="400" viewBox="0 0 100 100"><g id="rosyFan-awake">
+<ellipse id="seabed" cx="50" cy="89" rx="28" ry="5" fill="#06242B" opacity=".45"/>
+<path id="left-sway-from-base" d="M 45 81 C 24 72 11 59 10 42 C 10 34 17 31 23 35 C 18 25 23 17 31 20 C 34 21 36 25 38 29 L 54 63 Z" fill="#EB8196"/>
+<path id="right-sway-from-base" d="M 55 81 C 76 72 89 59 90 43 C 91 35 83 31 77 35 C 82 25 76 17 69 20 C 65 21 63 26 62 30 L 46 63 Z" fill="#EB8196"/>
+<path id="body-sway-from-base" d="M 30 79 C 22 66 23 51 29 43 C 21 34 27 23 36 28 C 33 15 41 10 48 17 C 52 7 64 12 63 24 C 72 16 81 25 75 35 C 84 40 78 53 70 61 C 62 69 61 78 66 86 C 67 93 31 93 33 86 Z" fill="#EB8196"/>
+<path id="branch-highlights" d="M 48 57 C 46 43 44 35 42 26 M 38 58 C 32 49 26 44 20 40 M 60 57 C 66 46 71 41 78 39" fill="none" stroke="#FFB4BD" stroke-width="2.8" stroke-linecap="round" opacity=".8"/>
+<circle id="polyp-0" cx="48" cy="21" r="1.8" fill="#FFB4BD"/>
+<circle id="polyp-1" cx="32" cy="32" r="1.6" fill="#FFB4BD"/>
+<circle id="polyp-2" cx="66" cy="30" r="1.7" fill="#FFB4BD"/>
+<circle id="polyp-3" cx="17" cy="45" r="1.5" fill="#FFB4BD"/>
+<circle id="polyp-4" cx="83" cy="46" r="1.5" fill="#FFB4BD"/>
+</g></svg>

@@ -1,0 +1,103 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1120" height="800" viewBox="0 0 1120 800">
+<rect id="lagoon" width="1120" height="800" fill="#AADED0"/>
+<path id="sand" d="M 0 715 Q 300 675 560 715 Q 800 760 1120 700 L 1120 800 L 0 800 Z" fill="#EDDFB0"/>
+<text x="60" y="65" fill="#143F42" font-size="30" font-family="Chalkboard, sans-serif">Directional corals</text>
+<g transform="translate(140,90) scale(3.2)"><g id="hero-tideSpires-lit">
+<ellipse cx="50" cy="89" rx="28" ry="5" fill="#06242B" opacity=".16"/>
+<path id="hero-left-sway-from-base" d="M 46 85 C 31 76 27 65 28 51 L 27 34 C 20 30 19 22 23 19 C 27 16 31 22 32 27 L 33 15 C 34 9 41 10 41 17 L 39 37 C 36 53 38 66 47 73 Z" fill="#70C7B5"/>
+<path id="hero-right-sway-from-base" d="M 52 85 C 65 76 70 63 70 48 L 72 32 C 79 28 81 20 77 18 C 73 16 70 23 68 26 L 67 15 C 66 9 59 12 60 18 L 61 38 C 63 51 60 66 52 74 Z" fill="#70C7B5"/>
+<path id="hero-body-sway-from-base" d="M 35 88 C 40 81 43 74 43 62 L 45 29 C 40 23 39 16 43 13 C 47 10 50 16 51 21 L 54 9 C 56 3 63 6 61 13 L 56 30 L 56 62 C 56 74 60 81 65 88 C 62 94 39 94 35 88 Z" fill="#70C7B5"/>
+<path id="hero-highlights" d="M 32 40 C 31 53 34 65 38 71 M 66 40 C 67 53 63 64 61 69 M 51 32 L 49 72 M 45 85 L 47 79" fill="none" stroke="#D8F3BC" stroke-width="2.8" stroke-linecap="round"/>
+<circle id="hero-polyp-0" cx="36" cy="20" r="1.4" fill="#D8F3BC"/>
+<circle id="hero-polyp-1" cx="25" cy="24" r="1.2" fill="#D8F3BC"/>
+<circle id="hero-polyp-2" cx="65" cy="22" r="1.3" fill="#D8F3BC"/>
+<circle id="hero-polyp-3" cx="74" cy="25" r="1.2" fill="#D8F3BC"/>
+<circle id="hero-polyp-4" cx="56" cy="13" r="1.4" fill="#D8F3BC"/>
+<circle id="hero-polyp-5" cx="46" cy="77" r="1.4" fill="#D8F3BC"/>
+<circle id="hero-polyp-6" cx="55" cy="86" r="1.1" fill="#D8F3BC"/>
+</g></g>
+<text x="300" y="435" text-anchor="middle" fill="#143F42" font-size="25" font-family="Chalkboard, sans-serif">Tide spires</text>
+<g transform="translate(90,490) scale(1.25)"><circle cx="50" cy="50" r="48" fill="#345F5D" stroke="#658E84" stroke-width="1.5"/><g id="tideSpiressleepy-tideSpires-sleepy">
+<ellipse cx="50" cy="89" rx="28" ry="5" fill="#06242B" opacity=".16"/>
+<path id="tideSpiressleepy-left-sway-from-base" d="M 46 85 C 31 76 27 65 28 51 L 27 34 C 20 30 19 22 23 19 C 27 16 31 22 32 27 L 33 15 C 34 9 41 10 41 17 L 39 37 C 36 53 38 66 47 73 Z" fill="#73978D"/>
+<path id="tideSpiressleepy-right-sway-from-base" d="M 52 85 C 65 76 70 63 70 48 L 72 32 C 79 28 81 20 77 18 C 73 16 70 23 68 26 L 67 15 C 66 9 59 12 60 18 L 61 38 C 63 51 60 66 52 74 Z" fill="#73978D"/>
+<path id="tideSpiressleepy-body-sway-from-base" d="M 35 88 C 40 81 43 74 43 62 L 45 29 C 40 23 39 16 43 13 C 47 10 50 16 51 21 L 54 9 C 56 3 63 6 61 13 L 56 30 L 56 62 C 56 74 60 81 65 88 C 62 94 39 94 35 88 Z" fill="#73978D"/>
+</g><g id="tideSpiressleepy-direction-icon"><ellipse cx="50" cy="50" rx="14" ry="15" fill="#244F50" opacity=".88"/><path d="M 46 59 L 46 41 M 41 46 L 46 41 L 51 46 M 55 41 L 55 59 M 50 54 L 55 59 L 60 54" fill="none" stroke="#FFF1C1" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"/></g></g>
+<g transform="translate(235,490) scale(1.25)"><circle cx="50" cy="50" r="48" fill="#C6E3C7" stroke="#FFF5D1" stroke-width="1.5"/><g id="tideSpireslit-tideSpires-lit">
+<ellipse cx="50" cy="89" rx="28" ry="5" fill="#06242B" opacity=".16"/>
+<path id="tideSpireslit-left-sway-from-base" d="M 46 85 C 31 76 27 65 28 51 L 27 34 C 20 30 19 22 23 19 C 27 16 31 22 32 27 L 33 15 C 34 9 41 10 41 17 L 39 37 C 36 53 38 66 47 73 Z" fill="#70C7B5"/>
+<path id="tideSpireslit-right-sway-from-base" d="M 52 85 C 65 76 70 63 70 48 L 72 32 C 79 28 81 20 77 18 C 73 16 70 23 68 26 L 67 15 C 66 9 59 12 60 18 L 61 38 C 63 51 60 66 52 74 Z" fill="#70C7B5"/>
+<path id="tideSpireslit-body-sway-from-base" d="M 35 88 C 40 81 43 74 43 62 L 45 29 C 40 23 39 16 43 13 C 47 10 50 16 51 21 L 54 9 C 56 3 63 6 61 13 L 56 30 L 56 62 C 56 74 60 81 65 88 C 62 94 39 94 35 88 Z" fill="#70C7B5"/>
+<path id="tideSpireslit-highlights" d="M 32 40 C 31 53 34 65 38 71 M 66 40 C 67 53 63 64 61 69 M 51 32 L 49 72 M 45 85 L 47 79" fill="none" stroke="#D8F3BC" stroke-width="2.8" stroke-linecap="round"/>
+<circle id="tideSpireslit-polyp-0" cx="36" cy="20" r="1.4" fill="#D8F3BC"/>
+<circle id="tideSpireslit-polyp-1" cx="25" cy="24" r="1.2" fill="#D8F3BC"/>
+<circle id="tideSpireslit-polyp-2" cx="65" cy="22" r="1.3" fill="#D8F3BC"/>
+<circle id="tideSpireslit-polyp-3" cx="74" cy="25" r="1.2" fill="#D8F3BC"/>
+<circle id="tideSpireslit-polyp-4" cx="56" cy="13" r="1.4" fill="#D8F3BC"/>
+<circle id="tideSpireslit-polyp-5" cx="46" cy="77" r="1.4" fill="#D8F3BC"/>
+<circle id="tideSpireslit-polyp-6" cx="55" cy="86" r="1.1" fill="#D8F3BC"/>
+</g><g id="tideSpireslit-direction-icon"><ellipse cx="50" cy="50" rx="14" ry="15" fill="#244F50" opacity=".88"/><path d="M 46 59 L 46 41 M 41 46 L 46 41 L 51 46 M 55 41 L 55 59 M 50 54 L 55 59 L 60 54" fill="none" stroke="#FFF1C1" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"/></g></g>
+<g transform="translate(380,490) scale(1.25)"><circle cx="50" cy="50" r="48" fill="#C6E3C7" stroke="#FFF5D1" stroke-width="1.5"/><g id="tideSpiresbloom-tideSpires-bloom">
+<ellipse cx="50" cy="89" rx="28" ry="5" fill="#06242B" opacity=".16"/>
+<path id="tideSpiresbloom-left-sway-from-base" d="M 46 85 C 31 76 27 65 28 51 L 27 34 C 20 30 19 22 23 19 C 27 16 31 22 32 27 L 33 15 C 34 9 41 10 41 17 L 39 37 C 36 53 38 66 47 73 Z" fill="#FFD6A0"/>
+<path id="tideSpiresbloom-right-sway-from-base" d="M 52 85 C 65 76 70 63 70 48 L 72 32 C 79 28 81 20 77 18 C 73 16 70 23 68 26 L 67 15 C 66 9 59 12 60 18 L 61 38 C 63 51 60 66 52 74 Z" fill="#FFD6A0"/>
+<path id="tideSpiresbloom-body-sway-from-base" d="M 35 88 C 40 81 43 74 43 62 L 45 29 C 40 23 39 16 43 13 C 47 10 50 16 51 21 L 54 9 C 56 3 63 6 61 13 L 56 30 L 56 62 C 56 74 60 81 65 88 C 62 94 39 94 35 88 Z" fill="#FFD6A0"/>
+<path id="tideSpiresbloom-highlights" d="M 32 40 C 31 53 34 65 38 71 M 66 40 C 67 53 63 64 61 69 M 51 32 L 49 72 M 45 85 L 47 79" fill="none" stroke="#FFF0C9" stroke-width="2.8" stroke-linecap="round"/>
+<circle id="tideSpiresbloom-polyp-0" cx="36" cy="20" r="1.4" fill="#FFF0C9"/>
+<circle id="tideSpiresbloom-polyp-1" cx="25" cy="24" r="1.2" fill="#FFF0C9"/>
+<circle id="tideSpiresbloom-polyp-2" cx="65" cy="22" r="1.3" fill="#FFF0C9"/>
+<circle id="tideSpiresbloom-polyp-3" cx="74" cy="25" r="1.2" fill="#FFF0C9"/>
+<circle id="tideSpiresbloom-polyp-4" cx="56" cy="13" r="1.4" fill="#FFF0C9"/>
+<circle id="tideSpiresbloom-polyp-5" cx="46" cy="77" r="1.4" fill="#FFF0C9"/>
+<circle id="tideSpiresbloom-polyp-6" cx="55" cy="86" r="1.1" fill="#FFF0C9"/>
+</g><g id="tideSpiresbloom-direction-icon"><ellipse cx="50" cy="50" rx="14" ry="15" fill="#244F50" opacity=".88"/><path d="M 46 59 L 46 41 M 41 46 L 46 41 L 51 46 M 55 41 L 55 59 M 50 54 L 55 59 L 60 54" fill="none" stroke="#FFF1C1" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"/></g></g>
+<g transform="translate(660,90) scale(3.2)"><g id="hero-driftShelf-lit">
+<ellipse cx="50" cy="89" rx="28" ry="5" fill="#06242B" opacity=".16"/>
+<path id="hero-left-sway-from-base" d="M 49 76 C 37 75 27 67 23 59 L 13 59 C 6 60 3 54 7 50 C 1 46 5 39 11 41 C 7 34 14 29 20 34 C 22 27 30 29 32 36 C 37 30 43 34 43 41 L 53 61 Z" fill="#E9A279"/>
+<path id="hero-right-sway-from-base" d="M 51 76 C 64 75 74 66 78 58 L 89 58 C 97 59 99 52 94 49 C 100 44 95 38 89 40 C 93 33 85 28 80 33 C 76 27 69 30 68 36 C 62 30 56 34 57 41 L 47 61 Z" fill="#E9A279"/>
+<path id="hero-body-sway-from-base" d="M 35 88 C 39 81 42 74 41 68 C 31 68 22 65 20 58 C 18 52 23 47 29 49 C 28 41 36 37 41 43 C 43 35 52 35 55 42 C 62 36 70 41 68 49 C 76 46 82 53 77 60 C 73 66 63 68 59 68 C 57 76 61 83 65 88 C 61 93 39 93 35 88 Z" fill="#E9A279"/>
+<path id="hero-highlights" d="M 49 81 L 49 68 M 49 66 C 38 59 27 57 13 52 M 49 66 C 63 59 74 56 88 53 M 30 60 L 27 47 M 67 60 L 73 44" fill="none" stroke="#FFE0AE" stroke-width="2.8" stroke-linecap="round"/>
+<circle id="hero-polyp-0" cx="16" cy="39" r="1.4" fill="#FFE0AE"/>
+<circle id="hero-polyp-1" cx="28" cy="39" r="1.2" fill="#FFE0AE"/>
+<circle id="hero-polyp-2" cx="72" cy="39" r="1.3" fill="#FFE0AE"/>
+<circle id="hero-polyp-3" cx="86" cy="38" r="1.3" fill="#FFE0AE"/>
+<circle id="hero-polyp-4" cx="35" cy="54" r="1.2" fill="#FFE0AE"/>
+<circle id="hero-polyp-5" cx="63" cy="54" r="1.3" fill="#FFE0AE"/>
+<circle id="hero-polyp-6" cx="55" cy="85" r="1.1" fill="#FFE0AE"/>
+</g></g>
+<text x="820" y="435" text-anchor="middle" fill="#143F42" font-size="25" font-family="Chalkboard, sans-serif">Drift shelf</text>
+<g transform="translate(610,490) scale(1.25)"><circle cx="50" cy="50" r="48" fill="#345F5D" stroke="#658E84" stroke-width="1.5"/><g id="driftShelfsleepy-driftShelf-sleepy">
+<ellipse cx="50" cy="89" rx="28" ry="5" fill="#06242B" opacity=".16"/>
+<path id="driftShelfsleepy-left-sway-from-base" d="M 49 76 C 37 75 27 67 23 59 L 13 59 C 6 60 3 54 7 50 C 1 46 5 39 11 41 C 7 34 14 29 20 34 C 22 27 30 29 32 36 C 37 30 43 34 43 41 L 53 61 Z" fill="#73978D"/>
+<path id="driftShelfsleepy-right-sway-from-base" d="M 51 76 C 64 75 74 66 78 58 L 89 58 C 97 59 99 52 94 49 C 100 44 95 38 89 40 C 93 33 85 28 80 33 C 76 27 69 30 68 36 C 62 30 56 34 57 41 L 47 61 Z" fill="#73978D"/>
+<path id="driftShelfsleepy-body-sway-from-base" d="M 35 88 C 39 81 42 74 41 68 C 31 68 22 65 20 58 C 18 52 23 47 29 49 C 28 41 36 37 41 43 C 43 35 52 35 55 42 C 62 36 70 41 68 49 C 76 46 82 53 77 60 C 73 66 63 68 59 68 C 57 76 61 83 65 88 C 61 93 39 93 35 88 Z" fill="#73978D"/>
+</g><g id="driftShelfsleepy-direction-icon" transform="rotate(90 50 50)"><ellipse cx="50" cy="50" rx="14" ry="15" fill="#244F50" opacity=".88"/><path d="M 46 59 L 46 41 M 41 46 L 46 41 L 51 46 M 55 41 L 55 59 M 50 54 L 55 59 L 60 54" fill="none" stroke="#FFF1C1" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"/></g></g>
+<g transform="translate(755,490) scale(1.25)"><circle cx="50" cy="50" r="48" fill="#C6E3C7" stroke="#FFF5D1" stroke-width="1.5"/><g id="driftShelflit-driftShelf-lit">
+<ellipse cx="50" cy="89" rx="28" ry="5" fill="#06242B" opacity=".16"/>
+<path id="driftShelflit-left-sway-from-base" d="M 49 76 C 37 75 27 67 23 59 L 13 59 C 6 60 3 54 7 50 C 1 46 5 39 11 41 C 7 34 14 29 20 34 C 22 27 30 29 32 36 C 37 30 43 34 43 41 L 53 61 Z" fill="#E9A279"/>
+<path id="driftShelflit-right-sway-from-base" d="M 51 76 C 64 75 74 66 78 58 L 89 58 C 97 59 99 52 94 49 C 100 44 95 38 89 40 C 93 33 85 28 80 33 C 76 27 69 30 68 36 C 62 30 56 34 57 41 L 47 61 Z" fill="#E9A279"/>
+<path id="driftShelflit-body-sway-from-base" d="M 35 88 C 39 81 42 74 41 68 C 31 68 22 65 20 58 C 18 52 23 47 29 49 C 28 41 36 37 41 43 C 43 35 52 35 55 42 C 62 36 70 41 68 49 C 76 46 82 53 77 60 C 73 66 63 68 59 68 C 57 76 61 83 65 88 C 61 93 39 93 35 88 Z" fill="#E9A279"/>
+<path id="driftShelflit-highlights" d="M 49 81 L 49 68 M 49 66 C 38 59 27 57 13 52 M 49 66 C 63 59 74 56 88 53 M 30 60 L 27 47 M 67 60 L 73 44" fill="none" stroke="#FFE0AE" stroke-width="2.8" stroke-linecap="round"/>
+<circle id="driftShelflit-polyp-0" cx="16" cy="39" r="1.4" fill="#FFE0AE"/>
+<circle id="driftShelflit-polyp-1" cx="28" cy="39" r="1.2" fill="#FFE0AE"/>
+<circle id="driftShelflit-polyp-2" cx="72" cy="39" r="1.3" fill="#FFE0AE"/>
+<circle id="driftShelflit-polyp-3" cx="86" cy="38" r="1.3" fill="#FFE0AE"/>
+<circle id="driftShelflit-polyp-4" cx="35" cy="54" r="1.2" fill="#FFE0AE"/>
+<circle id="driftShelflit-polyp-5" cx="63" cy="54" r="1.3" fill="#FFE0AE"/>
+<circle id="driftShelflit-polyp-6" cx="55" cy="85" r="1.1" fill="#FFE0AE"/>
+</g><g id="driftShelflit-direction-icon" transform="rotate(90 50 50)"><ellipse cx="50" cy="50" rx="14" ry="15" fill="#244F50" opacity=".88"/><path d="M 46 59 L 46 41 M 41 46 L 46 41 L 51 46 M 55 41 L 55 59 M 50 54 L 55 59 L 60 54" fill="none" stroke="#FFF1C1" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"/></g></g>
+<g transform="translate(900,490) scale(1.25)"><circle cx="50" cy="50" r="48" fill="#C6E3C7" stroke="#FFF5D1" stroke-width="1.5"/><g id="driftShelfbloom-driftShelf-bloom">
+<ellipse cx="50" cy="89" rx="28" ry="5" fill="#06242B" opacity=".16"/>
+<path id="driftShelfbloom-left-sway-from-base" d="M 49 76 C 37 75 27 67 23 59 L 13 59 C 6 60 3 54 7 50 C 1 46 5 39 11 41 C 7 34 14 29 20 34 C 22 27 30 29 32 36 C 37 30 43 34 43 41 L 53 61 Z" fill="#FFD6A0"/>
+<path id="driftShelfbloom-right-sway-from-base" d="M 51 76 C 64 75 74 66 78 58 L 89 58 C 97 59 99 52 94 49 C 100 44 95 38 89 40 C 93 33 85 28 80 33 C 76 27 69 30 68 36 C 62 30 56 34 57 41 L 47 61 Z" fill="#FFD6A0"/>
+<path id="driftShelfbloom-body-sway-from-base" d="M 35 88 C 39 81 42 74 41 68 C 31 68 22 65 20 58 C 18 52 23 47 29 49 C 28 41 36 37 41 43 C 43 35 52 35 55 42 C 62 36 70 41 68 49 C 76 46 82 53 77 60 C 73 66 63 68 59 68 C 57 76 61 83 65 88 C 61 93 39 93 35 88 Z" fill="#FFD6A0"/>
+<path id="driftShelfbloom-highlights" d="M 49 81 L 49 68 M 49 66 C 38 59 27 57 13 52 M 49 66 C 63 59 74 56 88 53 M 30 60 L 27 47 M 67 60 L 73 44" fill="none" stroke="#FFF0C9" stroke-width="2.8" stroke-linecap="round"/>
+<circle id="driftShelfbloom-polyp-0" cx="16" cy="39" r="1.4" fill="#FFF0C9"/>
+<circle id="driftShelfbloom-polyp-1" cx="28" cy="39" r="1.2" fill="#FFF0C9"/>
+<circle id="driftShelfbloom-polyp-2" cx="72" cy="39" r="1.3" fill="#FFF0C9"/>
+<circle id="driftShelfbloom-polyp-3" cx="86" cy="38" r="1.3" fill="#FFF0C9"/>
+<circle id="driftShelfbloom-polyp-4" cx="35" cy="54" r="1.2" fill="#FFF0C9"/>
+<circle id="driftShelfbloom-polyp-5" cx="63" cy="54" r="1.3" fill="#FFF0C9"/>
+<circle id="driftShelfbloom-polyp-6" cx="55" cy="85" r="1.1" fill="#FFF0C9"/>
+</g><g id="driftShelfbloom-direction-icon" transform="rotate(90 50 50)"><ellipse cx="50" cy="50" rx="14" ry="15" fill="#244F50" opacity=".88"/><path d="M 46 59 L 46 41 M 41 46 L 46 41 L 51 46 M 55 41 L 55 59 M 50 54 L 55 59 L 60 54" fill="none" stroke="#FFF1C1" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"/></g></g>
+</svg>

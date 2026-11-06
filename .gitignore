@@ -1,0 +1,63 @@
+# Xcode builds and exported apps
+build/
+DerivedData/
+*.app/
+*.ipa
+*.xcarchive/
+*.dSYM/
+*.dSYM.zip
+*.xcresult/
+*.hmap
+*.ipa.zip
+
+# Personal Xcode state. Keep project.pbxproj and shared schemes/workspaces.
+xcuserdata/
+*.xcuserstate
+*.xccheckout
+*.xcscmblueprint
+
+# Swift package build products. Keep Package.resolved for reproducible builds.
+.build/
+
+# Local signing credentials and secrets. Keep entitlements and shared configs.
+.env
+.env.*
+!.env.example
+!.env.sample
+*.local.xcconfig
+*.p8
+*.p12
+*.pfx
+*.pem
+*.key
+*.mobileprovision
+*.provisionprofile
+*.keychain
+*.keychain-db
+
+# Scratch builds, local saves and test output; never ignore level data or artwork.
+/work/
+/test-results/
+/save-backups/
+/reset-backups/
+/progress.json
+/progress-backup.json
+
+# Python artwork/level tooling caches
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+.pytest_cache/
+
+# Affinity document locks, not the editable .af/.afdesign masters
+*~lock~
+
+# macOS metadata and editor temporary files
+.DS_Store
+._*
+.AppleDouble/
+.LSOverride
+*.swp
+*.swo
+*~

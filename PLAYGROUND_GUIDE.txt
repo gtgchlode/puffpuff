@@ -1,0 +1,78 @@
+puffpuff — slingshot currents + illustrated path trials
+October 30, 2026
+
+Open Pause → Settings → Playground. Choose Golf or Paths, then 1–8.
+Golf defaults to the new slingshot/current collection. The New menu also
+contains Original eight, preserving the earlier comparison.
+The heart keeps your favorites. Each demo has Retry/Reset.
+These are disposable native Swift trials: no real currency, life, quest or Bloom
+changes. Only your favorite labels are remembered after closing the playground.
+
+NEW GOLF: all eight use pull back from Puff Puff, then release.
+Tap arrows before a shot; only Live currents lets the dial turn during flight.
+Compare 0–3 Trail finds. Scroll anywhere outside Puff Puff; aiming starts on him.
+1. Soft streams — gentle flows bend a physical shot. Finds clear bumpers and
+   widen the streams.
+2. Jet relay — land in a jet; it carries you through its center and sends you
+   along its arrow. Finds clear bumpers and preset one jet each.
+3. Two ways home — choose the left or right fork. The left route starts open;
+   optional finds clear the shorter right approach.
+4. One tide dial — one control rotates all currents together. Finds reveal
+   route segments and widen the capture zones.
+5. Pocket current — Move current, tap open water, then turn its arrow. Sling
+   through the placed jet. Finds clear bumpers and enlarge its catch area.
+6. Pulse tide — jets alternate on/off. Turn arrows and time your release.
+   Finds lengthen the active window and clear bumpers.
+7. Soft landing — two jets plus a slowing swirl near home. Finds expand the
+   swirl and entrance and clear bumpers; the swirl does not aim the fish.
+8. Live currents — turn the dial while swimming to redirect the next jet.
+   Finds slow the ride, giving more thinking time, and clear bumpers.
+
+The originals remain available in the golf collection menu:
+GOLF: compare the same idea with 0, 1, 2 or 3 Trail finds.
+1. Soft putt — drag toward the shot. Each find removes a bumper.
+2. Slingshot — pull back, release. Finds remove bumpers and widen home.
+3. Bubble stop — Go, then Stop at home. Finds slow movement and widen the timing window.
+4. Aim + puff — lock a swinging aim, then lock power. Finds slow both meters and clear bumpers.
+5. Bank builder — pick a numbered bank route, then Puff. One route begins open;
+   each find opens another. A planning puzzle with automatic strength.
+6. Current gates — rotate three currents into a route, then Puff. Each find
+   sets one current for you. Almost all the challenge is preparing the route.
+7. Draw a route — trace around coral to home. Finds remove coral and add ink.
+8. Tap to send — tap a landing point; power is automatic. Finds remove blockers,
+   so full exploration allows a simple tap on home.
+
+Prototype payout in ALL eight golf trials:
+1 shot = 12 Glow + hint + lighter; 2 = 8 Glow + hint; 3 = 5 Glow; 4 = 2 Glow.
+No home within 4 shots = nothing. Retry freely. Successful rounds retain their
+best score; Collect takes a single set, never the sum of repeated attempts.
+Changing the Trail finds comparison starts a fresh comparison including its best.
+These numbers are trial values, not changes to the real game's six-putt rule.
+
+ILLUSTRATED PATHS: search for three snacks and three optional supply caches.
+Each region has four things to uncover: food (2 Glow), a hidden supply cache
+(4), light-restoring coral (1), and a blocked passage (3). Contents stay hidden
+until you pay. All trial balances and discoveries are separate from real play.
+Tap the artwork or its named action/price. Opened objects remain visible;
+clearing lights the scene. The local Bloom refill adds 8 trial Glow.
+1. Cove doors — a close-up room with several objects; clear the passage,
+   then swim onward or return to an earlier cove.
+2. Fog islands — a tall continuous reef; clearing the edge of darkness reveals
+   neighboring places. Search side pockets before opening the next stretch.
+3. Side swim — illustrated scenes arranged horizontally. Swipe between them,
+   or use the Kelp/Shells/Coral controls after opening each passage.
+4. Reef garden — a denser field of coral patches; uncover adjacent patches
+   to expand your lit territory without moving room to room.
+5. Depth dive — a vertical stack of increasingly deep shelves. Search each
+   shelf and open its passage to reveal the one below; scroll back for finds.
+6. Home + spokes — a coral cottage hub. Visit three illustrated regions in
+   any order and uncover several local objects in each.
+7. Sonar hunt — a field of dark hiding places. Spend 1 Glow to scan, then the
+   displayed price to remove the revealed obstacle. No travel between rooms.
+8. Current forks — search a close-up pocket, then ride a one-way current to
+   the next. After the third pocket, loop back to search anything missed.
+
+At three snacks, Go home unlocks Try these finds in golf. Extra local searches
+remain possible before transferring. Each cache supplies one advantage in the
+selected golf trial. Change the finds comparison to see how exploration helps.
+The real Trail, Bloom progress, resources and six-putt bonus round are unchanged.

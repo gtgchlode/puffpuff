@@ -1,0 +1,191 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape" width="1200" height="930" viewBox="0 0 1200 930">
+<rect id="lagoon-background" width="1200" height="930" fill="#AADED0"/>
+<text x="70" y="64" fill="#F49B87" font-family="Helvetica Neue, sans-serif" font-size="16" letter-spacing="4">PUFFPUFF / CORAL GARDEN</text>
+<text x="70" y="118" fill="#143F42" font-family="Helvetica Neue, sans-serif" font-size="38" font-weight="300">Coral garden</text>
+<text x="70" y="151" fill="#376963" font-family="Helvetica Neue, sans-serif" font-size="17">Lagoon · faceless coral · Honey puffs</text>
+<circle cx="88" cy="216" r="21" fill="#AADED0" stroke="#A3BCB6" stroke-width=".5"/>
+<text x="120" y="212" fill="#143F42" font-family="Helvetica Neue, sans-serif" font-size="13">Lagoon</text>
+<text x="120" y="230" fill="#376963" font-family="Menlo, monospace" font-size="10">#AADED0</text>
+<circle cx="248" cy="216" r="21" fill="#D3EBCE" stroke="#A3BCB6" stroke-width=".5"/>
+<text x="280" y="212" fill="#143F42" font-family="Helvetica Neue, sans-serif" font-size="13">Sea glass</text>
+<text x="280" y="230" fill="#376963" font-family="Menlo, monospace" font-size="10">#D3EBCE</text>
+<circle cx="408" cy="216" r="21" fill="#F49B87" stroke="#A3BCB6" stroke-width=".5"/>
+<text x="440" y="212" fill="#143F42" font-family="Helvetica Neue, sans-serif" font-size="13">Peach</text>
+<text x="440" y="230" fill="#376963" font-family="Menlo, monospace" font-size="10">#F49B87</text>
+<circle cx="568" cy="216" r="21" fill="#EB8196" stroke="#A3BCB6" stroke-width=".5"/>
+<text x="600" y="212" fill="#143F42" font-family="Helvetica Neue, sans-serif" font-size="13">Rose</text>
+<text x="600" y="230" fill="#376963" font-family="Menlo, monospace" font-size="10">#EB8196</text>
+<circle cx="728" cy="216" r="21" fill="#F2BA76" stroke="#A3BCB6" stroke-width=".5"/>
+<text x="760" y="212" fill="#143F42" font-family="Helvetica Neue, sans-serif" font-size="13">Honey</text>
+<text x="760" y="230" fill="#376963" font-family="Menlo, monospace" font-size="10">#F2BA76</text>
+<circle cx="888" cy="216" r="21" fill="#FFD6A0" stroke="#A3BCB6" stroke-width=".5"/>
+<text x="920" y="212" fill="#143F42" font-family="Helvetica Neue, sans-serif" font-size="13">Bloom</text>
+<text x="920" y="230" fill="#376963" font-family="Menlo, monospace" font-size="10">#FFD6A0</text>
+<circle cx="1048" cy="216" r="21" fill="#EDDFB0" stroke="#A3BCB6" stroke-width=".5"/>
+<text x="1080" y="212" fill="#143F42" font-family="Helvetica Neue, sans-serif" font-size="13">Sand</text>
+<text x="1080" y="230" fill="#376963" font-family="Menlo, monospace" font-size="10">#EDDFB0</text>
+<g transform="translate(120,275) scale(2.6)"><g id="peachSprig-awake">
+<ellipse id="seabed" cx="50" cy="89" rx="28" ry="5" fill="#06242B" opacity=".45"/>
+<path id="left-sway-from-base" d="M 48 81 C 32 80 17 67 17 53 L 16 38 C 15 28 28 27 30 37 L 32 48 C 33 52 36 55 40 56 L 39 40 C 38 32 48 31 50 40 L 54 67 Z" fill="#F49B87"/>
+<path id="right-sway-from-base" d="M 53 80 C 70 77 84 65 85 50 L 85 37 C 84 28 72 28 71 38 L 70 47 C 67 53 61 55 55 55 L 57 44 C 59 36 48 34 46 43 L 43 68 Z" fill="#F49B87"/>
+<path id="body-sway-from-base" d="M 31 85 C 34 77 41 70 41 55 L 38 25 C 36 15 42 10 49 11 C 57 11 62 17 59 27 L 58 48 C 58 64 61 75 68 84 C 70 91 34 93 31 85 Z" fill="#F49B87"/>
+<path id="branch-highlights" d="M 46 26 C 45 42 49 49 48 56 M 23 39 L 25 51 M 78 39 L 77 48" fill="none" stroke="#FFD0AF" stroke-width="2.8" stroke-linecap="round" opacity=".8"/>
+<circle id="polyp-0" cx="44" cy="18" r="2" fill="#FFD0AF"/>
+<circle id="polyp-1" cx="24" cy="32" r="1.6" fill="#FFD0AF"/>
+<circle id="polyp-2" cx="78" cy="32" r="1.6" fill="#FFD0AF"/>
+<circle id="polyp-3" cx="37" cy="80" r="1.6" fill="#FFD0AF"/>
+<circle id="polyp-4" cx="61" cy="81" r="1.5" fill="#FFD0AF"/>
+</g></g>
+<text x="250" y="566" fill="#143F42" font-family="Helvetica Neue, sans-serif" font-size="23" text-anchor="middle">Peach sprig</text>
+<g transform="translate(85,612) scale(.95)"><g id="peachSprig-sleepy">
+<ellipse id="seabed" cx="50" cy="89" rx="28" ry="5" fill="#06242B" opacity=".45"/>
+<path id="left-sway-from-base" d="M 48 81 C 32 80 17 67 17 53 L 16 38 C 15 28 28 27 30 37 L 32 48 C 33 52 36 55 40 56 L 39 40 C 38 32 48 31 50 40 L 54 67 Z" fill="#507477"/>
+<path id="right-sway-from-base" d="M 53 80 C 70 77 84 65 85 50 L 85 37 C 84 28 72 28 71 38 L 70 47 C 67 53 61 55 55 55 L 57 44 C 59 36 48 34 46 43 L 43 68 Z" fill="#507477"/>
+<path id="body-sway-from-base" d="M 31 85 C 34 77 41 70 41 55 L 38 25 C 36 15 42 10 49 11 C 57 11 62 17 59 27 L 58 48 C 58 64 61 75 68 84 C 70 91 34 93 31 85 Z" fill="#507477"/>
+<path id="branch-highlights" d="M 46 26 C 45 42 49 49 48 56 M 23 39 L 25 51 M 78 39 L 77 48" fill="none" stroke="#779A99" stroke-width="2.8" stroke-linecap="round" opacity=".8"/>
+<circle id="polyp-0" cx="44" cy="18" r="2" fill="#779A99"/>
+<circle id="polyp-1" cx="24" cy="32" r="1.6" fill="#779A99"/>
+<circle id="polyp-2" cx="78" cy="32" r="1.6" fill="#779A99"/>
+<circle id="polyp-3" cx="37" cy="80" r="1.6" fill="#779A99"/>
+<circle id="polyp-4" cx="61" cy="81" r="1.5" fill="#779A99"/>
+</g></g>
+<text x="133" y="735" fill="#376963" font-family="Helvetica Neue, sans-serif" font-size="12" text-anchor="middle">Sleepy</text>
+<g transform="translate(193,612) scale(.95)"><g id="peachSprig-awake">
+<ellipse id="seabed" cx="50" cy="89" rx="28" ry="5" fill="#06242B" opacity=".45"/>
+<path id="left-sway-from-base" d="M 48 81 C 32 80 17 67 17 53 L 16 38 C 15 28 28 27 30 37 L 32 48 C 33 52 36 55 40 56 L 39 40 C 38 32 48 31 50 40 L 54 67 Z" fill="#F49B87"/>
+<path id="right-sway-from-base" d="M 53 80 C 70 77 84 65 85 50 L 85 37 C 84 28 72 28 71 38 L 70 47 C 67 53 61 55 55 55 L 57 44 C 59 36 48 34 46 43 L 43 68 Z" fill="#F49B87"/>
+<path id="body-sway-from-base" d="M 31 85 C 34 77 41 70 41 55 L 38 25 C 36 15 42 10 49 11 C 57 11 62 17 59 27 L 58 48 C 58 64 61 75 68 84 C 70 91 34 93 31 85 Z" fill="#F49B87"/>
+<path id="branch-highlights" d="M 46 26 C 45 42 49 49 48 56 M 23 39 L 25 51 M 78 39 L 77 48" fill="none" stroke="#FFD0AF" stroke-width="2.8" stroke-linecap="round" opacity=".8"/>
+<circle id="polyp-0" cx="44" cy="18" r="2" fill="#FFD0AF"/>
+<circle id="polyp-1" cx="24" cy="32" r="1.6" fill="#FFD0AF"/>
+<circle id="polyp-2" cx="78" cy="32" r="1.6" fill="#FFD0AF"/>
+<circle id="polyp-3" cx="37" cy="80" r="1.6" fill="#FFD0AF"/>
+<circle id="polyp-4" cx="61" cy="81" r="1.5" fill="#FFD0AF"/>
+</g></g>
+<text x="241" y="735" fill="#376963" font-family="Helvetica Neue, sans-serif" font-size="12" text-anchor="middle">Awake</text>
+<g transform="translate(301,612) scale(.95)"><g id="peachSprig-bloom">
+<ellipse id="seabed" cx="50" cy="89" rx="28" ry="5" fill="#06242B" opacity=".45"/>
+<path id="left-sway-from-base" d="M 48 81 C 32 80 17 67 17 53 L 16 38 C 15 28 28 27 30 37 L 32 48 C 33 52 36 55 40 56 L 39 40 C 38 32 48 31 50 40 L 54 67 Z" fill="#FFD6A0"/>
+<path id="right-sway-from-base" d="M 53 80 C 70 77 84 65 85 50 L 85 37 C 84 28 72 28 71 38 L 70 47 C 67 53 61 55 55 55 L 57 44 C 59 36 48 34 46 43 L 43 68 Z" fill="#FFD6A0"/>
+<path id="body-sway-from-base" d="M 31 85 C 34 77 41 70 41 55 L 38 25 C 36 15 42 10 49 11 C 57 11 62 17 59 27 L 58 48 C 58 64 61 75 68 84 C 70 91 34 93 31 85 Z" fill="#FFD6A0"/>
+<path id="branch-highlights" d="M 46 26 C 45 42 49 49 48 56 M 23 39 L 25 51 M 78 39 L 77 48" fill="none" stroke="#FFF0C9" stroke-width="2.8" stroke-linecap="round" opacity=".8"/>
+<circle id="polyp-0" cx="44" cy="18" r="2" fill="#FFF0C9"/>
+<circle id="polyp-1" cx="24" cy="32" r="1.6" fill="#FFF0C9"/>
+<circle id="polyp-2" cx="78" cy="32" r="1.6" fill="#FFF0C9"/>
+<circle id="polyp-3" cx="37" cy="80" r="1.6" fill="#FFF0C9"/>
+<circle id="polyp-4" cx="61" cy="81" r="1.5" fill="#FFF0C9"/>
+</g></g>
+<text x="349" y="735" fill="#376963" font-family="Helvetica Neue, sans-serif" font-size="12" text-anchor="middle">Bloom</text>
+<g transform="translate(495,275) scale(2.6)"><g id="rosyFan-awake">
+<ellipse id="seabed" cx="50" cy="89" rx="28" ry="5" fill="#06242B" opacity=".45"/>
+<path id="left-sway-from-base" d="M 45 81 C 24 72 11 59 10 42 C 10 34 17 31 23 35 C 18 25 23 17 31 20 C 34 21 36 25 38 29 L 54 63 Z" fill="#EB8196"/>
+<path id="right-sway-from-base" d="M 55 81 C 76 72 89 59 90 43 C 91 35 83 31 77 35 C 82 25 76 17 69 20 C 65 21 63 26 62 30 L 46 63 Z" fill="#EB8196"/>
+<path id="body-sway-from-base" d="M 30 79 C 22 66 23 51 29 43 C 21 34 27 23 36 28 C 33 15 41 10 48 17 C 52 7 64 12 63 24 C 72 16 81 25 75 35 C 84 40 78 53 70 61 C 62 69 61 78 66 86 C 67 93 31 93 33 86 Z" fill="#EB8196"/>
+<path id="branch-highlights" d="M 48 57 C 46 43 44 35 42 26 M 38 58 C 32 49 26 44 20 40 M 60 57 C 66 46 71 41 78 39" fill="none" stroke="#FFB4BD" stroke-width="2.8" stroke-linecap="round" opacity=".8"/>
+<circle id="polyp-0" cx="48" cy="21" r="1.8" fill="#FFB4BD"/>
+<circle id="polyp-1" cx="32" cy="32" r="1.6" fill="#FFB4BD"/>
+<circle id="polyp-2" cx="66" cy="30" r="1.7" fill="#FFB4BD"/>
+<circle id="polyp-3" cx="17" cy="45" r="1.5" fill="#FFB4BD"/>
+<circle id="polyp-4" cx="83" cy="46" r="1.5" fill="#FFB4BD"/>
+</g></g>
+<text x="625" y="566" fill="#143F42" font-family="Helvetica Neue, sans-serif" font-size="23" text-anchor="middle">Rosy fan</text>
+<g transform="translate(460,612) scale(.95)"><g id="rosyFan-sleepy">
+<ellipse id="seabed" cx="50" cy="89" rx="28" ry="5" fill="#06242B" opacity=".45"/>
+<path id="left-sway-from-base" d="M 45 81 C 24 72 11 59 10 42 C 10 34 17 31 23 35 C 18 25 23 17 31 20 C 34 21 36 25 38 29 L 54 63 Z" fill="#507477"/>
+<path id="right-sway-from-base" d="M 55 81 C 76 72 89 59 90 43 C 91 35 83 31 77 35 C 82 25 76 17 69 20 C 65 21 63 26 62 30 L 46 63 Z" fill="#507477"/>
+<path id="body-sway-from-base" d="M 30 79 C 22 66 23 51 29 43 C 21 34 27 23 36 28 C 33 15 41 10 48 17 C 52 7 64 12 63 24 C 72 16 81 25 75 35 C 84 40 78 53 70 61 C 62 69 61 78 66 86 C 67 93 31 93 33 86 Z" fill="#507477"/>
+<path id="branch-highlights" d="M 48 57 C 46 43 44 35 42 26 M 38 58 C 32 49 26 44 20 40 M 60 57 C 66 46 71 41 78 39" fill="none" stroke="#779A99" stroke-width="2.8" stroke-linecap="round" opacity=".8"/>
+<circle id="polyp-0" cx="48" cy="21" r="1.8" fill="#779A99"/>
+<circle id="polyp-1" cx="32" cy="32" r="1.6" fill="#779A99"/>
+<circle id="polyp-2" cx="66" cy="30" r="1.7" fill="#779A99"/>
+<circle id="polyp-3" cx="17" cy="45" r="1.5" fill="#779A99"/>
+<circle id="polyp-4" cx="83" cy="46" r="1.5" fill="#779A99"/>
+</g></g>
+<text x="508" y="735" fill="#376963" font-family="Helvetica Neue, sans-serif" font-size="12" text-anchor="middle">Sleepy</text>
+<g transform="translate(568,612) scale(.95)"><g id="rosyFan-awake">
+<ellipse id="seabed" cx="50" cy="89" rx="28" ry="5" fill="#06242B" opacity=".45"/>
+<path id="left-sway-from-base" d="M 45 81 C 24 72 11 59 10 42 C 10 34 17 31 23 35 C 18 25 23 17 31 20 C 34 21 36 25 38 29 L 54 63 Z" fill="#EB8196"/>
+<path id="right-sway-from-base" d="M 55 81 C 76 72 89 59 90 43 C 91 35 83 31 77 35 C 82 25 76 17 69 20 C 65 21 63 26 62 30 L 46 63 Z" fill="#EB8196"/>
+<path id="body-sway-from-base" d="M 30 79 C 22 66 23 51 29 43 C 21 34 27 23 36 28 C 33 15 41 10 48 17 C 52 7 64 12 63 24 C 72 16 81 25 75 35 C 84 40 78 53 70 61 C 62 69 61 78 66 86 C 67 93 31 93 33 86 Z" fill="#EB8196"/>
+<path id="branch-highlights" d="M 48 57 C 46 43 44 35 42 26 M 38 58 C 32 49 26 44 20 40 M 60 57 C 66 46 71 41 78 39" fill="none" stroke="#FFB4BD" stroke-width="2.8" stroke-linecap="round" opacity=".8"/>
+<circle id="polyp-0" cx="48" cy="21" r="1.8" fill="#FFB4BD"/>
+<circle id="polyp-1" cx="32" cy="32" r="1.6" fill="#FFB4BD"/>
+<circle id="polyp-2" cx="66" cy="30" r="1.7" fill="#FFB4BD"/>
+<circle id="polyp-3" cx="17" cy="45" r="1.5" fill="#FFB4BD"/>
+<circle id="polyp-4" cx="83" cy="46" r="1.5" fill="#FFB4BD"/>
+</g></g>
+<text x="616" y="735" fill="#376963" font-family="Helvetica Neue, sans-serif" font-size="12" text-anchor="middle">Awake</text>
+<g transform="translate(676,612) scale(.95)"><g id="rosyFan-bloom">
+<ellipse id="seabed" cx="50" cy="89" rx="28" ry="5" fill="#06242B" opacity=".45"/>
+<path id="left-sway-from-base" d="M 45 81 C 24 72 11 59 10 42 C 10 34 17 31 23 35 C 18 25 23 17 31 20 C 34 21 36 25 38 29 L 54 63 Z" fill="#FFD6A0"/>
+<path id="right-sway-from-base" d="M 55 81 C 76 72 89 59 90 43 C 91 35 83 31 77 35 C 82 25 76 17 69 20 C 65 21 63 26 62 30 L 46 63 Z" fill="#FFD6A0"/>
+<path id="body-sway-from-base" d="M 30 79 C 22 66 23 51 29 43 C 21 34 27 23 36 28 C 33 15 41 10 48 17 C 52 7 64 12 63 24 C 72 16 81 25 75 35 C 84 40 78 53 70 61 C 62 69 61 78 66 86 C 67 93 31 93 33 86 Z" fill="#FFD6A0"/>
+<path id="branch-highlights" d="M 48 57 C 46 43 44 35 42 26 M 38 58 C 32 49 26 44 20 40 M 60 57 C 66 46 71 41 78 39" fill="none" stroke="#FFF0C9" stroke-width="2.8" stroke-linecap="round" opacity=".8"/>
+<circle id="polyp-0" cx="48" cy="21" r="1.8" fill="#FFF0C9"/>
+<circle id="polyp-1" cx="32" cy="32" r="1.6" fill="#FFF0C9"/>
+<circle id="polyp-2" cx="66" cy="30" r="1.7" fill="#FFF0C9"/>
+<circle id="polyp-3" cx="17" cy="45" r="1.5" fill="#FFF0C9"/>
+<circle id="polyp-4" cx="83" cy="46" r="1.5" fill="#FFF0C9"/>
+</g></g>
+<text x="724" y="735" fill="#376963" font-family="Helvetica Neue, sans-serif" font-size="12" text-anchor="middle">Bloom</text>
+<g transform="translate(870,275) scale(2.6)"><g id="honeyCups-awake">
+<ellipse id="seabed" cx="50" cy="89" rx="28" ry="5" fill="#06242B" opacity=".45"/>
+<path id="left-sway-from-base" d="M 21 83 C 12 82 8 72 13 65 C 4 56 9 43 20 43 C 20 31 35 28 42 38 C 51 33 61 41 58 51 C 67 61 58 78 48 82 Z" fill="#F2BA76"/>
+<path id="right-sway-from-base" d="M 49 83 C 39 76 43 63 50 57 C 43 46 52 35 63 38 C 70 28 85 34 85 45 C 96 48 96 61 89 66 C 96 77 83 88 72 85 Z" fill="#F2BA76"/>
+<path id="body-sway-from-base" d="M 29 89 C 17 87 15 75 23 68 C 21 58 31 51 40 57 C 47 48 60 52 63 60 C 74 54 86 63 81 74 C 88 83 76 93 66 90 C 56 96 40 94 29 89 Z" fill="#F2BA76"/>
+<path id="branch-highlights" d="M 17 53 C 20 46 28 44 34 48 M 29 39 C 33 36 38 39 39 43 M 65 46 C 71 40 79 45 80 51 M 77 62 C 83 59 88 64 86 68 M 28 73 C 29 65 38 63 42 68 M 48 63 C 54 60 60 65 60 70 M 58 82 C 64 76 71 79 73 84" fill="none" stroke="#FFE0A4" stroke-width="2.8" stroke-linecap="round" opacity=".8"/>
+<circle id="polyp-0" cx="21" cy="60" r="1.6" fill="#FFE0A4"/>
+<circle id="polyp-1" cx="40" cy="48" r="1.4" fill="#FFE0A4"/>
+<circle id="polyp-2" cx="61" cy="53" r="1.7" fill="#FFE0A4"/>
+<circle id="polyp-3" cx="80" cy="54" r="1.5" fill="#FFE0A4"/>
+<circle id="polyp-4" cx="36" cy="80" r="1.6" fill="#FFE0A4"/>
+<circle id="polyp-5" cx="52" cy="76" r="1.5" fill="#FFE0A4"/>
+</g></g>
+<text x="1000" y="566" fill="#143F42" font-family="Helvetica Neue, sans-serif" font-size="23" text-anchor="middle">Honey puffs</text>
+<g transform="translate(835,612) scale(.95)"><g id="honeyCups-sleepy">
+<ellipse id="seabed" cx="50" cy="89" rx="28" ry="5" fill="#06242B" opacity=".45"/>
+<path id="left-sway-from-base" d="M 21 83 C 12 82 8 72 13 65 C 4 56 9 43 20 43 C 20 31 35 28 42 38 C 51 33 61 41 58 51 C 67 61 58 78 48 82 Z" fill="#507477"/>
+<path id="right-sway-from-base" d="M 49 83 C 39 76 43 63 50 57 C 43 46 52 35 63 38 C 70 28 85 34 85 45 C 96 48 96 61 89 66 C 96 77 83 88 72 85 Z" fill="#507477"/>
+<path id="body-sway-from-base" d="M 29 89 C 17 87 15 75 23 68 C 21 58 31 51 40 57 C 47 48 60 52 63 60 C 74 54 86 63 81 74 C 88 83 76 93 66 90 C 56 96 40 94 29 89 Z" fill="#507477"/>
+<path id="branch-highlights" d="M 17 53 C 20 46 28 44 34 48 M 29 39 C 33 36 38 39 39 43 M 65 46 C 71 40 79 45 80 51 M 77 62 C 83 59 88 64 86 68 M 28 73 C 29 65 38 63 42 68 M 48 63 C 54 60 60 65 60 70 M 58 82 C 64 76 71 79 73 84" fill="none" stroke="#779A99" stroke-width="2.8" stroke-linecap="round" opacity=".8"/>
+<circle id="polyp-0" cx="21" cy="60" r="1.6" fill="#779A99"/>
+<circle id="polyp-1" cx="40" cy="48" r="1.4" fill="#779A99"/>
+<circle id="polyp-2" cx="61" cy="53" r="1.7" fill="#779A99"/>
+<circle id="polyp-3" cx="80" cy="54" r="1.5" fill="#779A99"/>
+<circle id="polyp-4" cx="36" cy="80" r="1.6" fill="#779A99"/>
+<circle id="polyp-5" cx="52" cy="76" r="1.5" fill="#779A99"/>
+</g></g>
+<text x="883" y="735" fill="#376963" font-family="Helvetica Neue, sans-serif" font-size="12" text-anchor="middle">Sleepy</text>
+<g transform="translate(943,612) scale(.95)"><g id="honeyCups-awake">
+<ellipse id="seabed" cx="50" cy="89" rx="28" ry="5" fill="#06242B" opacity=".45"/>
+<path id="left-sway-from-base" d="M 21 83 C 12 82 8 72 13 65 C 4 56 9 43 20 43 C 20 31 35 28 42 38 C 51 33 61 41 58 51 C 67 61 58 78 48 82 Z" fill="#F2BA76"/>
+<path id="right-sway-from-base" d="M 49 83 C 39 76 43 63 50 57 C 43 46 52 35 63 38 C 70 28 85 34 85 45 C 96 48 96 61 89 66 C 96 77 83 88 72 85 Z" fill="#F2BA76"/>
+<path id="body-sway-from-base" d="M 29 89 C 17 87 15 75 23 68 C 21 58 31 51 40 57 C 47 48 60 52 63 60 C 74 54 86 63 81 74 C 88 83 76 93 66 90 C 56 96 40 94 29 89 Z" fill="#F2BA76"/>
+<path id="branch-highlights" d="M 17 53 C 20 46 28 44 34 48 M 29 39 C 33 36 38 39 39 43 M 65 46 C 71 40 79 45 80 51 M 77 62 C 83 59 88 64 86 68 M 28 73 C 29 65 38 63 42 68 M 48 63 C 54 60 60 65 60 70 M 58 82 C 64 76 71 79 73 84" fill="none" stroke="#FFE0A4" stroke-width="2.8" stroke-linecap="round" opacity=".8"/>
+<circle id="polyp-0" cx="21" cy="60" r="1.6" fill="#FFE0A4"/>
+<circle id="polyp-1" cx="40" cy="48" r="1.4" fill="#FFE0A4"/>
+<circle id="polyp-2" cx="61" cy="53" r="1.7" fill="#FFE0A4"/>
+<circle id="polyp-3" cx="80" cy="54" r="1.5" fill="#FFE0A4"/>
+<circle id="polyp-4" cx="36" cy="80" r="1.6" fill="#FFE0A4"/>
+<circle id="polyp-5" cx="52" cy="76" r="1.5" fill="#FFE0A4"/>
+</g></g>
+<text x="991" y="735" fill="#376963" font-family="Helvetica Neue, sans-serif" font-size="12" text-anchor="middle">Awake</text>
+<g transform="translate(1051,612) scale(.95)"><g id="honeyCups-bloom">
+<ellipse id="seabed" cx="50" cy="89" rx="28" ry="5" fill="#06242B" opacity=".45"/>
+<path id="left-sway-from-base" d="M 21 83 C 12 82 8 72 13 65 C 4 56 9 43 20 43 C 20 31 35 28 42 38 C 51 33 61 41 58 51 C 67 61 58 78 48 82 Z" fill="#FFD6A0"/>
+<path id="right-sway-from-base" d="M 49 83 C 39 76 43 63 50 57 C 43 46 52 35 63 38 C 70 28 85 34 85 45 C 96 48 96 61 89 66 C 96 77 83 88 72 85 Z" fill="#FFD6A0"/>
+<path id="body-sway-from-base" d="M 29 89 C 17 87 15 75 23 68 C 21 58 31 51 40 57 C 47 48 60 52 63 60 C 74 54 86 63 81 74 C 88 83 76 93 66 90 C 56 96 40 94 29 89 Z" fill="#FFD6A0"/>
+<path id="branch-highlights" d="M 17 53 C 20 46 28 44 34 48 M 29 39 C 33 36 38 39 39 43 M 65 46 C 71 40 79 45 80 51 M 77 62 C 83 59 88 64 86 68 M 28 73 C 29 65 38 63 42 68 M 48 63 C 54 60 60 65 60 70 M 58 82 C 64 76 71 79 73 84" fill="none" stroke="#FFF0C9" stroke-width="2.8" stroke-linecap="round" opacity=".8"/>
+<circle id="polyp-0" cx="21" cy="60" r="1.6" fill="#FFF0C9"/>
+<circle id="polyp-1" cx="40" cy="48" r="1.4" fill="#FFF0C9"/>
+<circle id="polyp-2" cx="61" cy="53" r="1.7" fill="#FFF0C9"/>
+<circle id="polyp-3" cx="80" cy="54" r="1.5" fill="#FFF0C9"/>
+<circle id="polyp-4" cx="36" cy="80" r="1.6" fill="#FFF0C9"/>
+<circle id="polyp-5" cx="52" cy="76" r="1.5" fill="#FFF0C9"/>
+</g></g>
+<text x="1099" y="735" fill="#376963" font-family="Helvetica Neue, sans-serif" font-size="12" text-anchor="middle">Bloom</text>
+<path d="M 70 785 Q 350 777 600 785 Q 890 793 1130 785" fill="none" stroke="#83CFC4" opacity=".3"/>
+<text x="70" y="827" fill="#143F42" font-family="Helvetica Neue, sans-serif" font-size="17">Motion, kept small.</text>
+<text x="70" y="860" fill="#376963" font-family="Helvetica Neue, sans-serif" font-size="15">Base-anchored sway · soft waking stretch · a warm golden ripple when the patch is complete.</text>
+<text x="70" y="886" fill="#376963" font-family="Helvetica Neue, sans-serif" font-size="13">Editable vector parts: left branch / right branch / body / highlights. Colours are decorative; puzzle rules stay the same.</text>
+</svg>
