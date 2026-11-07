@@ -303,7 +303,6 @@ enum ReefQuestArt {
                 let found = (scene.frame?.treasures ?? progress.treasures).contains(node.id)
                 let asset = node.chestArt(open: found)
                 TrailArt.draw(asset, in: world, at: CGPoint(x: p.x + (found ? 0 : 24), y: p.y + (found ? 0 : 10)), size: found ? 70 : 48, time: time)
-                if found { ReefTreasureArt.draw(ReefTreasureArt.rewards(for:node),in:world,at:CGPoint(x:p.x,y:p.y),chestSize:70) }
                 if !found {
                     let barrier: TrailArt.Asset = node.barrierKind == .kelp ? .kelpForest : node.barrierKind == .sand ? .sandpit : .enemySchool
                     TrailArt.draw(barrier, in: world, at: CGPoint(x: p.x - 7, y: p.y), size: 90, time: time)

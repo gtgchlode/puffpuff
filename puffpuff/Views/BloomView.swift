@@ -6,11 +6,21 @@ struct BloomView: View {
     var onOverlay: (Bool) -> Void = { _ in }
     @Environment(ReefStore.self) private var store
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
+    @Environment(\.scenePhase) private var scenePhase
+    @ScaledMetric(relativeTo: .body) private var tapSupplyHeight = 220.0
+    @ScaledMetric(relativeTo: .body) private var hintSupplyHeight = 255.0
+    @State private var showTapSummary = false
+    @State private var inspectedReward: BloomBubbleReward?
     @State private var showRules = false
     @State private var showCoralLesson = false
     @State private var lessonKind: CoralPracticeKind = .vertical
     @State private var showHintSupply = false
     @State private var lighting = false
+    @State private var showLifePeek = false
+    @State private var showReplay = false
+    @State private var showMoves = false
+    @State private var showFuture = false
+    @State private var pendingHintUse: BloomHintUse?
     @State private var showLives = false
     @State private var showRestart = false
     @State private var celebrationOrigin: Int?
@@ -18,10 +28,12 @@ struct BloomView: View {
     @State private var playFishCelebration = false
     @State private var reinflatingLevel: Int?
     @State private var bubbleBurstID = 0
+    @AppStorage("puffpuff.confirmHintUse") private var confirmHintUse = true
     @AppStorage("puffpuff.celebrationAnimations") private var celebrationAnimations = true
     @AppStorage("puffpuff.tutorial.verticalCoral") private var learnedVerticalCoral = false
     @AppStorage("puffpuff.tutorial.diagonalCoral") private var learnedDiagonalCoral = false
     @AppStorage("puffpuff.tutorial.lineCoral") private var learnedLineCoral = false
+    @AppStorage("puffpuff.tutorial.burstCoral") private var learnedBurstCoral = false
 
     private var victory: BloomVictoryStyle {
         .choose(level:store.puzzle.level,size:store.puzzle.size,
@@ -30,24 +42,43 @@ struct BloomView: View {
     private var earnedRewards: [BloomBubbleReward] {
         BloomBubbleReward.earned(pearl: store.puzzle.earnedPearl, hint: store.puzzle.earnedHint == true,
                                  shot: store.puzzle.earnedShot == true, gift: store.puzzle.earnedLifeGift,
-                                 lighter: store.puzzle.earnedLighter == true, shots: store.puzzle.earnedShots)
+                                 lighter: store.puzzle.earnedLighter == true, shots: store.puzzle.earnedShots, hints: store.puzzle.earnedHints, currentAdder:store.puzzle.earnedCurrentAdder == true, bouncyBlock:store.puzzle.earnedBouncyBlock == true, futureTeller:store.puzzle.earnedFutureTeller == true)
     }
     private var reinflating: Bool {
         reinflatingLevel == store.puzzle.level && !store.isComplete && celebrationAnimations && !reduceMotion
     }
 
+    private var showingOverlay: Bool {
+        showRules || showCoralLesson || showLives || showRestart || inspectingCompletion || showLifePeek || showReplay || showMoves || showFuture || pendingHintUse != nil
+    }
+
+    private var inspectingCompletion: Bool { inspectedReward != nil || showTapSummary }
+
+    private var showingSupplies: Bool {
+        store.isOutOfTaps || (showHintSupply && !store.isComplete && !store.puzzle.isTutorial && store.progress.hints == 0)
+    }
+    @ViewBuilder private var supplyControls: some View {
+        if store.isOutOfTaps { retryView }
+        else { BloomHintSupply { showHintSupply = false } }
+    }
+
     var body: some View {
-        ScrollViewReader { scroll in
+        GeometryReader { available in
+        ReefClock(duration:reinflating ? BloomVictoryStyle.reinflationDuration : victory.duration,
+                  paused:(celebrationOrigin == nil && !reinflating) || showingOverlay,frameInterval:1.0/30) { time in
+        ScrollViewReader { scrollProxy in
         ScrollView {
-            ReefClock(duration:reinflating ? BloomVictoryStyle.reinflationDuration : victory.duration,
-                      paused:(celebrationOrigin == nil && !reinflating) || showRules || showCoralLesson,frameInterval:1.0/30) { time in
             VStack(spacing: 12) {
                 HStack(spacing: 4) {
                     VStack(alignment: .leading, spacing: 7) {
                         Text("\(store.puzzle.level)").reefFont(size: 25, weight: .semibold, display: true).foregroundStyle(ReefTheme.ink)
                             .accessibilityLabel("Level \(store.puzzle.level)")
-                        Button { showLives = true } label: { BloomLivesStatus(compact: true) }
-                            .buttonStyle(ReefButtonStyle(kind: .quiet))
+                        Button { showLifePeek = true } label: {
+                            BloomLivesStatus(compact: true, iconOnly: true).frame(width: 44, height: 44)
+                        }
+                        .buttonStyle(.plain)
+                        .accessibilityLabel("Show lives")
+                        .anchorPreference(key: BloomFishAnchors.self, value: .bounds) { ["lives": $0] }
                     }.frame(maxWidth: .infinity, alignment: .leading)
                     Group {
                         if store.isComplete {
@@ -62,7 +93,15 @@ struct BloomView: View {
                         .accessibilityElement(children:.ignore)
                         .accessibilityLabel(store.isComplete ? "Puff Puff, relaxed and smiling" : "Puff Puff. Tap for bubbles")
                     ReefChestButton(onPresent:onOverlay)
-                    ReefPauseButton(action: onPause)
+                    VStack(spacing: 0) {
+                        ReefTrailReturnButton(progress: store.progress.firstReef, action: onHome)
+                        ReefPauseButton(action: onPause)
+                    }
+                }
+                if store.bloomTrailGuidance {
+                    Text("Win Bloom to earn Glow and light your way through the trail.")
+                        .reefFont(size: 15, weight: .semibold).foregroundStyle(ReefTheme.ink)
+                        .multilineTextAlignment(.center).fixedSize(horizontal: false, vertical: true)
                 }
 
                 VStack(spacing: 12) {
@@ -79,16 +118,7 @@ struct BloomView: View {
                         }
                         Spacer()
                         }
-                        VStack(spacing: 2) {
-                            Text("\(store.puzzle.tapsRemaining)")
-                                .reefFont(size: 17, weight: .medium).monospacedDigit()
-                            Text(store.puzzle.tapsRemaining == 1 ? "tap left" : "taps left")
-                                .reefFont(size: 11)
-                        }.foregroundStyle(ReefTheme.ink)
-                            .frame(width: 70, height: 64)
-                            .background(MembraneSurface(tint: ReefTheme.honey, intensity: 0.85, round: true))
-                            .accessibilityElement(children: .ignore)
-                            .accessibilityLabel("\(store.puzzle.tapsRemaining) taps remaining out of \(store.puzzle.allowedTaps)")
+                        tapsCounter
                         if !store.isComplete {
                         Button { showRules = true } label: { Image(systemName: "questionmark.circle").font(.title3).frame(width: 44, height: 44) }
                             .buttonStyle(ReefButtonStyle(kind: .quiet)).accessibilityLabel("How to play Coral Bloom")
@@ -113,11 +143,9 @@ struct BloomView: View {
                               playFishCelebration = celebrationAnimations && !reduceMotion
                           }
                       }
+                      .id("future-board")
                       .anchorPreference(key:BloomFishAnchors.self,value:.bounds) { ["board":$0] }
 
-                    if store.isOutOfTaps {
-                        retryView
-                    }
                     if !store.canPlayBloom {
                         VStack(spacing: 10) {
                             Text(store.canStartBloom ? "Ready to bloom" : "Lives are refilling").reefFont(size: 18, weight: .semibold)
@@ -148,7 +176,7 @@ struct BloomView: View {
                             Text(message).reefFont(size: 12)
                                 .foregroundStyle(ReefTheme.muted).multilineTextAlignment(.center)
                                 .fixedSize(horizontal: false, vertical: true)
-                        } else if [5, 21, 41, 61, 81].contains(store.puzzle.level) {
+                        } else if [5, 21, 41, 81].contains(store.puzzle.level) {
                             Text(store.puzzle.lesson).reefFont(size: 12)
                                 .foregroundStyle(ReefTheme.muted).multilineTextAlignment(.center)
                         } else if store.puzzle.level == 27 && store.puzzle.hasGaps {
@@ -162,8 +190,15 @@ struct BloomView: View {
                                 VStack(spacing: 4) { hintControls; restartControl }
                             }.buttonStyle(ReefButtonStyle(kind: .quiet))
                         }
-                        if showHintSupply && !store.puzzle.isTutorial && store.progress.hints == 0 {
-                            BloomHintSupply { showHintSupply = false }
+                        if store.progress.futureTellerUnlocked,
+                           store.progress.futureTellers > 0 || store.puzzle.futureTellerFinalTap != nil {
+                            Button { requestHintUse(.futureTeller) } label: {
+                                BloomGlimpseLabel(count: store.progress.futureTellers,
+                                    available: store.puzzle.futureTellerFinalTap != nil)
+                            }.buttonStyle(ReefButtonStyle(kind: .quiet))
+                                .accessibilityLabel(store.puzzle.futureTellerFinalTap == nil ? "Future Teller" : "Your glimpse")
+                                .accessibilityValue("\(store.progress.futureTellers) available")
+                                .accessibilityHint(store.puzzle.futureTellerFinalTap == nil ? "Uses one Future Teller to preview a possible final arrangement and winning tap." : "Reopen the glimpse for this attempt. No item used.")
                         }
                     }
                 }.id("bloom-board")
@@ -177,9 +212,9 @@ struct BloomView: View {
                             }.buttonStyle(ReefButtonStyle(filled: true))
                         } else {
                             Text("More reefs soon").reefFont(size: 14).foregroundStyle(ReefTheme.muted)
-                            Button("Play again") { _ = store.startFromBeginning() }
-                                .buttonStyle(ReefButtonStyle(filled: true))
+
                         }
+                        VStack(spacing: 6) { reviewControls }
                         Button("Home", action: onHome).buttonStyle(ReefButtonStyle(kind: .quiet))
                     }.accessibilityElement(children: .contain)
                         .padding(.vertical, 8)
@@ -198,41 +233,113 @@ struct BloomView: View {
                                     docks: anchors.reduce(into: [String: CGRect]()) { result, entry in
                                         result[entry.key] = proxy[entry.value]
                                     }, time: celebrationOrigin == nil || reduceMotion ? victory.duration : time,
-                                    duration: victory.duration)
+                                    duration: victory.duration, onInspect: { inspectedReward = $0 })
                             }
                             if !store.isComplete && bubbleBurstID > 0 && !reduceMotion {
                                 BloomTapBubbles(restingFrame: proxy[fish])
                                     .id("\(store.puzzle.level)-bubbles-\(bubbleBurstID)")
                             }
                         }
-                    }.allowsHitTesting(false)
+                    }
                 }
                 .background(BloomDiscoveryTrigger(ready:store.isComplete && time>=350))
-            }.id("\(store.puzzle.level)-\(celebrationID)")
-        }.scrollIndicators(.hidden).clipped()
-        .onChange(of: store.isOutOfTaps) { _, _ in
-            // Keep the actual puzzle in view both when the refill controls
-            // appear and when the player resumes with more taps.
-            withAnimation(reduceMotion ? nil : .easeOut(duration: 0.2)) {
-                scroll.scrollTo("bloom-board", anchor: .top)
-            }
-        }
-        .onAppear {
-            if store.isOutOfTaps { scroll.scrollTo("bloom-board", anchor: .top) }
-            offerCoralLesson()
-        }
-        .onChange(of: showHintSupply) { _, visible in
-            if visible {
-                withAnimation(reduceMotion ? nil : .easeOut(duration: 0.2)) {
-                    scroll.scrollTo("bloom-board", anchor: .top)
+        }.scrollIndicators(.visible)
+        .safeAreaInset(edge: .bottom, spacing: 0) {
+            if showingSupplies {
+                ViewThatFits(in: .vertical) {
+                    supplyControls.fixedSize(horizontal: false, vertical: true)
+                    ScrollView { supplyControls }.scrollBounceBehavior(.basedOnSize)
+                }
+                .frame(height: min(max(180, available.size.height * 0.5),
+                                   store.isOutOfTaps ? tapSupplyHeight : hintSupplyHeight))
+                .padding(.horizontal, 16).padding(.top, 8).padding(.bottom, 12)
+                .frame(maxWidth: .infinity)
+                .background {
+                    LinearGradient(colors: [ReefTheme.glass.opacity(0.92), ReefTheme.glass],
+                                   startPoint: .top, endPoint: .bottom)
+                        .ignoresSafeArea(edges: .bottom)
                 }
             }
         }
+        .blur(radius: showFuture ? 6 : 0)
+        .allowsHitTesting(!inspectingCompletion && !showLifePeek && !showFuture && pendingHintUse == nil)
+        .accessibilityHidden(inspectingCompletion || showLifePeek || showFuture || pendingHintUse != nil)
+        .overlayPreferenceValue(BloomFishAnchors.self) { anchors in
+            GeometryReader { proxy in
+                if showFuture, let board = anchors["board"],
+                   let target = store.puzzle.futureTellerBoard, let final = store.puzzle.futureTellerFinalTap {
+                    BloomFutureTellerOverlay(target: target, finalTap: final,
+                        boardFrame: proxy[board], viewport: proxy.size) {
+                            withAnimation(reduceMotion ? nil : .easeInOut(duration: 0.2)) { showFuture = false }
+                        }
+                        .transition(.opacity)
+                }
+            }
+        }
+        .overlayPreferenceValue(BloomFishAnchors.self) { anchors in
+            GeometryReader { proxy in
+                if showLifePeek, let heart = anchors["lives"] {
+                    BloomLivesPeek(anchor: proxy[heart], viewport: proxy.size) { showLifePeek = false }
+                }
+            }
+        }
+        .overlay {
+            if let pendingHintUse {
+                BloomInfoPanel(closeLabel: "Cancel use", onDismiss: { self.pendingHintUse = nil }) {
+                    VStack(spacing: 18) {
+                        ReefIcon(pendingHintUse.icon, size: 66)
+                        Text(pendingHintUse.question).reefFont(size: 24, weight: .semibold)
+                        Button("Use") {
+                            self.pendingHintUse = nil
+                            useHint(pendingHintUse)
+                        }.buttonStyle(ReefButtonStyle(filled: true))
+                        Button("Keep playing") { self.pendingHintUse = nil }
+                            .buttonStyle(ReefButtonStyle(kind: .quiet))
+                    }
+                }
+            } else if let reward = inspectedReward {
+                BloomRewardInfo(reward: reward) { inspectedReward = nil }
+            } else if showTapSummary {
+                BloomTapInfo(moves: store.puzzle.moves, bonus: store.puzzle.earnedPearl) { showTapSummary = false }
+            }
+        }
+        .onChange(of: scenePhase) { _, phase in
+            if phase != .active { inspectedReward = nil; showTapSummary = false; showLifePeek = false; showFuture = false; pendingHintUse = nil }
+        }
+        .onDisappear {
+            if inspectingCompletion || showLifePeek || showFuture || pendingHintUse != nil { inspectedReward = nil; showTapSummary = false; showLifePeek = false; showFuture = false; pendingHintUse = nil; onOverlay(false) }
+        }
+        .onChange(of: showFuture) { _, shown in
+            if shown {
+                // The control is below Hint; bring the actual board into view
+                // before showing its glimpse, including on short screens.
+                withAnimation(reduceMotion ? nil : .easeInOut(duration: 0.2)) {
+                    scrollProxy.scrollTo("future-board", anchor: .center)
+                }
+            }
+        }
+        }
+        }.id("\(store.puzzle.level)-\(celebrationID)")
+        }
+        .task(id: showLifePeek) {
+            guard showLifePeek else { return }
+            do {
+                try await Task.sleep(for: .seconds(10))
+                guard !Task.isCancelled else { return }
+                showLifePeek = false
+            } catch { /* Dismissal or leaving Bloom cancels this peek. */ }
+        }
+        .onAppear { offerCoralLesson() }
         .onChange(of: store.progress.hints) { _, count in
             if count > 0 { showHintSupply = false }
         }
         .onChange(of: store.puzzle.level) { _, level in
+            inspectedReward = nil
+            showTapSummary = false
+            showLifePeek = false
             lighting = false
+            showFuture = false
+            pendingHintUse = nil
             showHintSupply = false
             celebrationOrigin = nil
             playFishCelebration = false
@@ -241,7 +348,7 @@ struct BloomView: View {
             offerCoralLesson()
         }
         .onChange(of: store.isComplete) { _, complete in
-            if complete { showHintSupply = false; lighting = false } else { celebrationOrigin = nil }
+            if complete { showHintSupply = false; lighting = false; showFuture = false; pendingHintUse = nil } else { celebrationOrigin = nil; inspectedReward = nil; showTapSummary = false }
         }
         .onChange(of: store.puzzle.verticals ?? []) { _, _ in offerCoralLesson() }
         .onChange(of: store.puzzle.stars) { _, _ in offerCoralLesson() }
@@ -253,10 +360,21 @@ struct BloomView: View {
         .onChange(of: reduceMotion) { _, reduced in
             if reduced { playFishCelebration = false; reinflatingLevel = nil }
         }
-        .onChange(of: showRules) { _, value in onOverlay(value || showCoralLesson || showLives || showRestart) }
-        .onChange(of: showCoralLesson) { _, value in onOverlay(value || showRules || showLives || showRestart) }
-        .onChange(of: showLives) { _, value in onOverlay(value || showRules || showCoralLesson || showRestart) }
-        .onChange(of: showRestart) { _, value in onOverlay(value || showRules || showCoralLesson || showLives) }
+        .onChange(of: showingOverlay) { _, value in onOverlay(value) }
+        .sheet(isPresented: $showReplay) {
+            BloomFreeReplay(puzzle: store.puzzle, canAdvance: store.puzzle.level < ReefStore.levelLimit,
+                onClose: { showReplay = false }, onNext: {
+                    store.nextPuzzle()
+                    showReplay = false
+                })
+                .environment(\.reefPaused, false)
+                .presentationDetents([.large]).presentationBackground(.clear)
+        }
+        .sheet(isPresented: $showMoves) {
+            BloomMoveShow(puzzle: store.puzzle) { showMoves = false }
+                .environment(\.reefPaused, false)
+                .presentationDetents([.large]).presentationBackground(.clear)
+        }
         .sheet(isPresented: $showRestart) {
             OceanScene {
                 VStack(spacing: 22) {
@@ -298,23 +416,52 @@ struct BloomView: View {
                 Text("Ordinary coral flips itself and its four side neighbors. Marked coral follows its arrows. Wake them all.").multilineTextAlignment(.center)
                 Text("Lose a life when you run out of taps or restart. One refills every 5 minutes.").multilineTextAlignment(.center)
                 Text("A lighter keeps one chosen coral glowing for this attempt. It uses no taps.").multilineTextAlignment(.center)
-                Text("One hint reveals your next tap. Collect hints at patches 5, 10, 15… and with treasure, or get more with a purchase or ad. Tutorials guide you for free.").multilineTextAlignment(.center)
+                Text("One hint reveals a useful coral to tap. Collect hints as you play, or get more when you run out.").multilineTextAlignment(.center)
                 Text(store.puzzle.lesson).multilineTextAlignment(.center).foregroundStyle(ReefTheme.muted)
                 if store.puzzle.hasGaps {
                     Text("Open water has no tile. Neighbor ripples never skip a gap. Whole-line coral reaches across the row or column.")
                         .multilineTextAlignment(.center).foregroundStyle(ReefTheme.muted)
                 }
-                Text("A bloom earns 3 Glow. Every five wins earn a shot, and each win has a 10% chance of an extra shot. Replays count too.").multilineTextAlignment(.center)
+                Text("Win Bloom to earn Glow for the Trail. You may find extra supplies too.").multilineTextAlignment(.center)
                 Button("Got it") { showRules = false }.buttonStyle(ReefButtonStyle(filled: true))
               }.padding(28).frame(maxWidth: 460).foregroundStyle(ReefTheme.ink)
             }.presentationDetents([.large]).presentationDragIndicator(.visible).presentationBackground(.clear)
         }
+    }
+
+    @ViewBuilder private var reviewControls: some View {
+        Button { showReplay = true } label: {
+            Text("Replay").multilineTextAlignment(.center)
+                .fixedSize(horizontal: false, vertical: true).frame(maxWidth: .infinity)
+        }.buttonStyle(ReefButtonStyle(kind: .quiet))
+            .accessibilityHint("Try this level again for free, without rewards or losing lives.")
+        if store.puzzle.recording != nil {
+            Button { showMoves = true } label: {
+                Text("Watch your moves").multilineTextAlignment(.center)
+                    .fixedSize(horizontal: false, vertical: true).frame(maxWidth: .infinity)
+            }.buttonStyle(ReefButtonStyle(kind: .quiet))
+        }
+    }
+
+    @ViewBuilder private var tapsCounter: some View {
+        if store.isComplete {
+            Button { showTapSummary = true } label: {
+                BloomTapsBadge(remaining: store.puzzle.tapsRemaining, complete: true, bonus: store.puzzle.earnedPearl)
+            }
+            .buttonStyle(.plain)
+            .accessibilityLabel("Finished in \(store.puzzle.moves) taps" + (store.puzzle.earnedPearl ? ", tap bonus earned" : ""))
+            .accessibilityHint("Show tap summary")
+        } else {
+            BloomTapsBadge(remaining: store.puzzle.tapsRemaining, complete: false, bonus: false)
+                .accessibilityElement(children: .ignore)
+                .accessibilityLabel("\(store.puzzle.tapsRemaining) taps remaining out of \(store.puzzle.allowedTaps)")
         }
     }
 
     private func offerCoralLesson() {
         guard !showCoralLesson, !store.isComplete else { return }
-        if !learnedLineCoral && store.puzzle.hasLineCorals { lessonKind = .lines }
+        if !learnedBurstCoral && !(store.puzzle.burstCorals ?? []).isEmpty { lessonKind = .burst }
+        else if !learnedLineCoral && store.puzzle.hasLineCorals { lessonKind = .lines }
         else if !learnedDiagonalCoral && !store.puzzle.stars.isEmpty { lessonKind = .diagonal }
         else if !learnedVerticalCoral && !(store.puzzle.verticals ?? []).isEmpty { lessonKind = .vertical }
         else { return }
@@ -326,15 +473,14 @@ struct BloomView: View {
         case .vertical: learnedVerticalCoral = true
         case .diagonal: learnedDiagonalCoral = true
         case .lines: learnedLineCoral = true
+        case .burst: learnedBurstCoral = true
         }
     }
 
     private var hintControls: some View {
         HStack(spacing: 3) {
-            Button {
-                if !store.showHint() { showHintSupply = true }
-            } label: {
-                ReefIconLabel(store.puzzle.isTutorial ? "Guide" : "Hint · \(store.progress.hints)", .hint)
+            Button { requestHintUse(.hint) } label: {
+                ReefIconLabel(store.puzzle.isTutorial ? "Guide" : "\(store.progress.hints)", .hint)
                     .lineLimit(1).fixedSize(horizontal: true, vertical: false)
             }
             .disabled(store.puzzle.revealedHint != nil)
@@ -345,6 +491,27 @@ struct BloomView: View {
                     .accessibilityLabel("Get more hints")
             }
         }.fixedSize(horizontal: true, vertical: false)
+    }
+
+    private func requestHintUse(_ kind: BloomHintUse) {
+        guard store.canPlayBloom, !store.isSaveBlocked, !store.isComplete, !store.isOutOfTaps else { return }
+        let spendsItem = kind == .hint
+            ? !store.puzzle.isTutorial && store.puzzle.revealedHint == nil && store.progress.hints > 0
+            : store.puzzle.futureTellerFinalTap == nil && store.progress.futureTellers > 0
+        if confirmHintUse && spendsItem { pendingHintUse = kind }
+        else { useHint(kind) }
+    }
+
+    private func useHint(_ kind: BloomHintUse) {
+        switch kind {
+        case .hint:
+            if !store.showHint() { showHintSupply = true }
+        case .futureTeller:
+            if store.showFutureTeller() {
+                lighting = false; showHintSupply = false
+                withAnimation(reduceMotion ? nil : .easeInOut(duration: 0.2)) { showFuture = true }
+            }
+        }
     }
 
     private var restartControl: some View {
@@ -459,7 +626,7 @@ private struct CoralBoard: View {
                     CoralCell(lit: store.puzzle.cells[index], stone: store.puzzle.stones.contains(index),
                               current: store.puzzle.currents.contains(index), vertical: store.puzzle.isVertical(index),
                               star: store.puzzle.stars.contains(index),
-                              wholeRow: store.puzzle.isRowCoral(index), wholeColumn: store.puzzle.isColumnCoral(index),
+                              wholeRow: store.puzzle.isRowCoral(index), wholeColumn: store.puzzle.isColumnCoral(index), burst: store.puzzle.isBurst(index),
                               hint: store.hint == index,
                               seed: Double(index),
                               species: CoralSpecies(rawValue: (index + index / store.puzzle.size) % 3) ?? .peachSprig,
@@ -480,7 +647,7 @@ private struct CoralBoard: View {
                         }
                     }
                     .disabled(store.isComplete || !store.canPlayBloom || store.puzzle.stones.contains(index)
-                              || (lighting ? store.puzzle.cells[index] : store.isOutOfTaps))
+                              || (lighting ? store.puzzle.cells[index] : !store.puzzle.canTap(index)))
                     .accessibilityLabel("Row \(index / store.puzzle.size + 1), column \(index % store.puzzle.size + 1), \(cellDescription(index))")
                   }
                 }
@@ -516,7 +683,7 @@ private struct CoralBoard: View {
 
     private func cellDescription(_ index: Int) -> String {
         if store.puzzle.stones.contains(index) { return "resting pebble" }
-        let kind = store.puzzle.isRowCoral(index) ? "whole row coral" :
+        let kind = store.puzzle.isBurst(index) ? "burst coral" : store.puzzle.isRowCoral(index) ? "whole row coral" :
             store.puzzle.isColumnCoral(index) ? "whole column coral" : store.puzzle.isVertical(index) ? "up and down coral" :
             store.puzzle.currents.contains(index) ? "left and right coral" : store.puzzle.stars.contains(index) ? "diagonal coral" : "coral"
         return "\(store.isComplete ? "fully bloomed" : store.puzzle.cells[index] ? "glowing" : "sleepy") \(kind)\(store.hint == index ? ", suggested tap" : "")\((store.puzzle.lighterCorals ?? []).contains(index) ? ", stays lit by a lighter" : "")"
@@ -560,6 +727,7 @@ struct CoralCell: View {
     let star: Bool
     var wholeRow = false
     var wholeColumn = false
+    var burst = false
     let hint: Bool
     let seed: Double
     let species: CoralSpecies
@@ -569,7 +737,7 @@ struct CoralCell: View {
     @Environment(\.oceanTime) private var time
     @Environment(\.colorScheme) private var colorScheme
     private var isDeepSea: Bool { colorScheme == .dark }
-    private var displayedSpecies: CoralSpecies { vertical || wholeColumn ? .tideSpires : current || wholeRow ? .driftShelf : star ? .rosyFan : species }
+    private var displayedSpecies: CoralSpecies { burst ? .burstAnemone : vertical || wholeColumn ? .tideSpires : current || wholeRow ? .driftShelf : star ? .rosyFan : species }
     private var tint: Color { CoralArt.blend(displayedSpecies.color, 0xFFD6A0, bloom) }
     var body: some View {
         Button(action: action) {
@@ -595,8 +763,8 @@ struct CoralCell: View {
                     }
                 }
                 if hint && !stone { BloomHintHalo(seed: seed).padding(2) }
-                if !stone && (star || wholeRow || wholeColumn) {
-                    CoralRuleMark(kind: star ? .diagonal : wholeRow ? .row : .column)
+                if !stone && (burst || star || wholeRow || wholeColumn) {
+                    CoralRuleMark(kind: burst ? .burst : star ? .diagonal : wholeRow ? .row : .column)
                         .frame(width: 21, height: 21).padding(4)
                         .foregroundStyle(wholeRow || wholeColumn ? Color(hex: 0x244F50) : Color(hex: 0xFFF1C1))
                         .background(SeaGlassShape(seed: seed).fill(wholeRow || wholeColumn ? Color(hex: 0xFFE2A2) : Color(hex: 0x244F50)))
@@ -616,7 +784,7 @@ struct CoralCell: View {
 
 /// Custom direction glyphs: diagonal arrows or an end-to-end line with stops.
 struct CoralRuleMark: Shape {
-    enum Kind { case diagonal, row, column }
+    enum Kind { case diagonal, row, column, burst }
     var kind: Kind
     func path(in rect: CGRect) -> Path {
         var p = Path()
@@ -624,7 +792,14 @@ struct CoralRuleMark: Shape {
             p.move(to: CGPoint(x: points[0].0, y: points[0].1))
             for (x,y) in points.dropFirst() { p.addLine(to: CGPoint(x:x,y:y)) }
         }
-        if kind == .diagonal {
+        if kind == .burst {
+            p.addEllipse(in: CGRect(x: 7, y: 7, width: 6, height: 6))
+            for i in 0..<8 {
+                let a = Double(i) * .pi / 4
+                line([(10 + CGFloat(cos(a)) * 6, 10 + CGFloat(sin(a)) * 6),
+                      (10 + CGFloat(cos(a)) * 9, 10 + CGFloat(sin(a)) * 9)])
+            }
+        } else if kind == .diagonal {
             line([(3,3),(17,17)]); line([(3,17),(17,3)])
             for (x,y,sx,sy): (CGFloat,CGFloat,CGFloat,CGFloat) in [(3,3,1,1),(17,3,-1,1),(3,17,1,-1),(17,17,-1,-1)] {
                 line([(x,y+4*sy),(x,y),(x+4*sx,y)])
@@ -647,12 +822,13 @@ struct CoralRuleMark: Shape {
 }
 
 enum CoralPracticeKind: Hashable {
-    case vertical, diagonal, lines
-    var title: String { switch self { case .vertical: "Up & down"; case .diagonal: "Diagonals"; case .lines: "Whole lines" } }
+    case vertical, diagonal, lines, burst
+    var title: String { switch self { case .vertical: "Up & down"; case .diagonal: "Diagonals"; case .lines: "Whole lines"; case .burst: "Burst coral" } }
     var instruction: String { switch self {
         case .vertical: "It flips itself, above and below."
         case .diagonal: "It flips itself and its diagonal neighbors."
         case .lines: "One flips its whole row. The other flips its whole column."
+        case .burst: "Tap to flip this coral and all eight around it."
     } }
     var targets: [Int] { self == .lines ? [11,8] : [4] }
     func puzzle() -> CoralPuzzle {
@@ -662,6 +838,7 @@ enum CoralPracticeKind: Hashable {
         case .vertical: p.verticals=[4]; p.gaps=[0,2,6,8]
         case .diagonal: p.stars=[4]
         case .lines: p.rowCorals=[11]; p.columnCorals=[8]
+        case .burst: p.burstCorals=[4]
         }
         for target in targets { p.pulse(at:target) }
         return p
@@ -689,7 +866,7 @@ struct CoralPractice: View {
                         if demo.isGap(i) { Color.clear.aspectRatio(1,contentMode:.fit).accessibilityHidden(true) }
                         else {
                             CoralCell(lit:demo.cells[i],stone:false,current:false,vertical:demo.isVertical(i),
-                                      star:demo.stars.contains(i),wholeRow:demo.isRowCoral(i),wholeColumn:demo.isColumnCoral(i),
+                                      star:demo.stars.contains(i),wholeRow:demo.isRowCoral(i),wholeColumn:demo.isColumnCoral(i),burst:demo.isBurst(i),
                                       hint:kind.targets.contains(i) && !tapped.contains(i),seed:Double(i),species:.peachSprig,bloom:0,swell:0) {
                                 withAnimation(reduceMotion ? nil : ReefMotion.response) { demo.pulse(at:i); tapped.insert(i) }
                             }.allowsHitTesting(kind.targets.contains(i) && !tapped.contains(i))
@@ -729,6 +906,7 @@ private struct BloomHintHalo: View {
 
 struct BloomLivesStatus: View {
     var compact = false
+    var iconOnly = false
     @Environment(ReefStore.self) private var store
 
     static func countdown(_ until: Date, at now: Date) -> String {
@@ -739,20 +917,50 @@ struct BloomLivesStatus: View {
         TimelineView(.periodic(from: .now, by: 1)) { clock in
             let supplies = store.progress.supplies.refreshed(at: clock.date)
             VStack(spacing: 4) {
-                ReefIconLabel(supplies.unlimited(at: clock.date) ? "∞" : "\(supplies.lives)", supplies.unlimited(at: clock.date) ? .boostLive : .life, size: compact ? 25 : 38)
+                Group {
+                    if iconOnly { ReefIcon(supplies.unlimited(at:clock.date) ? .boostLive : .life, size: compact ? 25:38) }
+                    else if supplies.unlimited(at:clock.date) {ReefIcon(.boostLive,size:compact ? 25:38)}
+                    else {ReefIconLabel("\(supplies.lives)",.life,size:compact ? 25:38)}
+                }
                     .reefFont(size: 16, weight: .semibold).foregroundStyle(ReefTheme.coral)
-                if let until = supplies.unlimitedUntil, until > clock.date {
+                if !iconOnly, let until = supplies.unlimitedUntil, until > clock.date {
                     Text(Self.countdown(until, at: clock.date)).monospacedDigit().reefFont(size: 12)
-                } else if let due = supplies.nextLifeAt {
+                } else if !iconOnly, let due = supplies.nextLifeAt {
                     Text(Self.countdown(due, at: clock.date)).monospacedDigit().reefFont(size: 12)
                 }
             }
             .accessibilityElement(children: .combine)
-            .accessibilityLabel(supplies.unlimited(at: clock.date) ? "Unlimited lives" : "\(supplies.lives) lives")
+            .accessibilityLabel(iconOnly ? "Lives" : supplies.unlimited(at: clock.date) ? "Unlimited lives" : "\(supplies.lives) lives")
             .onChange(of: supplies.lives) { _, _ in store.refreshLives() }
             .onChange(of: supplies.unlimited(at: clock.date)) { _, _ in store.refreshLives() }
             .onAppear { store.refreshLives() }
         }
+    }
+}
+
+/// A brief anchored balance peek, separate from the full lives/refill sheet.
+private struct BloomLivesPeek: View {
+    let anchor: CGRect
+    let viewport: CGSize
+    let onDismiss: () -> Void
+    var body: some View {
+        ZStack(alignment: .topLeading) {
+            Button(action: onDismiss) {
+                Color.clear.contentShape(Rectangle()).ignoresSafeArea()
+            }.buttonStyle(.plain).accessibilityLabel("Hide lives")
+            BloomLivesStatus()
+                .padding(16).frame(width: 140, height: 108)
+                .background {
+                    MembraneShape().fill(ReefTheme.glass.opacity(0.97))
+                    MembraneSurface(tint: ReefTheme.coral, intensity: 0.75)
+                }
+                .contentShape(Rectangle()).onTapGesture { }
+                .position(x: min(max(78, anchor.minX + 70), viewport.width - 78),
+                          y: min(max(62, anchor.maxY + 60), viewport.height - 62))
+        }
+        .accessibilityElement(children: .contain)
+        .accessibilityAddTraits(.isModal)
+        .accessibilityAction(.escape, onDismiss)
     }
 }
 
@@ -824,5 +1032,32 @@ private struct BloomDiscoveryTrigger: View {
                 presentDiscovery(receipt.id)
             }
         }.accessibilityHidden(true)
+    }
+}
+
+
+private enum BloomHintUse {
+    case hint, futureTeller
+    var icon: ReefIconKind { self == .hint ? .hint : .futureTeller }
+    var question: String { self == .hint ? "Use a hint?" : "Use a Future Teller?" }
+}
+
+/// A saved glimpse remains available without using another item.
+private struct BloomGlimpseLabel: View {
+    let count: Int
+    let available: Bool
+    @Environment(\.oceanTime) private var time
+    @Environment(\.accessibilityReduceMotion) private var reduceMotion
+    var body: some View {
+        let breath = reduceMotion ? 1 : 0.86 + 0.14 * sin(time / 4000 * .pi * 2)
+        ReefIconLabel("\(count)", .futureTeller)
+            .background {
+                if available {
+                    SeaGlassShape().fill(ReefTheme.hintGold.opacity(0.3 * breath))
+                        .blur(radius: 7).padding(-7)
+                        .allowsHitTesting(false).accessibilityHidden(true)
+                }
+            }
+            .shadow(color: ReefTheme.hintGold.opacity(available ? 0.65 * breath : 0), radius: 6)
     }
 }

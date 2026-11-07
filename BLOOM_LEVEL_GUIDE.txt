@@ -1,10 +1,10 @@
-puffpuff — current Bloom levels (November 1, 2026)
-60 playable levels. Levels 61–100 remain drafts.
+puffpuff — current Bloom levels (November 6, 2026)
+100 playable levels.
 NEW marks the first appearance of a mechanic, board size or shaped footprint.
 Pearl targets are optional: finish within that many taps for +1 Glow.
 Pebbles cannot be tapped; gaps are empty water. All coral taps include the tapped coral.
 Up/down: self plus immediate above/below. Left/right: self plus immediate left/right.
-Diagonal coral begins at 52; whole-row/column coral begins at 60.
+Diagonal coral begins at 52; whole-row/column coral begins at 60; burst coral begins at 85.
 Tap limits below exclude extra-move power-ups. Existing started saves retain their original footprint.
 
 01 | Single coral, 1×1 | 6 taps | ordinary coral
@@ -97,3 +97,60 @@ Diagonal: self and four immediate diagonal neighbors.
 Whole line: every coral in its row/column, including self; crosses gaps/pebbles without changing them.
 Lighter: one extra collectible on first clears of 7, 14, 21…; shown in success bubbles.
 Covers: planned after 100 as required permanent movable board tools, not collectible prizes.
+
+
+APPROVED MIX 61–70 — November 6, 2026
+All ten new boards have 38 taps; ordinary coral fills unmarked spaces.
+61  Round reef      1 whole-row, 1 up/down, 2 pebbles
+62  Sloping shelf   1 whole-column, 1 left/right, 1 diagonal
+63  Small square    2 diagonals, 2 pebbles — NO whole lines
+64  Coral loop      1 whole-row, 1 whole-column, 1 up/down; interior water gap
+65  Square reef     1 whole-row, 1 left/right, 1 diagonal, 2 pebbles
+66  Crescent cove   1 whole-column, 1 up/down, 1 diagonal
+67  Diamond reef    2 diagonals; no pebbles — NO whole lines
+68  Square reef     1 whole-row, 1 whole-column, 1 diagonal, 2 pebbles
+69  Reef ribbon     1 whole-row, 1 up/down, 1 left/right
+70  Round reef      1 whole-row, 1 whole-column, 1 up/down, 1 left/right, 1 diagonal
+60 remains the original whole-row + whole-column introduction with 34 taps.
+Only 63 and 67 omit whole-row/whole-column coral in 60–70. No new tile types.
+Shortest solutions for 61–70: 4, 5, 4, 5, 5, 6, 4, 6, 6, 7 taps.
+70 retains its optional pearl target of 9 taps. Existing started boards/checkpoints retain their exact rules.
+
+
+APPROVED 71–100 — November 6, 2026
+70 remains unchanged. 71–80 have 38 taps; 81–100 have 42.
+Burst coral at 85 flips itself plus all eight adjacent coral; gaps/pebbles stay unchanged.
+A free, skippable unnumbered practice comes before the first burst board.
+All ordinary and special taps still respect held-on lighters and same-coral tap refunds.
+No consumables are needed to solve any board. Covers remain after 100.
+
+71 | Small square, 4×4 | ordinary coral | 38 taps; shortest solution 3
+72 | Crescent cove, 5×5 | 1 whole-row, 1 diagonal, 2 pebbles | 38 taps; shortest solution 4
+73 | Square reef, 5×5 | 1 whole-column, 2 left/right | 38 taps; shortest solution 5
+74 | Diamond reef, 5×5 | 1 up/down, 2 diagonal | 38 taps; shortest solution 4
+75 | Sloping shelf, 5×5 | 2 whole-row | 38 taps; shortest solution 5; pearl target 7 — FIRST two whole-row corals on separate rows
+76 | Coral fan, 5×5 | 2 pebbles | 38 taps; shortest solution 3
+77 | Square reef, 5×5 | 2 whole-column, 1 left/right | 38 taps; shortest solution 5
+78 | Coral loop, 5×5 | 1 whole-row, 1 diagonal | 38 taps; shortest solution 5
+79 | Reef ribbon, 5×5 | 2 up/down, 2 left/right, 2 pebbles | 38 taps; shortest solution 6
+80 | Round reef, 5×5 | 1 whole-row, 1 whole-column, 2 diagonal | 38 taps; shortest solution 6; pearl target 8
+81 | Small square, 4×4 | 1 diagonal | 42 taps; shortest solution 4
+82 | Split lagoon, 5×5 | 1 whole-row, 1 whole-column, 2 pebbles | 42 taps; shortest solution 5
+83 | Square reef, 5×5 | 2 whole-row, 1 up/down | 42 taps; shortest solution 6
+84 | Crescent cove, 5×5 | 1 left/right, 2 diagonal, 2 pebbles | 42 taps; shortest solution 6
+85 | Small square, 4×4 | 1 burst | 42 taps; shortest solution 2 — FIRST burst coral; free unnumbered practice
+86 | Clipped shore, 4×4 | 1 burst | 42 taps; shortest solution 3
+87 | Small square, 4×4 | 2 burst | 42 taps; shortest solution 4
+88 | Round reef, 5×5 | 1 burst, 2 pebbles | 42 taps; shortest solution 4
+89 | Coral fan, 5×5 | ordinary coral | 42 taps; shortest solution 3
+90 | Round reef, 5×5 | 1 whole-row, 1 burst | 42 taps; shortest solution 5; pearl target 7
+91 | Small square, 4×4 | 2 pebbles | 42 taps; shortest solution 3
+92 | Reef ribbon, 5×5 | 1 whole-row, 1 up/down, 1 left/right, 1 burst | 42 taps; shortest solution 6
+93 | Square reef, 5×5 | 2 whole-column, 2 diagonal | 42 taps; shortest solution 7
+94 | Diamond reef, 5×5 | 2 up/down, 2 left/right, 1 diagonal, 2 pebbles | 42 taps; shortest solution 6
+95 | Coral loop, 5×5 | 2 whole-row, 1 whole-column, 1 burst | 42 taps; shortest solution 7; pearl target 9
+96 | Little cove, 5×5 | 1 left/right, 1 diagonal | 42 taps; shortest solution 4
+97 | Square reef, 5×5 | 1 whole-row, 1 whole-column, 2 diagonal, 2 pebbles | 42 taps; shortest solution 7
+98 | Split lagoon, 5×5 | 2 whole-row, 1 up/down, 1 left/right, 1 burst | 42 taps; shortest solution 7
+99 | Small coral fan, 4×4 | ordinary coral | 42 taps; shortest solution 3
+100 | Round reef, 5×5 | 1 whole-row, 1 whole-column, 1 up/down, 1 left/right, 1 diagonal, 1 burst, 2 pebbles | 42 taps; shortest solution 8; pearl target 10

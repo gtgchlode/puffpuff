@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="600" height="600" viewBox="0 0 100 100"><g id="burst-burstAnemone-lit">
+<ellipse cx="50" cy="89" rx="28" ry="5" fill="#06242B" opacity=".16"/>
+<path id="burst-left-sway-from-base" d="M 47 83 C 28 84 13 71 12 59 C 3 58 4 48 13 46 C 4 40 9 30 18 33 C 13 23 23 18 30 26 C 29 16 40 16 43 27 C 46 38 46 56 50 70 Z" fill="#E997AD"/>
+<path id="burst-right-sway-from-base" d="M 52 83 C 72 84 87 72 88 60 C 98 59 97 49 88 46 C 97 40 92 30 83 33 C 89 23 78 18 71 26 C 72 16 61 16 58 27 C 55 39 55 57 50 71 Z" fill="#E997AD"/>
+<path id="burst-body-sway-from-base" d="M 35 89 C 38 84 38 80 34 77 C 21 76 16 68 20 62 C 9 57 13 47 24 48 C 16 38 22 30 31 35 C 26 24 35 18 42 27 C 40 14 51 11 55 24 C 61 14 70 21 65 32 C 76 24 83 33 76 42 C 87 39 92 50 82 56 C 92 63 84 73 75 69 C 73 78 63 79 61 82 L 65 89 C 62 95 39 95 35 89 Z" fill="#E997AD"/>
+<path id="burst-highlights" d="M 30 67 Q 24 59 27 55 M 28 46 Q 28 40 32 40 M 37 35 L 41 43 M 50 27 L 50 39 M 64 34 L 60 42 M 75 47 Q 78 51 73 56 M 70 65 Q 67 71 61 73 M 45 79 Q 50 82 56 79" fill="none" stroke="#FFE0C7" stroke-width="2.8" stroke-linecap="round"/>
+<circle id="burst-polyp-0" cx="16" cy="40" r="1.5" fill="#FFE0C7"/>
+<circle id="burst-polyp-1" cx="24" cy="28" r="1.4" fill="#FFE0C7"/>
+<circle id="burst-polyp-2" cx="37" cy="24" r="1.4" fill="#FFE0C7"/>
+<circle id="burst-polyp-3" cx="64" cy="23" r="1.3" fill="#FFE0C7"/>
+<circle id="burst-polyp-4" cx="82" cy="40" r="1.5" fill="#FFE0C7"/>
+<circle id="burst-polyp-5" cx="85" cy="59" r="1.2" fill="#FFE0C7"/>
+<circle id="burst-polyp-6" cx="25" cy="70" r="1.6" fill="#FFE0C7"/>
+<circle id="burst-polyp-7" cx="39" cy="72" r="1.5" fill="#FFE0C7"/>
+<circle id="burst-polyp-8" cx="61" cy="69" r="1.3" fill="#FFE0C7"/>
+<circle id="burst-polyp-9" cx="49" cy="86" r="1.3" fill="#FFE0C7"/>
+</g><g id="burst-rule"><ellipse cx="50" cy="50" rx="14.5" ry="14.5" fill="#244F50"/><circle cx="50" cy="50" r="3" fill="none" stroke="#FFF1C1" stroke-width="1.9"/><path d="M 56.000 50.000 L 59.000 50.000 M 54.243 54.243 L 56.364 56.364 M 50.000 56.000 L 50.000 59.000 M 45.757 54.243 L 43.636 56.364 M 44.000 50.000 L 41.000 50.000 M 45.757 45.757 L 43.636 43.636 M 50.000 44.000 L 50.000 41.000 M 54.243 45.757 L 56.364 43.636" fill="none" stroke="#FFF1C1" stroke-width="1.9" stroke-linecap="round"/></g></svg>

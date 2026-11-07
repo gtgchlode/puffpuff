@@ -39,7 +39,7 @@ import Foundation
   let migrated=ReefStore(defaults:defaults,saveDirectory:migratedDir)
   precondition(!migrated.isSaveBlocked && !migrated.lastSaveFailed)
   let m=migrated.progress
-  precondition(m.version==20 && m.currentChangers==0 && equal(m.puzzle,old.puzzle) && equal(m.bloomResumePuzzle,old.bloomResumePuzzle))
+  precondition(m.version==28 && m.currentChangers==0 && equal(m.puzzle,old.puzzle) && equal(m.bloomResumePuzzle,old.bloomResumePuzzle))
   precondition(m.glow==old.glow && m.hints==old.hints && m.shots==old.shots && equal(m.supplies,old.supplies))
   precondition(m.firstReef.cleared==old.firstReef.cleared && m.firstReef.food==old.firstReef.food && m.firstReef.treasures==old.firstReef.treasures && m.firstReef.visited==old.firstReef.visited && m.firstReef.bonus?.strokes==old.firstReef.bonus?.strokes && m.firstReef.bonus?.bestStrokes==old.firstReef.bonus?.bestStrokes)
   precondition(m.firstReef.bonus?.position==old.firstReef.bonus?.position)
@@ -48,10 +48,10 @@ import Foundation
   print("Legacy migration and repeated reload: board, checkpoint, inventory, discoveries, best score, position preserved")
 
   let fullClearPrice=FirstReef.destinations.flatMap{ReefCove.objects(in:$0.id)}.reduce(0){$0+$1.cost}
-  precondition(fullClearPrice==1268)
-  precondition(["start","south","food-sand"].map{ReefCove.objects(in:$0).reduce(0){$0+$1.cost}}==[42,52,56])
+  precondition(FirstReef.destinations.flatMap{ReefCove.objects(in:$0.id)}.reduce(0){$0+$1.baseCost}==1268)
+  precondition(["start","south","food-sand"].map{ReefCove.objects(in:$0).reduce(0){$0+$1.baseCost}}==[42,52,56])
   print("Course pricing: 1268 Glow for every optional find; required-goal pacing checked by PathGoals; local prices 8–24")
-  var fresh=ReefProgress();fresh.glow=2000
+  var fresh=ReefProgress();fresh.glow=10000
   let freshDir=try seed(fresh,"fresh");let store=ReefStore(defaults:defaults,saveDirectory:freshDir)
   precondition(FirstReef.visibleIDs(store.progress.firstReef)==["start"])
   precondition(store.visitFirstReef("south")==nil)
@@ -63,7 +63,7 @@ import Foundation
    let objects=ReefCove.objects(in:area)
    for (index,object) in objects.enumerated() {
     if object.isGift {precondition((8...12).contains(object.cost) && object.action=="Open")}
-    if object.find == .treasure {precondition(object.cost==FirstReef.node(area).glowCost)}
+    if object.find == .treasure {precondition(object.baseCost==FirstReef.node(area).glowCost)}
     let balance=store.progress.glow
     let result=store.uncoverCove(object.id)
     precondition(result != nil && store.progress.glow==balance-object.cost && store.progress.firstReef.position==before)
@@ -122,10 +122,10 @@ import Foundation
 
   var samples=[String:(ReefPoint,FirstReefProgress)]()
   for cleared in [Set<String>(),Set(FirstReef.clearances.map(\.id))] {
-   for dirs in [[6,4,6],[0,0,0],[1,1,0]] {
+   for dirs in [BonusCourse.defaultCurrents,[0,1,0],[7,1,0],[6,4,6]] {
     var state=store.progress.firstReef;state.cleared=cleared;state.bonus=nil;state.bonus=FirstReef.newBonus(state);state.bonus!.currents=dirs
     var wins=0,total=0,first:ReefPoint?
-    for angle in stride(from:-150.0,through:-10.0,by:2) {
+    for angle in stride(from:-180.0,through:20.0,by:1) {
      for pull in stride(from:50.0,through:110.0,by:2) {
       let drag=ReefPoint(x:cos(angle * .pi/180)*pull,y:sin(angle * .pi/180)*pull)
       let result=FirstReef.putt(drag:drag,from:state)!.outcome;total+=1
@@ -138,7 +138,7 @@ import Foundation
     precondition(wins<total/4,"Too automatic")
    }
   }
-  guard let sample=samples["6-[0, 0, 0]"] ?? samples["6-[1, 1, 0]"] else {fatalError("No viable full-clear hole in one")}
+  guard let sample=samples["6-[6, 1, 0]"] ?? samples["6-[0, 1, 0]"] else {fatalError("No viable full-clear hole in one")}
   var winSave=store.progress;winSave.firstReef=sample.1
   let winDir=try seed(winSave,"win");let winner=ReefStore(defaults:defaults,saveDirectory:winDir)
   let shotBalance=winner.progress.shots
@@ -147,6 +147,12 @@ import Foundation
   precondition(winner.collectReefBonus())
   let claimed=winner.progress;precondition(claimed.firstReef.nextWorldUnlocked==true && claimed.glow==beforeClaim.glow+12)
   precondition(!winner.collectReefBonus() && !winner.startReefBonus(retry:true) && !winner.redirectReefCurrent(0,to:3) && equal(winner.progress,claimed))
+  var fastHome=winSave.firstReef
+  fastHome.bonus=FirstReef.newBonus(fastHome)
+  fastHome.bonus!.position=BonusCourse.home+ReefPoint(x:0,y:42)
+  let fastEntry=FirstReef.putt(drag:.init(x:0,y:-110),from:fastHome)!
+  precondition(fastEntry.outcome.bonus!.holed && fastEntry.outcome.bonus!.position==BonusCourse.home)
+  precondition(fastEntry.duration<0.2,"Full-power entry should stay in the hole")
   var failureSave=winSave;failureSave.firstReef.bonus!.strokes=6;failureSave.firstReef.bonus!.finished=true;failureSave.firstReef.bonus!.bestStrokes=1
   let failure=ReefStore(defaults:defaults,saveDirectory:try seed(failureSave,"failure"))
   precondition(!failure.collectReefBonus() && failure.startReefBonus(retry:true) && failure.progress.firstReef.bonus?.bestStrokes==1)
@@ -174,7 +180,7 @@ import Foundation
   var v16=winSave;v16.version=16;v16.pendingDiscoveries=[];v16.learnedDiscoveries=[]
   let v16dir=try seed(v16,"version16")
   let v17=ReefStore(defaults:defaults,saveDirectory:v16dir).progress
-  precondition(v17.version==20 && equal(v17.firstReef,v16.firstReef) && equal(v17.puzzle,v16.puzzle))
+  precondition(v17.version==28 && equal(v17.firstReef,v16.firstReef) && equal(v17.puzzle,v16.puzzle))
   precondition(v17.shots==v16.shots && v17.pendingDiscoveries.isEmpty && v17.learnedDiscoveries.isEmpty)
 
   // Zero stock pauses a round; exploration/refills resume its exact ball and score.

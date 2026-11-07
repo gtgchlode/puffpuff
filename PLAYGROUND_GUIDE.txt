@@ -76,3 +76,19 @@ At three snacks, Go home unlocks Try these finds in golf. Extra local searches
 remain possible before transferring. Each cache supplies one advantage in the
 selected golf trial. Change the finds comparison to see how exploration helps.
 The real Trail, Bloom progress, resources and six-putt bonus round are unchanged.
+
+
+Enemy challenges (Settings → Playground)
+1. Timed school — Two fish patrol. Time a single drag-and-release shot to sink both into the prison.
+2. Scare enemies — Eight moves; caught fish stay in the hole.
+3. Shell setup — Drag two shells before the first shot. Bank off at least one shell and sink both fish in three moves. Retry unlocks placement again.
+All three use only local trial state. No real shots, Glow or progress are affected.
+
+Settings → Replay kelp — The real introductory kelp geometry, free practice. Touch kelp to end the attempt; reach the hole within four shots. Retry as often as desired.
+
+Golf aids (November 5): Kelp run and all three enemy challenge trials include
+Current and Block controls with three free supplies each. Pick open water and
+confirm placement. Retry restores the trial stock and clears placed aids;
+production spends real collected supplies and does not refund them.
+Timed-school release now uses the displayed school phase, and Retry swims
+the fish back into their continuing patrol.

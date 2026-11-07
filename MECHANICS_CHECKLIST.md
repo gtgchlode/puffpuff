@@ -226,3 +226,86 @@ Buying the three-hint preview bundle during a playable non-tutorial Bloom immedi
 
 - [x] **Even local prices (November 3).** All paid finds cost 8–24 Glow, with no 1/28-style split. Required route minimum 200 Glow, representative route 222; 50–74 Bloom wins. Full optional clear 1268 (317–423 wins). Paid objects/balances unchanged.
 - [x] **Spatial exits and scrolling travel.** Arrows show actual map bearings and sit toward those directions. One fish swims continuously as both cove scenes scroll through shared water lighting. Soft sandy paths hint at local discoveries/available exits. Preserve dark unpaid areas, Reduce Motion, pause, map and atomic saved destinations.
+
+
+## November 5: treasure inspection, Glow totals, hint chances, and debug replay
+
+- [x] Opened Trail chests and their prizes show a read-only receipt with exact item amounts and optional explanations; opening information never grants again.
+- [x] Show item clusters up to five icons instead of multiplier badges; the tapped receipt states the full count. Eaten snack chests still explain their quest item.
+- [x] Every completed Bloom shows its total Glow in the floating/docked rewards: 3, or 4 including the pearl bonus.
+- [x] Each new Bloom win (including a replay) has an 8% chance of one hint. Meeting the pearl target adds an independent 5% chance of two hints. Keep the first-clear every-fifth-level hint; grants stack, up to four.
+- [x] Persist the exact hint count and deterministic per-win roll in format 21. Failed writes roll back; reopening a win cannot re-grant or reroll. Old hint rewards and resources migrate unchanged.
+- [x] The debug level picker starts a fresh replay for a completed selection, including the current completed board. Unfinished boards resume, normal Bloom entry stays unchanged, and the original main checkpoint survives.
+
+- [x] Last-life restart: 5→4→3→2→1→0, with the final restarted round still playable at zero; another normal restart requires a refill/ad. No added life or refund.
+- [x] The unlimited-life heart has no duplicate infinity text; keep the countdown.
+- [x] Opening Hint supplies scrolls the panel itself into view after layout, rather than scrolling away to the board top.
+
+
+- [x] **Current adders.** Separate collected supplies for bonus golf: choose open water and one of eight directions, spend one, and keep the extra current until the next Retry. Relaunch/exploration preserve it; Retry removes it without refund. Invalid placement/cancel/save failure spend nothing. Earn through Bloom and newly cleared sand/kelp. First-pickup explanation and inventory describe usage, not internal drop odds.
+- [x] **Supplies behind ordinary kelp/sand.** One authored surprise on newly paid coral/passage clearances, saved with the discovery and Glow debit. Original chests stay unchanged. No retroactive awards and no repeat farming.
+
+
+## Trail mini challenges — November 5, 2026
+
+- [x] Kelp challenge: a bent lane, fatal kelp walls, four moves, reachable hole in one and a comfortable three-shot route.
+- [x] Enemy challenge: two fish, knock both into the prison within four moves.
+- [x] Win a challenge or pay 4× the previous obstacle price. Real moves each spend one collected shot. Clearance, supplies and costs persist atomically, once. Closed gift/snack prices stay unchanged.
+- [x] DEBUG Settings → Replay kelp: free, isolated replay with unlimited retries and no real rewards.
+- [x] Three isolated enemy Playground versions: timed moving targets in one shot; four-shot bowling; arrange shells then use a bank within three shots.
+- [ ] Author additional mini-course layouts after testing the first kelp and enemy courses.
+
+\n## Trail One mini challenges — latest decisions
+- [x] Use timing (moving fish, one shot) and multiple-shot enemy challenges in the first trail.
+- [x] Each kelp/enemy encounter has a distinct, stable easy layout; no harder trail escalation yet.
+- [x] Scare enemies is the player-facing title; instructions refer only to the hole.
+- [x] Cleared locations offer isolated free Replay during DEBUG; no Replay kelp in Settings.
+- [x] Keep Retry/Continue visible outside the scrolling board.
+- [ ] Introduce the arrange-objects enemy challenge on a later trail. Keep the current playground prototype available.
+
+
+## Shared one-use golf power-ups — November 5, 2026
+
+- [x] Current adders in bonus golf, kelp, timed enemies and multiple-shot enemies; free isolated versions in the playground.
+- [x] Collectible bouncy blocks for those same courses. Explicit placement spends one; Retry removes placed aids without refund. Relaunch preserves the attempt.
+- [x] Bouncy blocks: independent 5% Bloom-win drop, four one-time optional Trail finds, reward bubbles, inventory explanation, editable Affinity art and DEBUG refill.
+- [x] Timed schools use the exact visible clock for release; smooth return on Retry, with no arena reconstruction.
+- [ ] Later trails may include fixed currents that can be turned using current changers. Do not introduce them into Trail One mini challenges yet.
+
+
+### Bloom continuation — November 6, 2026
+- [x] User-approved 60–70 tile mix implemented; 70 playable, 71–100 drafts. Exactly 63/67 have no whole-line coral. See BLOOM_LEVEL_GUIDE.txt for counts/shapes. 61–70 have 38 taps and verified 4–7-tap solutions; preserve started saves.
+- [x] Free same-level practice after a win until Next, without rewards/life costs; original win remains intact. Watch your moves replays the actual tap/lighter order as a read-only light show, recorded from new attempts in save format 25.
+
+### First Trail polish — November 6, 2026
+- [x] Multi-shot enemy challenges allow six shots; kelp keeps four and timing keeps one. Each move still spends one collected shot. Existing unfinished four-shot attempts gain two remaining tries without resetting fish or spending tokens.
+- [x] Once a fish enters the enemy hole, or Puff Puff enters bonus home, it stays caught at any speed. Wall banks outside the opening remain.
+- [x] Shot-strength inflation is larger in both official shape and size, with a short smooth deflation on release.
+- [x] Bloom Replay/Watch your moves have separate full-width labels; playback is slower.
+- [x] Clarified below; historical question about Bloom undo refund: tap credit versus heart life, which repeated taps qualify, and how the two proposed tap totals affect completion/pearl targets. Keep actual actions in the move show; Pro statistics are a requested future direction, not an implemented entitlement. No gameplay counting change until clarified.
+
+- [x] Clarified: refund taps, not hearts. An immediate second tap on the same coral undoes the previous paid tap; keep both actual clicks in playback. Counted taps govern the allowance, actual taps remain the efficiency score; both totals persist for future Pro stats. No Pro storefront/entitlement introduced.
+- [x] User chose eight shots for multi-shot enemy encounters; supersedes the six-shot trial.
+
+
+### Approved 71–100 and burst coral — November 6, 2026
+- [x] All 100 levels playable; exact counts/shapes in BLOOM_LEVEL_GUIDE.txt. Levels 1–70 preserved. 38 taps through 80, then 42; mixed shapes/squares and plain breathers remain.
+- [x] Burst coral begins at 85: self and eight adjacent coral flip; gaps/pebbles/held-on lighters do not. Free unnumbered practice; 85–87 alone, 88 with pebbles, 89 plain, 90 with a row. Returns selectively at 92,95,98,100.
+- [x] Native solver, hints, tap refunds, recorded playback, lighter interactions, persistence/checkpoints and cap progression cover the new rule. Format 27 preserves existing progress; older played drafts keep their board until Restart.
+- [x] Faceless burst anemone has editable Affinity/SVG art, a centered sunburst and shared-clock subtle movement. Final level uses bubble-spin celebration.
+- [x] Current-adder plus is centered in native/SVG/Affinity artwork. Existing current-changer art and aid behavior unchanged.
+
+
+Watch your moves speed — November 6, 2026
+A pinned Slow–Fast slider interpolates between the relaxed 220–380ms move intervals (650/1400ms holds) and original 100–240ms intervals (450/1100ms holds), using the existing action-count formulas. Default is the midpoint. Remember locally with puffpuff.bloomPlaybackSpeed; it is a viewing preference, not saved gameplay. Changing speed preserves the exact current action/ripple, including while paused; never restart, skip or reroll. Again uses the selected speed. Pause/backgrounding freeze playback and cancel/reschedule finite completion work. Reduce Motion retains manual Next tap and omits the inactive speed slider. Keep controls outside the board ScrollView and preserve the no-store/no-rewards viewing boundary.
+
+
+### Future Teller — November 6, 2026
+- [x] Rare collectible unlocked after Bloom 50: a possible final board arrangement with its winning tap marked. The player discovers how to reach it. No complete tap sequence or live-board change.
+- [x] One item per attempt's glimpse; free reopening and saved continuity, all coral/shape/pebble/lighter rules respected. Restart/win clears it.
+- [x] Independent initial 2% Bloom-win reward after unlock, exact saved reward bubble, first-pickup explanation, Bloom inventory and +3 DEBUG refill. No odds in player copy.
+- [x] Custom editable Affinity/SVG/native crystal-reef icon; Lagoon and Deep Sea preview with a pinned Keep playing control. Format 28 retains older progress and adds zero initial inventory.
+
+- [x] Future Teller appears on the actual board over a hazy game background; no modal. Use/reopen control sits under Hint, and the saved glimpse remains free to revisit. Tap away or Keep playing to return to the unchanged board.
+
+- [x] Icon/count Hint controls, glowing saved Future Teller glimpse, and default-on use confirmations with one persistent Settings switch. Free glimpse reopening never asks or spends again.

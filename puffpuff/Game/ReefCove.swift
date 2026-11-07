@@ -8,7 +8,12 @@ enum ReefCove {
         let slot:Int
         let find:Find
         let barrier:ReefBumper.Kind
-        let cost:Int
+        let baseCost:Int
+        var challengeKind:ReefMiniKind? {
+            guard !isChest else{return nil}
+            return barrier == .kelp ? .kelp:barrier == .enemy ? .enemy:nil
+        }
+        var cost:Int {baseCost*(challengeKind == nil ? 1:4)}
         var id:String {"\(area):\(slot)"}
         var isGift:Bool {[Find.hint,.lives,.lighter,.current,.shot].contains(find)}
         // A closed chest may hide a quest item as well as optional supplies.
@@ -21,6 +26,16 @@ enum ReefCove {
             case .enemy:"Scare off fish"
             case .stone:"Lift shells"
             }
+        }
+        // Authored surprises, recorded only on a newly paid clearance.
+        var clearingReward:ReefDiscovery? {
+            guard !isChest,find == .coral || find == .passage,
+                  barrier == .kelp || barrier == .sand,
+                  let index=FirstReef.destinations.firstIndex(where:{$0.id == area}) else{return nil}
+            // Selected optional finds add blocks without changing old supply assignments.
+            if ["south:2","food-garden:3","ribbon-cove:0","shell-shelf:2"].contains(id) {return .bouncyBlock}
+            let rewards:[ReefDiscovery]=[.shot,.hint,.life,.lighter,.currentAdder]
+            return rewards[(index+slot)%rewards.count]
         }
         var result:String {
             switch find {
@@ -38,8 +53,8 @@ enum ReefCove {
     }
     static let shotAreas:Set<String> = ["start","south","lower","north","home","ribbon-cove","shell-shelf","fin-lookout"]
     static let shotsPerFind = 3
-    // Keep the required route at 50–100 Bloom wins, with comparable local prices.
-    // Small finds are 8–12 Glow; onward passages/snacks top out at 24.
+    // Original base prices retain the 50–100 Bloom-win economy.
+    // Kelp/fish now offer a shot challenge or an intentionally costly 4× Glow bypass.
     private static let passageCosts:[String:Int] = [
         "start":10,"south":16,"food-sand":20,"lower":22,"food-garden":22,
         "north":22,"food-middle":22,"home":16,"hint-shell":20,"shot-pearl":22,
@@ -78,9 +93,9 @@ enum ReefCove {
             default: cost = supplyCost(in:area)
             }
             return Object(area:area,slot:slot,find:find,
-                          barrier:(find == .treasure || find == .passage && node.kind == .clearance) ? node.barrierKind ?? .kelp:barrier[(index+slot)%3],cost:cost)
+                          barrier:(find == .treasure || find == .passage && node.kind == .clearance) ? node.barrierKind ?? .kelp:barrier[(index+slot)%3],baseCost:cost)
         }
-        if shotAreas.contains(area) {objects.append(.init(area:area,slot:4,find:.shot,barrier:.sand,cost:supplyCost(in:area)))}
+        if shotAreas.contains(area) {objects.append(.init(area:area,slot:4,find:.shot,barrier:.sand,baseCost:supplyCost(in:area)))}
         return objects
     }
     static func isComplete(_ area:String,in state:FirstReefProgress)->Bool {
@@ -164,6 +179,18 @@ enum ReefCove {
         return result
     }
 
+    /// Both halves of a connection meet at the same world-space point.
+    static func travelStep(from:ReefPoint,to:ReefPoint,size:ReefPoint)->ReefPoint {
+        let delta=to-from,span=max(1,max(abs(delta.x),abs(delta.y)))
+        return .init(x:delta.x/span*size.x,y:delta.y/span*size.y)
+    }
+    static func routeSeam(from:ReefPoint,to:ReefPoint,size:ReefPoint)->ReefPoint {
+        size*0.5+travelStep(from:from,to:to,size:size)*0.5
+    }
+    static func mapOffset(_ proposed:ReefPoint,size:ReefPoint,bottomInset:Double)->ReefPoint {
+        .init(x:min(max(0,size.x-112),max(0,proposed.x)),
+              y:min(max(0,size.y-bottomInset-136),max(0,proposed.y)))
+    }
     struct TravelFrame {
         let oldOffset:ReefPoint
         let newOffset:ReefPoint
@@ -173,8 +200,7 @@ enum ReefCove {
     /// Fish and camera share world coordinates: no pose swap at the cove boundary.
     static func travelFrame(from:ReefPoint,to:ReefPoint,start:ReefPoint,size:ReefPoint,fraction:Double)->TravelFrame {
         func ease(_ value:Double)->Double {let t=min(1,max(0,value));return t*t*(3-2*t)}
-        let delta=to-from,span=max(1,max(abs(delta.x),abs(delta.y)))
-        let step=ReefPoint(x:delta.x/span*size.x,y:delta.y/span*size.y)
+        let step=travelStep(from:from,to:to,size:size)
         let swim=ease(fraction),camera=ease((fraction-0.20)/0.60)
         let origin=ReefPoint(x:start.x*size.x,y:start.y*size.y)
         let destination=step+ReefPoint(x:size.x*0.5,y:size.y*0.51)
@@ -209,6 +235,10 @@ enum ReefCove {
               !(state.coveSearches ?? []).contains(object.id) else{return nil}
         var next=state
         next.coveSearches=(state.coveSearches ?? []).union([object.id])
+        if let prize=object.clearingReward {
+            var rewards=state.clearingRewards ?? [:];rewards[object.id]=prize
+            next.clearingRewards=rewards
+        }
         var clearance:String?
         switch object.find {
         case .food:next.food.insert(object.area)

@@ -6,7 +6,7 @@ enum BloomVictoryStyle: String, CaseIterable {
     case hop, doubleHop, wiggle, swoop, bob, drift, lap, bubbleSpin
 
     static func choose(level: Int, size: Int, feature: String, pearlTarget: Int?) -> Self {
-        if feature == "star" || feature == "mixed" || (pearlTarget ?? 0) >= 12 { return .bubbleSpin }
+        if level == 100 || feature == "burst" || feature == "star" || feature == "mixed" || (pearlTarget ?? 0) >= 12 { return .bubbleSpin }
         if feature == "stone" || feature == "current" || feature == "vertical" || size >= 5 { return .lap }
         let gentle: [Self] = [.hop, .wiggle, .swoop, .doubleHop, .bob, .drift]
         return gentle[(max(1, level) - 1) % gentle.count]
@@ -126,14 +126,21 @@ struct BloomTapBubbles: View {
 }
 
 /// Pure presentation of rewards already committed by the store.
-enum BloomBubbleReward: String, Identifiable {
-    case glow, pearl, hint, shot, doubleShot, instant, refill, stored, lighter
-    var id: String { rawValue }
+enum BloomBubbleReward: Identifiable, Equatable {
+    case glow, pearl, shot, doubleShot, instant, refill, stored, lighter, currentAdder, bouncyBlock, futureTeller
+    case hint(Int)
+    var id: String {
+        if case .hint(let count)=self {return "hint-\(count)"}
+        return String(describing:self)
+    }
     var kind: ReefIconKind {
         switch self {
         case .glow, .pearl: .glow
         case .hint: .hint
+        case .futureTeller: .futureTeller
         case .lighter: .lighter
+        case .currentAdder: .currentAdder
+        case .bouncyBlock: .bouncyBlock
         case .shot, .doubleShot: .shot
         case .refill: .life
         case .instant: .boostLive
@@ -144,8 +151,11 @@ enum BloomBubbleReward: String, Identifiable {
         switch self {
         case .glow: "+3 Glow"
         case .pearl: "+4 Glow"
-        case .hint: "+1 hint"
+        case .hint(let count): "+\(count) \(count == 1 ? "hint":"hints")"
         case .lighter: "+1 lighter"
+        case .futureTeller: "+1 Future Teller"
+        case .currentAdder: "+1 current adder"
+        case .bouncyBlock: "+1 bouncy block"
         case .shot: "+1 shot"
         case .doubleShot: "+2 shots"
         case .refill: "Life refill"
@@ -156,7 +166,8 @@ enum BloomBubbleReward: String, Identifiable {
         switch self {
         case .glow: "+3"
         case .pearl: "+4"
-        case .hint, .shot, .lighter: "+1"
+        case .hint(let count): "+\(count)"
+        case .shot, .lighter, .currentAdder, .bouncyBlock, .futureTeller: "+1"
         case .doubleShot: "+2"
         case .refill: "Full"
         case .instant, .stored: "15 min"
@@ -172,23 +183,48 @@ enum BloomBubbleReward: String, Identifiable {
     var accessibility: String {
         switch self {
         case .glow: "3 Glow earned"
-        case .pearl: "4 Glow earned, including 1 extra Glow for the pearl target"
+        case .pearl: "4 Glow earned"
         case .refill: "Lives refilled to at least five. No unlimited time added."
         case .instant: "15 minutes of unlimited lives activated. Lives refilled."
-        case .stored: "Rare 15-minute unlimited-lives boost saved for later."
+        case .stored: "15-minute unlimited-lives boost saved for later."
         default: title
+        }
+    }
+    var infoTitle: String {
+        switch self {
+        case .instant: "Unlimited lives"
+        case .stored: "Saved unlimited lives"
+        default: title
+        }
+    }
+    var explanation: String {
+        switch self {
+        case .glow, .pearl: "Lights the Trail, clears obstacles and opens treasure chests."
+        case .hint: "Highlights one useful coral to tap in Bloom. Uses no taps."
+        case .futureTeller: "Glimpse a possible final arrangement and its winning tap. Work out how to get there, and reopen the glimpse freely this attempt."
+        case .shot, .doubleShot: "Each shot lets Puff Puff take one putt in golf or a Trail challenge."
+        case .refill: "Refills your Bloom lives."
+        case .instant: "Refills your Bloom lives and starts 15 minutes of unlimited lives immediately."
+        case .stored: "Save it for later. Use it from Your treasure for a life refill and 15 minutes of unlimited Bloom lives."
+        case .lighter: "Keeps one chosen coral glowing for the rest of the Bloom attempt. Uses no taps."
+        case .currentAdder: "Place a current and choose its direction to push Puff Puff or enemy fish. Lasts until Retry."
+        case .bouncyBlock: "Place a block to bounce Puff Puff or enemy fish. Lasts until Retry."
         }
     }
     static func forGift(_ gift:BloomLifeGift)->Self {
         switch gift {case .instant:.instant;case .refill:.refill;case .stored:.stored}
     }
-    static func earned(pearl: Bool, hint: Bool, shot: Bool, gift: BloomLifeGift?, lighter: Bool = false, shots: Int? = nil) -> [Self] {
+    static func earned(pearl: Bool, hint: Bool, shot: Bool, gift: BloomLifeGift?, lighter: Bool = false, shots: Int? = nil, hints: Int? = nil, currentAdder:Bool = false, bouncyBlock:Bool = false, futureTeller: Bool = false) -> [Self] {
         var rewards: [Self] = [pearl ? .pearl:.glow]
-        if hint { rewards.append(.hint) }
+        let hintCount=hints ?? (hint ? 1:0)
+        if hintCount>0 { rewards.append(.hint(hintCount)) }
         let count=shots ?? (shot ? 1:0)
         if count>0 { rewards.append(count>1 ? .doubleShot:.shot) }
         if let gift { rewards.append(forGift(gift)) }
         if lighter { rewards.append(.lighter) }
+        if currentAdder { rewards.append(.currentAdder) }
+        if bouncyBlock { rewards.append(.bouncyBlock) }
+        if futureTeller { rewards.append(.futureTeller) }
         return rewards
     }
 }
@@ -244,7 +280,7 @@ struct BloomRewardDock: View {
             ForEach(items) { reward in
                 Color.clear.frame(width: 60, height: 60)
                     .anchorPreference(key: BloomFishAnchors.self, value: .bounds) { ["reward-\(reward.id)": $0] }
-                    .accessibilityElement(children: .ignore).accessibilityLabel(reward.accessibility)
+                    .accessibilityHidden(true)
             }
         }
     }
@@ -267,6 +303,7 @@ struct BloomRewardFlight: View {
     let docks: [String: CGRect]
     let time: Double
     let duration: Double
+    var onInspect: (BloomBubbleReward) -> Void
 
     var body: some View {
         ForEach(Array(rewards.enumerated()), id: \.element.id) { index, reward in
@@ -278,13 +315,131 @@ struct BloomRewardFlight: View {
                 let fromX = board.minX + 8 + column*(board.width-16)
                 let fromY = board.minY + board.height*0.72
                 let diameter = dock.width + (72-dock.width)*sin(t * .pi)
-                BloomRewardBubble(reward: reward, diameter: diameter, compact: true)
+                Button { onInspect(reward) } label: {
+                    BloomRewardBubble(reward: reward, diameter: diameter, compact: true)
+                        .contentShape(Circle())
+                }
+                    .buttonStyle(.plain)
+                    .accessibilityLabel(reward.accessibility)
+                    .accessibilityHint("Learn what this prize does")
+                    .allowsHitTesting(t > 0.05)
+                    .accessibilityHidden(t <= 0.05)
                     .position(x: fromX+(dock.midX-fromX)*eased+sin(t * .pi*2)*5*(1-t),
                               y: fromY+(dock.midY-fromY)*eased)
                     .opacity(min(1, t*8))
             }
         }
+    }
+}
+
+/// Read-only completion details. Outside taps dismiss without spending anything.
+struct BloomInfoPanel<Content: View>: View {
+    var tint = ReefTheme.cyan
+    var closeLabel = "Close prize details"
+    let onDismiss: () -> Void
+    @ViewBuilder var content: Content
+
+    private var details: some View {
+        content.multilineTextAlignment(.center).foregroundStyle(ReefTheme.ink)
+            .fixedSize(horizontal: false, vertical: true).padding(28)
+    }
+    var body: some View {
+        ZStack {
+            Button(action: onDismiss) {
+                Color.black.opacity(0.2).contentShape(Rectangle()).ignoresSafeArea()
+            }.buttonStyle(.plain).accessibilityLabel(closeLabel)
+            ViewThatFits(in: .vertical) {
+                details
+                ScrollView { details }.scrollBounceBehavior(.basedOnSize)
+            }
+            .frame(maxWidth: 340)
+            .background {
+                MembraneShape().fill(ReefTheme.glass.opacity(0.96))
+                MembraneSurface(tint: tint, intensity: 1.1)
+            }
+            .contentShape(Rectangle()).onTapGesture { }
+            .padding(24)
+            .accessibilityElement(children: .contain)
+        }
+        .accessibilityElement(children: .contain)
+        .accessibilityAddTraits(.isModal)
+        .accessibilityAction(.escape, onDismiss)
+    }
+}
+
+struct BloomRewardInfo: View {
+    let reward: BloomBubbleReward
+    let onDismiss: () -> Void
+    var body: some View {
+        BloomInfoPanel(tint: reward == .stored ? ReefTheme.honey : ReefTheme.cyan, onDismiss: onDismiss) {
+            VStack(spacing: 14) {
+                if reward == .stored || reward == .instant {
+                    ReefBoostIcon(stored: reward == .stored, size: 76)
+                } else {
+                    ReefIcon(reward.kind, size: 76)
+                }
+                Text(reward.infoTitle).reefFont(size: 24, weight: .semibold)
+                Text(reward.explanation).reefFont(size: 17)
+            }
+        }
+    }
+}
+
+struct BloomTapsBadge: View {
+    let remaining: Int
+    let complete: Bool
+    let bonus: Bool
+    var body: some View {
+        VStack(spacing: 2) {
+            Text("\(remaining)").reefFont(size: 17, weight: .medium).monospacedDigit()
+            Text(remaining == 1 ? "tap left" : "taps left").reefFont(size: 11)
+        }
+        .foregroundStyle(complete ? Color.adaptive(light: 0x5E706A, dark: 0xA5B1AF) : ReefTheme.ink)
+        .frame(width: 70, height: 64)
+        .background {
+            if complete {
+                SeaGlassShape().fill(Color.adaptive(light: 0xB7C8BF, dark: 0x2B4247))
+            } else {
+                MembraneSurface(tint: ReefTheme.honey, intensity: 0.85, round: true)
+            }
+        }
+        .overlay { if bonus { BloomTapBonusSparkles() } }
+        .contentShape(Circle())
+    }
+}
+
+struct BloomTapBonusSparkles: View {
+    @Environment(\.oceanTime) private var time
+    @Environment(\.accessibilityReduceMotion) private var reduceMotion
+    var body: some View {
+        Canvas { context, size in
+            var c = context
+            c.scaleBy(x: size.width / 100, y: size.height / 75)
+            c.addFilter(.shadow(color: ReefTheme.hintGold.opacity(0.7), radius: 3))
+            GlowTwinkles.draw(in: c, time: time, seed: 4, still: reduceMotion)
+        }
+        .frame(width: 90, height: 78).offset(y: -4)
         .allowsHitTesting(false).accessibilityHidden(true)
+    }
+}
+
+struct BloomTapInfo: View {
+    let moves: Int
+    let bonus: Bool
+    let onDismiss: () -> Void
+    var body: some View {
+        BloomInfoPanel(tint: bonus ? ReefTheme.honey : ReefTheme.bone,
+                       closeLabel: "Close tap summary", onDismiss: onDismiss) {
+            VStack(spacing: 18) {
+                Text("Finished in \(moves) \(moves == 1 ? "tap" : "taps")")
+                    .reefFont(size: 25, weight: .semibold)
+                if bonus {
+                    ReefIconLabel("+1 Glow", .glow, size: 40).reefFont(size: 21, weight: .semibold)
+                        .overlay { BloomTapBonusSparkles() }
+                        .accessibilityLabel("Tap bonus: 1 extra Glow")
+                }
+            }
+        }
     }
 }
 

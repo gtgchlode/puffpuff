@@ -1,5 +1,11 @@
 puffpuff — first native SwiftUI chapter
 
+APP NAMES
+Selected App Store listing name: PuffPuff: Golf & Glow
+Home Screen name: puffpuff
+The listing name is set separately in App Store Connect. Keep the Xcode
+bundle display name lowercase, with no spaces.
+
 OPEN AND RUN
 Open puffpuff.xcodeproj in Xcode. Select the puffpuff scheme and
 an iPhone simulator, then Run. The target also supports My Mac for a native
@@ -105,8 +111,7 @@ lit corals bend gently with the current. All use the shared ocean clock and
 respect pause and Reduce Motion. Unlit corals and pebbles remain still.
 
 CONTENT
-100 authored Bloom boards live in Resources/BloomLevels.json. Only levels 1–45
-are currently playable; 46–100 remain drafts for the next design pass.
+100 authored Bloom boards live in Resources/BloomLevels.json. All 100 are playable; burst coral starts at 85 with a free practice.
 The first 10 boards are authored as a gentler introduction. The remaining
 boards are generated from legal moves and saved as data. Every tap budget
 covers a solution, with room for mistakes beyond the first one-tap lesson.
@@ -129,11 +134,16 @@ data-controlled and can be moved, mixed, or disabled while tuning:
   36–38:  up/down coral (self + above/below); one, one and two vertical tiles
   41–42:  horizontal current coral introduced; 5x5 boards
   43–45:  plain, pebble and up/down variations
-  46–100: drafts, reserved for later design work
+  46–51: up/down + left/right mixes
+  52–59: diagonals, pebbles and selected directional mixes
+  60–70: whole rows/columns mixed with earlier tiles; 63/67 have no whole lines
+  71–84: mixed line/directional/diagonal boards and breathers
+  85–88: burst coral introduction, overlap practice and pebbles
+  89–100: selective mixes and breathers; 100 ends this chapter
 
 Legacy ten-stage data is retained for save compatibility; only the new
 first reef is exposed through Home → Trail.
-Bloom stops at 45. Play again explicitly replays from 1 to keep earning Glow;
+Bloom stops at 100. Replay lets you practice the just-won level for free, without rewards;
 Home returns to the saved Trail cove. Shots are first-clear milestones only. Later saved progress is preserved.
 Saved native progress is independent of the earlier browser demo.
 Existing unfinished levels 1–10 migrate to the new lesson at the same
@@ -238,13 +248,14 @@ Home offers Bloom and Trail. Gameplay has a Pause button with Resume and
 Home; the bottom toolbar is removed. Bloom's heading is just the patch.
 
 Choosing Bloom opens Start from beginning or Start from level. Type any
-number from 1–45. The field starts at the current patch; starting that
+number from 1–100. The field starts at the current patch; starting that
 level resumes its board. A different level starts a fresh board and keeps
 the original checkpoint. The saved checkpoint level is shown when it
 differs; type that number to restore it. Beginning replays patch 1 while
 keeping resources, Trail progress and the original board. Invalid input
-cannot start a game. This level picker is temporary and compiled only in DEBUG. Release builds
-resume the current Bloom board directly from Home.
+cannot start a game. This level picker is temporary and available in local Debug/simulator builds and
+verified TestFlight installations. Public App Store builds hide testing tools.
+The normal Bloom button resumes the current board directly from the Trail.
 Save format 8 supports jumping above or below the checkpoint, preserves it
 across launches, and prevents older builds from overwriting the newer save.
 
@@ -382,7 +393,7 @@ discoveries remain unlocked, without a retroactive charge.
 First-item explanations appear at their actual reward reveal; old queued
 records no longer pop up after navigation or launch. Some easy Bloom wins
 use a little hop or double hop in place. The hint refill panel has a centered
-shell icon and a padded 44-point close button. Bloom currently ends at 60.
+shell icon and a padded 44-point close button. Bloom currently ends at 100.
 
 NOVEMBER 2 PATH GOALS & CLOSED CHESTS
 The path has no footer. Goals show snacks and home; optional chests do not
@@ -393,3 +404,15 @@ Run bash scripts/check-path-goals.sh for isolated pacing and payment checks.
 November 3 update: first-visit 3-slide intro + first Bonus putt 2-slide guide, remembered separately. One-time shot chests; every five Bloom wins + a separate 10% chance per win grant shots. Short chest reveals, readable multipliers, full-height Trail scenery. Save format 20 preserves all existing progress; no signing changes.
 
 November 3 Trail refinement: local prices are now 8–24 Glow (small finds 8–12), with required routes 200/222 Glow, or roughly 50–74 Bloom wins. Clearing all 104 optional/required finds costs 1268 Glow (317–423 wins). Arrows follow the map diagonally, coves scroll around one swimming fish, and faint sandy routes guide exploration. Already paid discoveries and inventory stay unchanged.
+
+November 6: Burst coral flips its 3×3 neighborhood, excluding water, pebbles and lighter-held coral. All 100 boards are solvable with native rules. Existing started/completed attempts and checkpoints survive the format-27 upgrade. Current-Adder.af/SVG and the runtime icon place the plus at (50,50).
+
+
+TESTFLIGHT TESTING TOOLS (November 6, 2026)
+Archive the normal puffpuff scheme in Release and upload a new build to TestFlight.
+Settings includes Debug refills, Debug levels, Playground and Restart everything
+in Xcode/simulator and verified TestFlight installations. Cleared Trail challenges
+also show Replay. Public App Store installations hide and reject testing actions.
+StoreKit checks the signed app environment; no extra scheme or DEBUG flag is needed.
+An initial environment check may need connectivity; reopening Settings retries it.
+Existing TestFlight uploads cannot change; install the newly uploaded build.

@@ -1,4 +1,3 @@
-#if DEBUG
 import Foundation
 import Observation
 
@@ -191,4 +190,3 @@ enum SlingTrial:Int,CaseIterable,Identifiable {
         }
     }
 }
-#endif

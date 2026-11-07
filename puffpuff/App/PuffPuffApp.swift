@@ -61,6 +61,9 @@ struct ReefRootView: View {
             if !openedTrail { openedTrail = true; store.navigate(to: .trail) }
             await purchases.observe(store: store)
         }
+        .task(id: scenePhase) {
+            if scenePhase == .active { await store.refreshTestingAccess() }
+        }
         .onChange(of:store.discoveryReceipt?.id) { _,_ in
             if let receipt=store.discoveryReceipt,receipt.source == .bonus {presentDiscovery(receipt.id)}
         }
@@ -202,7 +205,7 @@ struct ReefBloomStartOptions: View {
                         .keyboardType(.numberPad)
                         #endif
                     Button("Start from level") {
-                        if let level = chosenLevel, store.startFromLevel(level) { onStart() }
+                        if let level = chosenLevel, store.startDebugLevel(level) { onStart() }
                     }.buttonStyle(ReefButtonStyle(filled: true)).disabled(chosenLevel == nil)
                 }
                 if chosenLevel == nil { Text("Choose 1–\(ReefStore.levelLimit)").reefFont(size: 12) }

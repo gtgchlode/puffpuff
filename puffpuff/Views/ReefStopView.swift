@@ -24,8 +24,12 @@ struct ReefStopView: View {
     @State private var showExploredMap = false
     @State private var showQuestRewards = false
     @State private var selectedCurrent: Int?
+    @State private var placingAid:ReefGolfAid?
+    @State private var placementPoint:ReefPoint?
     @State private var showBonusIntro = false
-    @State private var treasureInfo:ReefDiscovery?
+    @State private var challengeID:String?
+    @State private var replayTrial:ReefMiniTrial?
+    @State private var replayLayout=0
 
     private var reef: FirstReefProgress { store.progress.firstReef }
     private var busy: Bool { journey != nil }
@@ -33,7 +37,7 @@ struct ReefStopView: View {
     private var fishPosition: ReefPoint { golf ? reef.bonus?.position ?? FirstReef.bonusTee(reef) : reef.position }
     private var canAdjustCurrent: Bool { golf && reef.bonus?.finished == false && reef.bonus?.claimed == false && !busy && !reefPaused && !store.isSaveBlocked }
 
-    private var canPutt:Bool {canAdjustCurrent && store.progress.shots>0}
+    private var canPutt:Bool {canAdjustCurrent && store.progress.shots>0 && placingAid == nil}
 
     var body: some View {
         GeometryReader { geometry in
@@ -62,6 +66,26 @@ struct ReefStopView: View {
                                         }.position(x:BonusCourse.currents[index].x*scale,y:BonusCourse.currents[index].y*scale)
                                             .disabled(!canAdjustCurrent).accessibilityLabel("Current \(index+1), \(ReefCurrentPicker.names[BonusCourse.initialCurrents(reef)[index]])")
                                     }
+                                    ForEach(reef.bonus?.addedCurrents ?? []) {current in
+                                        ReefCurrentButton(direction:current.direction,time:reduceMotion ? 0:oceanTime) {}
+                                            .overlay(alignment:.bottomTrailing) {ReefIcon(.currentAdder,size:18)}
+                                            .position(x:current.position.x*scale,y:current.position.y*scale)
+                                            .allowsHitTesting(false)
+                                            .accessibilityLabel("Added current, \(ReefCurrentPicker.names[current.direction])")
+                                    }
+                                    ForEach(reef.bonus?.bouncyBlocks ?? []) {block in
+                                        ReefIcon(.bouncyBlock,size:50*scale)
+                                            .position(x:block.position.x*scale,y:block.position.y*scale).allowsHitTesting(false)
+                                    }
+                                    if let aid=placingAid,canAdjustCurrent {
+                                        Color.clear.frame(width:width,height:height).contentShape(Rectangle())
+                                            .onTapGesture {point in
+                                                let location=ReefPoint(x:point.x/scale,y:point.y/scale)
+                                                if aid == .current ? BonusCourse.canPlaceCurrent(at:location,in:reef) :
+                                                    (BonusCourse.canPlaceBlock(at:location,in:reef) && (location-fishPosition).length>=45) {placementPoint=location;feedback=nil}
+                                                else {feedback="Choose open water away from home, obstacles and other currents."}
+                                            }.accessibilityLabel("Choose a place for the \(aid.title.lowercased())")
+                                    }
                                     if canPutt {
                                         Color.clear.frame(width:60,height:60).contentShape(Circle())
                                             .highPriorityGesture(DragGesture(minimumDistance:2)
@@ -88,7 +112,12 @@ struct ReefStopView: View {
                                           reduceMotion: reduceMotion,
                                           enabled: !busy && !reefPaused && !store.isSaveBlocked && reef.bonus?.claimed != true,
                                           onVisit: visit, onUncover: uncover, onMap: { showExploredMap = true },
-                                          onTreasureInfo: { treasureInfo=$0 },
+                                          onChallenge: {object in
+                                              if store.beginCoveChallenge(object.id) {challengeID=object.id}
+                                              else {pathNotice="Couldn't save. Please try again."}
+                                          },
+                                          onReplayChallenge: replayChallenge,
+                                          testingToolsEnabled: store.testingToolsEnabled,
                                           bottomInset: geometry.safeAreaInsets.bottom)
                                 .frame(maxWidth: 520, maxHeight: .infinity)
                         }
@@ -114,15 +143,41 @@ struct ReefStopView: View {
                 }.presentationDetents([.height(430)]).presentationBackground(.clear)
             }
         }
+        .sheet(isPresented:Binding(get:{placementPoint != nil},set:{if !$0 {placementPoint=nil}})) {
+            if placingAid == .block {
+                ReefBlockPicker(count:store.progress.bouncyBlocks) {
+                    if let point=placementPoint,store.addReefBlock(at:point) {placementPoint=nil;placingAid=nil;feedback=nil}
+                    else {placementPoint=nil;feedback="Couldn't place it. Your block is still in your treasure."}
+                }.presentationDetents([.height(310)]).presentationBackground(.clear)
+            } else {
+                ReefCurrentPicker(index:0,direction:0,count:store.progress.currentAdders,onUse:{direction in
+                    if let point=placementPoint,store.addReefCurrent(at:point,direction:direction) {
+                        placementPoint=nil;placingAid=nil;feedback=nil
+                    } else {placementPoint=nil;feedback="Couldn't place it. Your current adder is still in your treasure."}
+                },placing:true).presentationDetents([.height(430)]).presentationBackground(.clear)
+            }
+        }
+        .onChange(of:placementPoint) {_,point in onOverlay(point != nil)}
+        .onChange(of:golf) {_,_ in placingAid=nil;placementPoint=nil}
         .onChange(of: selectedCurrent) { _, selection in onOverlay(selection != nil) }
         .onChange(of: showExploredMap) { _, shown in onOverlay(shown) }
         .onChange(of: showQuestRewards) { _, shown in onOverlay(shown) }
         .onChange(of: showBonusIntro) { _, shown in onOverlay(shown) }
-        .onChange(of: treasureInfo) { _, item in onOverlay(item != nil) }
-        .sheet(item:$treasureInfo,onDismiss:{onOverlay(false)}) {item in
-            // Voluntary information only: no reward, purchase, or tutorial acknowledgement.
-            ReefDiscoverySheet(item:item) {treasureInfo=nil}
-                .presentationDetents([.medium]).presentationBackground(.clear)
+        .sheet(isPresented:Binding(get:{challengeID != nil},set:{if !$0 {challengeID=nil}}),onDismiss:{onOverlay(false)}) {
+            if let id=challengeID {
+                ReefMiniChallengeView(objectID:id) {reveal in
+                    challengeID=nil
+                    if let reveal {questDeparture=reef;play(reveal)}
+                }.environment(store).presentationDetents([.large]).presentationBackground(.clear)
+                    .interactiveDismissDisabled()
+            }
+        }
+        .onChange(of:challengeID) {_,id in onOverlay(id != nil)}
+        .onChange(of:store.testingToolsEnabled) { _, enabled in if !enabled { replayTrial = nil } }
+        .onChange(of:replayTrial) {_,trial in onOverlay(trial != nil)}
+        .sheet(item:$replayTrial,onDismiss:{onOverlay(false)}) {trial in
+            ReefMiniPractice(trial:trial,title:trial.kind == .kelp ? "Kelp run":"Scare enemies",layout:replayLayout)
+                .presentationDetents([.large]).presentationBackground(.clear)
         }
         .sheet(isPresented: $showBonusIntro, onDismiss: { onOverlay(false) }) {
             OceanScene {
@@ -160,7 +215,9 @@ struct ReefStopView: View {
                 // Chest prizes have their own brief reveal, without a celebration hold.
                 let finishAt = reduceMotion ? 0.15 : max(duration+(homecoming ? 1.5:0.1),giftEndsAt)
                 var revealAt = 0.0
-                if let receiptID {
+                if object?.isChest == true || object?.find == .treasure {
+                    store.cancelDiscoveryReceipt()
+                } else if let receiptID {
                     // Explain at the reveal, without the old global delay or reward-banner hold.
                     revealAt = reduceMotion ? 0 : min(finishAt,object.map{CoveActionTiming($0).clearedAt+0.1} ?? duration)
                     try await Task.sleep(for:.seconds(revealAt))
@@ -172,6 +229,13 @@ struct ReefStopView: View {
                 journey=nil;questDeparture=nil
             } catch { /* Destination and rewards are already saved atomically. */ }
         }
+    }
+
+    private func replayChallenge(_ object:ReefCove.Object) {
+        guard store.testingToolsEnabled, let kind=object.challengeKind,(reef.coveSearches ?? []).contains(object.id) else{return}
+        replayLayout=reef.miniChallenges?[object.id]?.layout ?? ReefMiniChallenge.layout(for:object.id)
+        let timed=reef.miniChallenges?[object.id]?.timedEnemies ?? ReefMiniChallenge.timedEncounter(object.id)
+        replayTrial=kind == .kelp ? .kelp:timed ? .movingEnemies:.enemyPutts
     }
 
     private func heading(elapsed: Double) -> some View {
@@ -228,7 +292,7 @@ struct ReefStopView: View {
         feedback=nil
         let cost=FirstReef.cost(to:destination,from:reef)
         guard FirstReef.route(to:destination.id,state:reef) != nil else { pathNotice="Clear the blockage or take another path.";return }
-        guard store.progress.glow >= cost else { pathNotice="Need \(cost-store.progress.glow) more Glow. Earn it in Bloom.";return }
+        guard store.progress.glow >= cost else { openBloomForGlow(); return }
         let departure = reef
         guard let result=store.visitFirstReef(destination.id) else { pathNotice="Couldn't save. Please try again.";return }
         questDeparture = departure
@@ -237,10 +301,15 @@ struct ReefStopView: View {
     private func uncover(_ object:ReefCove.Object) {
         guard !busy,!reefPaused,!store.isSaveBlocked,reef.bonus?.claimed != true else{return}
         feedback=nil
-        guard store.progress.glow>=object.cost else {pathNotice="Need \(object.cost-store.progress.glow) more Glow. Earn it in Bloom.";return}
+        guard store.progress.glow>=object.cost else { openBloomForGlow(); return }
         let departure=reef
         guard let result=store.uncoverCove(object.id) else {pathNotice="Couldn't save. Please try again.";return}
         questDeparture=departure;play(result)
+    }
+    private func openBloomForGlow() {
+        pathNotice = nil
+        if store.playBloomForGlow() { onOverlay(false) }
+        else { pathNotice = "Couldn't save. Please try again." }
     }
     private func play(_ result:ReefJourney) { journeyBegan=Date();journey=result }
 
@@ -251,7 +320,7 @@ struct ReefStopView: View {
                 Text("Next reef unlocked · coming soon").reefFont(size:12).foregroundStyle(ReefTheme.muted)
                 Button("Home",action:onHome).buttonStyle(ReefButtonStyle(kind:.action))
             } else if let bonus=reef.bonus {
-                if !busy {
+                if !busy && placingAid == nil {
                     Text(bonusStatus(bonus)).reefFont(size:13,weight:.medium).foregroundStyle(ReefTheme.ink)
                     if bonus.canCollect, let best=bonus.bestStrokes {
                         let reward=FirstReef.reward(for:best)
@@ -261,10 +330,14 @@ struct ReefStopView: View {
                         }
                     }
                 }
+                if !bonus.finished && !busy {
+                    ReefAidControls(currents:store.progress.currentAdders,blocks:store.progress.bouncyBlocks,
+                                    placing:$placingAid,enabled:canAdjustCurrent)
+                }
                 HStack(spacing:8) {
                     Button("Explore") { golf=false;feedback=nil }
                         .buttonStyle(ReefButtonStyle(kind:.quiet)).disabled(busy)
-                    Button("Retry") { if store.startReefBonus(retry:true) { feedback=nil;journey=nil } }
+                    Button("Retry") { if store.startReefBonus(retry:true) { feedback=nil;journey=nil;placingAid=nil;placementPoint=nil } }
                         .buttonStyle(ReefButtonStyle(kind:.quiet)).disabled(busy || store.isSaveBlocked)
                     if bonus.canCollect {
                         Button("Collect") { if !store.collectReefBonus() { feedback="Couldn't save. Please try again." } }
@@ -333,8 +406,9 @@ struct ReefPlayfield: View {
             let visited=progress.visited ?? ["start"]
             if golf {
                 ReefBayArt.puttingWater(in:c,state:progress,time:time)
-                for (index,point) in BonusCourse.currents.enumerated() {
-                    let direction=BonusCourse.currentDirection(BonusCourse.initialCurrents(progress)[index])
+                for current in BonusCourse.activeCurrents(progress) {
+                    let point=current.position
+                    let direction=BonusCourse.currentDirection(current.direction)
                     for lane in -1...1 {
                         let side=ReefPoint(x:-direction.y,y:direction.x)*Double(lane)*9
                         let offset=reduceMotion ? 0 : sin(time/1600+Double(lane))*3
@@ -397,10 +471,10 @@ private struct ReefPuffOverlay: View {
             let landing=journey.map { max(0,playTime-$0.duration) } ?? (arrived ? 2.0:0)
             let release=journey.map { _ in min(1,playTime/0.18) } ?? 1
             let charge=drag.map { min(1,$0.length/110) } ?? (journey?.launchCharge ?? 0)*(1-release)
-            var inflation=0.25+charge*0.75
-            var fishScale=0.62+charge*0.15
+            var inflation=0.05+charge*0.95
+            var fishScale=0.62+charge*0.55
             if arrived && landing > 0 {
-                inflation=max(0,0.25*(1-landing/0.65))
+                inflation=max(0,0.05*(1-landing/0.65))
                 let enter=ReefMotion.segment(landing*1000,from:550,to:1400)
                 fishScale *= 1-enter*0.78
                 position=position+ReefPoint(x:0,y:-3)*enter

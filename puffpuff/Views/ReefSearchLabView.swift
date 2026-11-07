@@ -1,4 +1,3 @@
-#if DEBUG
 import SwiftUI
 
 struct ReefSearchLabView:View {
@@ -266,4 +265,3 @@ private struct SearchReefBackdrop:View {
         }.allowsHitTesting(false).accessibilityHidden(true)
     }
 }
-#endif

@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="700" height="560" viewBox="83 0 175 140">
+<g id="goal">
+<path id="sand-shadow" d="M246 115 C246 122.731987 211.973641 129 170 129 C128.026359 129 94 122.731987 94 115 C94 107.268013 128.026359 101 170 101 C211.973641 101 246 107.268013 246 115 Z" style="fill:rgb(89,140,129);opacity:1" />
+<path id="coral-left" d="M111 110 C99 87 98 68 102 49 M101 76 C91 69 90 60 92 53 M102 64 C111 55 111 49 109 43" style="fill:none;stroke:rgb(239,161,141);stroke-width:9;stroke-linecap:round" />
+<path id="coral-left-light" d="M102 101 C97 84 98 65 102 51" style="fill:none;stroke:rgb(248,206,170);stroke-width:2.7;stroke-linecap:round" />
+<path id="coral-right" d="M230 111 C238 91 239 75 237 55 M238 84 C249 75 248 66 247 61 M237 73 C230 68 229 60 230 54" style="fill:none;stroke:rgb(143,190,166);stroke-width:8;stroke-linecap:round" />
+<path id="coral-right-light" d="M232 104 C238 88 237 70 237 58" style="fill:none;stroke:rgb(218,232,193);stroke-width:2.6;stroke-linecap:round" />
+<path id="cavity" d="M114 109 L114 50 L132 24 L208 24 L226 50 L226 109 C188.666667 117.666667 151.333333 117.666667 114 109 Z" style="fill:rgb(18,59,66);stroke:rgb(66,119,110);stroke-width:3" />
+<path id="cavity-inner" d="M124 99 L124 53 L137 34 L203 34 L216 53 L216 99 C185.333333 107.666667 154.666667 107.666667 124 99 Z" style="fill:rgb(27,83,90)" />
+<path id="deep-pocket" d="M206 58 C206 70.7025493 189.882251 81 170 81 C150.117749 81 134 70.7025493 134 58 C134 45.2974507 150.117749 35 170 35 C189.882251 35 206 45.2974507 206 58 Z" style="fill:rgb(12,45,53)" />
+<path id="entrance-water" d="M139 116 C159.666667 108 180.333333 108 201 116 L191 82 C177 76 163 76 149 82 Z" style="fill:rgb(68,140,138)" />
+<path id="entrance-shine" d="M150 104 C163.333333 100 176.666667 100 190 104 M155 93 C165 89 175 89 185 93" style="fill:none;stroke:rgb(155,207,193);stroke-width:2;stroke-linecap:round" />
+<path id="wall-ink" d="M130 106 L114 106 L114 50 L132 24 L208 24 L226 50 L226 106 L210 106" style="fill:none;stroke:rgb(66,119,110);stroke-width:15;stroke-linecap:round;stroke-linejoin:round" />
+<path id="wall-coral" d="M130 106 L114 106 L114 50 L132 24 L208 24 L226 50 L226 106 L210 106" style="fill:none;stroke:rgb(223,157,135);stroke-width:11;stroke-linecap:round;stroke-linejoin:round" />
+<path id="wall-light" d="M130 102 L118 102 L118 51 L135 28 L205 28 L222 51 L222 102 L211 102" style="fill:none;stroke:rgb(255,225,174);stroke-width:3;stroke-linecap:round;stroke-linejoin:round" />
+<path id="fore-bar-one" d="M147 34 C145.666667 40.6666667 146 48.3333333 148 57" style="fill:none;stroke:rgb(150,187,167);stroke-width:4;stroke-linecap:round" />
+<path id="fore-bar-two" d="M169 34 C167.666667 41.3333333 168 49.3333333 170 58" style="fill:none;stroke:rgb(150,187,167);stroke-width:4;stroke-linecap:round" />
+<path id="fore-bar-three" d="M191 34 C189.666667 40.6666667 190 48.3333333 192 57" style="fill:none;stroke:rgb(150,187,167);stroke-width:4;stroke-linecap:round" />
+<path id="fore-shell" d="M159 22 C153.666667 14.6666667 152.666667 10 156 8 C161.333333 6 166 8 170 14 C174 8 178.333333 6 183 8 C186.333333 11.3333333 185 16 179 22 Z" style="fill:rgb(241,200,121);stroke:rgb(141,134,92);stroke-width:2" />
+<path id="fore-shell-vein" d="M170 20 L170 13 M168 19 L160 12 M173 19 L180 12" style="fill:none;stroke:rgb(255,231,178);stroke-width:1.5;stroke-linecap:round" />
+<path id="fore-pebble-left" d="M119 119 C119 121.209139 114.970563 123 110 123 C105.029437 123 101 121.209139 101 119 C101 116.790861 105.029437 115 110 115 C114.970563 115 119 116.790861 119 119 Z" style="fill:rgb(233,203,145);stroke:rgb(66,119,110);stroke-width:1.5" />
+<path id="fore-pebble-right" d="M234 117 C234 118.656854 230.865993 120 227 120 C223.134007 120 220 118.656854 220 117 C220 115.343146 223.134007 114 227 114 C230.865993 114 234 115.343146 234 117 Z" style="fill:rgb(169,203,176);stroke:rgb(66,119,110);stroke-width:1.5" />
+</g></svg>

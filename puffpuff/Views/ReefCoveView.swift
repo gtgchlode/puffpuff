@@ -10,7 +10,7 @@ struct CoveActionTiming {
     init(_ object:ReefCove.Object) {
         scares=object.barrier == .enemy && !object.isChest
         eats=object.find == .food
-        treasure=object.isChest || object.find == .treasure
+        treasure=object.isChest || object.find == .treasure || object.clearingReward != nil
     }
 }
 
@@ -25,11 +25,15 @@ struct ReefCoveView:View {
     let onVisit:(FirstReef.Destination)->Void
     let onUncover:(ReefCove.Object)->Void
     let onMap:()->Void
-    var onTreasureInfo:(ReefDiscovery)->Void = {_ in}
+    var onChallenge:(ReefCove.Object)->Void = {_ in}
+    var onReplayChallenge:(ReefCove.Object)->Void = {_ in}
+    var testingToolsEnabled = false
     var bottomInset:Double = 0
     @Environment(\.reefPaused) private var paused
     @Environment(\.scenePhase) private var scenePhase
     @State private var selectedID:String?
+    @State private var mapPosition=ReefPoint(x:0,y:0)
+    @GestureState private var mapDrag=CGSize.zero
     @State private var rest=CGPoint(x:0.5,y:0.51)
     @State private var swimFrom=CGPoint(x:0.5,y:0.51)
     @State private var swimBegan=Date()
@@ -97,14 +101,14 @@ struct ReefCoveView:View {
                     .offset(x:movement.newOffset.x,y:movement.newOffset.y)
                 Canvas {c,s in drawTravelDarkness(in:c,size:s,movement:movement,previous:previous,fish:pose.point)}
                     .allowsHitTesting(false).accessibilityHidden(true)
-                previous.foreground(size:size,pose:pose)
+                previous.foreground(size:size,pose:pose,interactive:false)
                     .offset(x:movement.oldOffset.x,y:movement.oldOffset.y).allowsHitTesting(false).accessibilityHidden(true)
-                foreground(size:size,pose:pose)
+                foreground(size:size,pose:pose,interactive:!paused && journey == nil)
                     .offset(x:movement.newOffset.x,y:movement.newOffset.y)
             } else {
                 ground(size:size,pose:pose)
                 Canvas {c,s in drawDarkness(in:c,size:s,fish:pose.point)}.allowsHitTesting(false).accessibilityHidden(true)
-                foreground(size:size,pose:pose)
+                foreground(size:size,pose:pose,interactive:!paused && journey == nil)
             }
             Canvas {c,s in drawFish(in:c,pose:pose,size:s)}.allowsHitTesting(false).accessibilityHidden(true)
             if journey == nil { ForEach(exits) {destination in
@@ -112,19 +116,43 @@ struct ReefCoveView:View {
                     exitButton(destination).position(x:p.x,y:p.y)
                 }
             } }
-            if let selectedID,let object=objects.first(where:{$0.id == selectedID}) {
-                let halfHeight=searches.contains(object.id)
-                    ? 65.0+Double(ReefTreasureArt.contents(for:object).count)*34:104.0
+            miniMap(size:size,movement:movement)
+            if let selectedID,let object=objects.first(where:{$0.id == selectedID}),!searches.contains(object.id) {
+                Color.clear.contentShape(Rectangle()).onTapGesture {p in
+                    self.selectedID=nil
+                    if enabled {swim(to:p,in:size)}
+                }.accessibilityLabel("Dismiss details").accessibilityAddTraits(.isButton)
+                let halfHeight=object.challengeKind == nil ? 86.0:126.0
                 details(object,size:size)
                     .position(x:min(size.width-140,max(140,point(object.slot,in:size).x)),
-                              y:min(size.height-halfHeight-12,max(halfHeight+12,point(object.slot,in:size).y+(object.slot<2 ? 120:-120))))
+                              y:min(size.height-bottomInset-halfHeight-12,max(halfHeight+12,point(object.slot,in:size).y+(object.slot<2 ? 120:-120))))
+                    .accessibilityAction(named:"Dismiss") {self.selectedID=nil}
             }
-        }.overlay(alignment:.topLeading) {
-            ReefMiniMap(progress:progress,position:departure.map {
-                $0.position+(progress.position-$0.position)*(movement?.progress ?? 1)
-            } ?? progress.position,onExpand:{selectedID=nil;onMap()}).padding(8)
-                .allowsHitTesting(journey == nil)
-        }.clipped()
+        }.clipped().coordinateSpace(name:"reef-cove")
+    }
+    private func miniMap(size:CGSize,movement:ReefCove.TravelFrame?)->some View {
+        let bounds=ReefPoint(x:size.width,y:size.height)
+        let offset=ReefCove.mapOffset(mapPosition+ReefPoint(x:mapDrag.width,y:mapDrag.height),size:bounds,bottomInset:bottomInset)
+        return ReefMiniMap(progress:progress,position:departure.map {
+            $0.position+(progress.position-$0.position)*(movement?.progress ?? 1)
+        } ?? progress.position,onExpand:{selectedID=nil;onMap()})
+            .frame(width:96,height:120)
+            .highPriorityGesture(DragGesture(minimumDistance:8,coordinateSpace:.named("reef-cove"))
+                .updating($mapDrag) {value,state,_ in state=value.translation}
+                .onEnded {value in
+                    let drag=ReefPoint(x:value.translation.width,y:value.translation.height)
+                    let projected=ReefPoint(x:value.predictedEndTranslation.width,y:value.predictedEndTranslation.height)-drag
+                    // Keep a fast flick gentle; never launch the chart across the whole screen.
+                    let coast=reduceMotion ? ReefPoint(x:0,y:0):projected*min(1,70/max(1,projected.length))
+                    let proposed=mapPosition+drag+coast
+                    withAnimation(reduceMotion ? nil:.easeOut(duration:0.28)) {
+                        mapPosition=ReefCove.mapOffset(proposed,size:bounds,bottomInset:bottomInset)
+                    }
+                })
+            .position(x:56+offset.x,y:68+offset.y)
+            .allowsHitTesting(journey == nil && !paused)
+            .accessibilityHint("Tap to expand. Drag or flick to move the map.")
+            .accessibilityAction(named:"Return to upper left") {mapPosition = .init(x:0,y:0)}
     }
     private func ground(size:CGSize,pose:CoveFishPose)->some View {
         let artSize=min(128,min(size.width*0.36,size.height*0.27))
@@ -154,90 +182,89 @@ struct ReefCoveView:View {
         .frame(width:size.width,height:size.height)
         .allowsHitTesting(false).accessibilityHidden(true)
     }
-    private func foreground(size:CGSize,pose:CoveFishPose)->some View {
+    // The departing cove is a drawing snapshot, not an installed SwiftUI view.
+    // Resolve environment-driven interaction in scene(), never through that snapshot.
+    private func foreground(size:CGSize,pose:CoveFishPose,interactive:Bool)->some View {
         let artSize=min(128,min(size.width*0.36,size.height*0.27))
         return ZStack {
-            ForEach(objects.filter{!searches.contains($0.id)}) {object in
-                Button {
-                    guard enabled else{return}
-                    swim(to:standPoint(object,in:size),in:size)
-                    selectedID=object.id
-                } label: {
-                    if object.isChest {
-                        // The scene owns closed/open artwork and the reward animation.
-                        // Keeping this hit target separate makes center chests tappable.
-                        Color.clear.frame(width:artSize+8,height:artSize+8).contentShape(Rectangle())
-                    } else {
-                        HStack(spacing:0) {
-                            ReefIcon(.glowKey,size:43,sparkleSeed:object.slot+area.utf8.reduce(0){$0+Int($1)})
-                            Text("\(object.cost)").reefFont(size:20,weight:.semibold)
-                        }.padding(.leading,4).padding(.trailing,13).padding(.vertical,4)
-                            .background(MembraneShape().fill(ReefTheme.glass.opacity(0.96)))
-                            .frame(width:artSize+10,height:artSize+12).contentShape(Rectangle())
-                    }
-                }.buttonStyle(.plain).disabled(!enabled)
-                    .position(point(object.slot,in:size))
-                    .accessibilityLabel(object.isChest ? "Open treasure chest, \(object.cost) Glow":"\(object.cost) Glow to uncover hiding place \(object.slot+1)")
-                    .accessibilityHint("Show the action and Glow price.")
-            }
             Canvas {c,s in
                 for object in objects where object.isChest || object.find == .treasure {
                     drawTreasure(object,in:c,size:s,artSize:artSize)
                     if object.find == .food { drawFood(object,in:c,size:s,artSize:artSize,pose:pose) }
                 }
+                for object in objects {
+                    drawKelpGate(object,in:c,size:s,artSize:artSize)
+                    drawEnemyPatrol(object,in:c,size:s,artSize:artSize)
+                    if let item=progress.clearingRewards?[object.id],
+                       action?.id == object.id,!reduceMotion {
+                        let reveal=elapsed-CoveActionTiming(object).clearedAt
+                        if reveal<1.55 {
+                            var prize=c;prize.opacity *= max(0,min(1,(1.55-reveal)/0.3))
+                            ReefTreasureArt.draw([.init(item:item)],in:prize,at:point(object.slot,in:s),chestSize:artSize,elapsed:reveal)
+                        }
+                    }
+                }
                 drawLifeGift(in:c,size:s)
             }.allowsHitTesting(false).accessibilityHidden(true)
-            ForEach(objects.filter{searches.contains($0.id) && ($0.isChest || $0.find == .treasure)}) {object in
+            ForEach(objects.filter{!searches.contains($0.id)}) {object in
                 Button {
-                    guard journey == nil,!paused else{return}
-                    if enabled {swim(to:standPoint(object,in:size),in:size)}
+                    guard enabled,interactive else{return}
+                    swim(to:standPoint(object,in:size),in:size)
                     selectedID=object.id
                 } label: {
-                    // Include the floating prizes above the lid in the same target.
-                    Color.clear.frame(width:artSize+24,height:artSize*1.5).contentShape(Rectangle())
-                }.buttonStyle(.plain).disabled(journey != nil || paused)
-                    .position(x:point(object.slot,in:size).x,y:point(object.slot,in:size).y-artSize*0.20)
-                    .accessibilityLabel("Collected treasure: " + ReefTreasureArt.contents(for:object).map(\.label).joined(separator:", "))
-                    .accessibilityHint("Show the amounts received and optional item information.")
+                    VStack(spacing:0) {
+                        if object.isChest {Spacer(minLength:0)}
+                        HStack(spacing:0) {
+                            ReefIcon(.glowKey,size:object.isChest ? 33:43,sparkleSeed:object.slot+area.utf8.reduce(0){$0+Int($1)})
+                            Text("\(object.cost)").reefFont(size:object.isChest ? 18:20,weight:.semibold)
+                        }.padding(.leading,4).padding(.trailing,12).padding(.vertical,4)
+                            .background(MembraneShape().fill(ReefTheme.glass.opacity(0.98)))
+                    }.frame(width:artSize+10,height:artSize+20)
+                        .contentShape(Rectangle())
+                }.buttonStyle(.plain).disabled(!enabled || !interactive)
+                    .position(point(object.slot,in:size))
+                    .accessibilityLabel(object.isChest ? "Open treasure chest, \(object.cost) Glow":"\(object.cost) Glow to uncover hiding place \(object.slot+1)")
+                    .accessibilityHint("Show the action and Glow price.")
+            }
+            if testingToolsEnabled {
+            ForEach(objects.filter{searches.contains($0.id) && $0.challengeKind != nil}) {object in
+                Button {onReplayChallenge(object)} label: {
+                    Label("Replay",systemImage:"arrow.counterclockwise")
+                        .reefFont(size:13,weight:.semibold)
+                        .padding(.horizontal,12).padding(.vertical,10)
+                        .background(MembraneShape().fill(ReefTheme.glass.opacity(0.94)))
+                        .frame(minWidth:64,minHeight:44)
+                }.buttonStyle(.plain).disabled(!interactive)
+                    .position(x:point(object.slot,in:size).x,y:point(object.slot,in:size).y+artSize*0.34)
+                    .accessibilityLabel(object.challengeKind == .kelp ? "Replay kelp challenge":"Replay enemy challenge")
+            }
             }
         }
     }
     private func details(_ object:ReefCove.Object,size:CGSize)->some View {
-        let opened=searches.contains(object.id)
-        return VStack(spacing:opened ? 8:16) {
-            HStack(spacing:4) {
-                Color.clear.frame(width:44,height:44).accessibilityHidden(true)
-                Text(opened ? "Found":object.action).reefFont(size:18,weight:.semibold)
-                    .multilineTextAlignment(.center).fixedSize(horizontal:false,vertical:true)
-                    .frame(maxWidth:.infinity)
-                Button {selectedID=nil} label:{Image(systemName:"xmark").frame(width:44,height:44)}
-                    .buttonStyle(.plain).accessibilityLabel(opened ? "Close treasure":"Cancel")
-            }
-            if opened {
-                ForEach(Array(ReefTreasureArt.contents(for:object).enumerated()),id:\.offset) {_,prize in
-                    HStack(spacing:8) {
-                        ReefTreasureCluster(prize:prize).frame(width:54,height:58).accessibilityHidden(true)
-                        Text(prize.label).reefFont(size:16,weight:.semibold)
-                            .fixedSize(horizontal:false,vertical:true).frame(maxWidth:.infinity,alignment:.leading)
-                        Button {selectedID=nil;onTreasureInfo(prize.item)} label: {
-                            Image(systemName:"info.circle").font(.system(size:21)).frame(width:44,height:44)
-                        }.buttonStyle(.plain).accessibilityLabel("About \(prize.item.title.lowercased())")
-                    }
-                }
-            } else {
-                Button {
-                    actionFrom=freeSpot(at:Date())
-                    facing=object.slot%2 == 0 ? -1:1
-                    selectedID=nil;onUncover(object)
-                } label: {
-                    HStack(spacing:8) {Text("\(object.cost) Glow").reefFont(size:16,weight:.semibold);ReefIcon(.glow,size:27)}
-                        .frame(maxWidth:.infinity,alignment:.center)
+        VStack(spacing:16) {
+            Text(object.action).reefFont(size:18,weight:.semibold)
+                .multilineTextAlignment(.center).fixedSize(horizontal:false,vertical:true)
+                .frame(maxWidth:.infinity)
+            if object.challengeKind != nil {
+                Button {selectedID=nil;onChallenge(object)} label: {
+                    ReefIconLabel("Play",.shot,size:28).frame(maxWidth:.infinity)
                 }.buttonStyle(ReefButtonStyle(kind:.action)).disabled(!enabled)
-                    .accessibilityLabel("\(object.cost) Glow, \(object.action.lowercased())")
+                Text("or").reefFont(size:13).foregroundStyle(ReefTheme.muted)
             }
+            Button {
+                actionFrom=freeSpot(at:Date())
+                facing=object.slot%2 == 0 ? -1:1
+                selectedID=nil;onUncover(object)
+            } label: {
+                HStack(spacing:8) {Text("\(object.cost) Glow").reefFont(size:16,weight:.semibold);ReefIcon(.glow,size:27)}
+                    .frame(maxWidth:.infinity,alignment:.center)
+            }.buttonStyle(ReefButtonStyle(kind:.action)).disabled(!enabled)
+                .accessibilityLabel("\(object.cost) Glow, \(object.action.lowercased())")
         }.padding(.horizontal,24).padding(.top,18).padding(.bottom,26).frame(width:min(280,size.width-24))
             .background(MembraneShape().fill(ReefTheme.glass))
             .shadow(color:ReefTheme.abyss.opacity(0.4),radius:12,y:4)
+            .contentShape(Rectangle()).onTapGesture {}
     }
     private func light(_ object:ReefCove.Object)->Double {
         guard searches.contains(object.id) else{return 0}
@@ -248,9 +275,10 @@ struct ReefCoveView:View {
         let center=CGPoint(x:size.width*0.5,y:size.height*0.51)
         let pathTint=Color.adaptive(light:0xEAD7A6,dark:0x91BBB1)
         let exitsHere=exitPositions(in:size)
+        let routeExits=exits.filter{exitsHere[$0.id] != nil}
         let connections=objects.map { (point($0.slot,in:size),light($0)) }
-            + exits.compactMap { destination -> (CGPoint,Double)? in
-                guard let p=exitsHere[destination.id] else{return nil}
+            + routeExits.map {destination in
+                let p=exitsHere[destination.id]!
                 return (CGPoint(x:p.x,y:p.y),1.0)
             }
         for (index,connection) in connections.enumerated() {
@@ -260,6 +288,15 @@ struct ReefCoveView:View {
             path.addCurve(to:end,
                           control1:.init(x:center.x+dx*0.22+bend,y:center.y+dy*0.42),
                           control2:.init(x:center.x+dx*0.78-bend,y:center.y+dy*0.72))
+            if index>=objects.count {
+                let destination=routeExits[index-objects.count]
+                let canvas=ReefPoint(x:size.width,y:size.height)
+                let step=ReefCove.travelStep(from:FirstReef.node(area).point,to:destination.point,size:canvas)
+                let seam=ReefCove.routeSeam(from:FirstReef.node(area).point,to:destination.point,size:canvas)
+                path.addCurve(to:.init(x:seam.x,y:seam.y),
+                              control1:.init(x:end.x+(seam.x-end.x)*0.45,y:end.y+(seam.y-end.y)*0.45),
+                              control2:.init(x:seam.x-step.x*0.12,y:seam.y-step.y*0.12))
+            }
             var sand=context
             sand.addFilter(.blur(radius:overShadow ? 2:4))
             sand.stroke(path,with:.color(pathTint.opacity(overShadow ? 0.045:0.24+connection.1*0.06)),
@@ -362,14 +399,16 @@ struct ReefCoveView:View {
     private func drawObject(_ object:ReefCove.Object,in c:GraphicsContext,size:CGSize,artSize:Double,pose:CoveFishPose) {
         let p=point(object.slot,in:size),active=action?.id == object.id,timing=CoveActionTiming(object)
         let opened=searches.contains(object.id),reveal=active && !reduceMotion ? smooth((elapsed-timing.clearedAt)/0.4):opened ? 1.0:0.0
-        if !object.isChest && (!opened || active && reveal<1) {
+        if !object.isChest && object.barrier != .kelp && (!opened || active && reveal<1) {
             var obstacle=c
             if active && timing.scares && !reduceMotion {
                 let flee=smooth((elapsed-0.9)/0.85)
                 obstacle.translateBy(x:facing*flee*size.width*0.75,y:-flee*size.height*0.18)
                 obstacle.opacity=1-flee
             } else {obstacle.opacity=1-reveal}
-            TrailArt.draw(object.barrier == .kelp ? .kelpForest:object.barrier == .sand ? .sandpit:.enemySchool,in:obstacle,at:p,size:artSize,time:time)
+            // Enemy fish live above the shadow; their planted kelp remains in the reef.
+            if object.barrier == .enemy {obstacle=c;obstacle.opacity=0.75}
+            TrailArt.draw(object.barrier == .sand ? .sandpit:.kelpForest,in:obstacle,at:p,size:artSize,time:reduceMotion ? 0:time)
         }
         guard opened else{return}
         var found=c;found.opacity=reveal
@@ -389,6 +428,25 @@ struct ReefCoveView:View {
             coral.stroke(species.veins,with:.color(Color(hex:species.tip)),style:.init(lineWidth:2.8,lineCap:.round))
         }
     }
+    private func drawKelpGate(_ object:ReefCove.Object,in c:GraphicsContext,size:CGSize,artSize:Double) {
+        guard object.barrier == .kelp,!object.isChest else{return}
+        let opened=searches.contains(object.id),active=action?.id == object.id
+        let spread=opened ? (active && !reduceMotion ? smooth((elapsed-0.10)/0.65):1):0
+        let p=point(object.slot,in:size)
+        var plants=c;plants.addFilter(.saturation(1.12))
+        TrailArt.draw(.kelpForest,in:plants,at:.init(x:p.x,y:p.y-artSize*0.02),
+                      size:artSize*1.28,time:reduceMotion ? 0:time,spread:spread)
+    }
+    private func drawEnemyPatrol(_ object:ReefCove.Object,in c:GraphicsContext,size:CGSize,artSize:Double) {
+        guard object.barrier == .enemy,!object.isChest else{return}
+        let active=action?.id == object.id
+        guard !searches.contains(object.id) || active && !reduceMotion else{return}
+        let flee=active && !reduceMotion ? smooth((elapsed-0.9)/0.85):0
+        guard flee<1 else{return}
+        let p=point(object.slot,in:size)
+        TrailArt.drawPatrol(in:c,at:.init(x:p.x,y:p.y-artSize*0.12),size:artSize,
+                           time:time,moving:!reduceMotion,flee:flee,direction:facing)
+    }
     private func drawTreasure(_ object:ReefCove.Object,in c:GraphicsContext,size:CGSize,artSize:Double) {
         let opened=searches.contains(object.id)
         guard object.isChest || opened else { return }
@@ -402,16 +460,29 @@ struct ReefCoveView:View {
             : FirstReef.node(area).chestArt(open:revealed)
         var chest=c
         if !object.isChest && !revealed { chest.opacity=0 }
+        if !revealed,object.isChest {
+            let glow=c
+            let halo=CGRect(x:p.x-chestSize*0.6,y:p.y-chestSize*0.5,width:chestSize*1.2,height:chestSize)
+            glow.fill(Path(ellipseIn:halo),with:.radialGradient(Gradient(colors:[ReefTheme.gold.opacity(0.25),.clear]),center:p,startRadius:2,endRadius:chestSize*0.6))
+            // Keep the user-edited lid fully closed; the key below it is the action.
+            chest.addFilter(.brightness(0.04))
+        }
         TrailArt.draw(asset,in:chest,at:p,size:chestSize)
-        guard revealed else{return}
-        ReefTreasureArt.draw(ReefTreasureArt.rewards(for:object),in:c,at:p,chestSize:chestSize,elapsed:revealTime)
-        if object.find == .food,let revealTime { ReefTreasureArt.bubbles(in:c,at:p,chestSize:chestSize,elapsed:revealTime) }
+        guard revealed,let revealTime,revealTime<1.55 else{return}
+        var prize=c;prize.opacity *= max(0,min(1,(1.55-revealTime)/0.3))
+        ReefTreasureArt.draw(ReefTreasureArt.rewards(for:object),in:prize,at:p,chestSize:chestSize,elapsed:revealTime)
+        if object.find == .food { ReefTreasureArt.bubbles(in:c,at:p,chestSize:chestSize,elapsed:revealTime) }
     }
     private func drawFood(_ object:ReefCove.Object,in c:GraphicsContext,size:CGSize,artSize:Double,pose:CoveFishPose) {
         let timing=CoveActionTiming(object)
-        guard searches.contains(object.id),action?.id == object.id,!reduceMotion,
-              elapsed>=timing.clearedAt,elapsed<timing.eatAt+0.85 else{return}
-        let p=point(object.slot,in:size),bite=smooth((elapsed-timing.eatAt)/0.85)
+        guard searches.contains(object.id) else{return}
+        let p=point(object.slot,in:size)
+        let eating=action?.id == object.id && !reduceMotion
+        if !eating || elapsed>=timing.eatAt+0.55 {
+            TrailArt.drawFoodStems(in:c,at:.init(x:p.x,y:p.y-artSize*0.39),size:artSize*0.40)
+        }
+        guard eating,elapsed>=timing.clearedAt,elapsed<timing.eatAt+0.85 else{return}
+        let bite=smooth((elapsed-timing.eatAt)/0.85)
         let mouth=CGPoint(x:pose.point.x+facing*18,y:pose.point.y+8)
         let food=CGPoint(x:p.x+(mouth.x-p.x)*bite,y:p.y+(mouth.y-p.y)*bite)
         TrailArt.draw(.food,in:c,at:food,size:artSize*0.6*(1-bite),time:time)
@@ -528,10 +599,13 @@ enum ReefTreasureArt {
             case .glow:"Glow"
             case .snack:count == 1 ? "snack":"snacks"
             case .hint:count == 1 ? "hint":"hints"
+            case .futureTeller:count == 1 ? "Future Teller":"Future Tellers"
             case .life:count == 1 ? "life":"lives"
             case .lighter:count == 1 ? "lighter":"lighters"
             case .shot:count == 1 ? "shot":"shots"
             case .current:count == 1 ? "current changer":"current changers"
+            case .bouncyBlock:count == 1 ? "bouncy block":"bouncy blocks"
+            case .currentAdder:count == 1 ? "current adder":"current adders"
             case .instantBoost:"15-min boost"
             case .storedBoost:"saved 15-min boost"
             }
@@ -563,8 +637,9 @@ enum ReefTreasureArt {
     }
 
     // The snack is eaten on discovery; its receipt remains inspectable afterward.
-    static func contents(for object:ReefCove.Object)->[Prize] {
-        object.find == .food ? [.init(item:.snack)] : rewards(for:object)
+    static func contents(for object:ReefCove.Object,in progress:FirstReefProgress?=nil)->[Prize] {
+        if let item=progress?.clearingRewards?[object.id] {return [.init(item:item)]}
+        return object.find == .food ? [.init(item:.snack)] : rewards(for:object)
     }
 
     static func clusterOffsets(count:Int)->[CGPoint] {

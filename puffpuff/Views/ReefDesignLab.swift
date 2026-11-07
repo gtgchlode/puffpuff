@@ -1,10 +1,10 @@
-#if DEBUG
 import SwiftUI
 
 struct ReefDesignLab:View {
     @Environment(\.dismiss) private var dismiss
     @Environment(\.scenePhase) private var scenePhase
     @State private var family=0
+    @State private var enemyTrial:ReefMiniTrial?
     @State private var golfIndex=0
     @State private var newGolf=true
     @State private var slingIndex=0
@@ -25,6 +25,9 @@ struct ReefDesignLab:View {
                     Spacer()
                     Button("Done") {dismiss()}.buttonStyle(ReefButtonStyle(kind:.quiet))
                 }
+                Menu("Enemy challenges") {
+                    ForEach(ReefMiniTrial.enemies) {trial in Button(trial.title) {enemyTrial=trial}}
+                }.reefFont(size:16,weight:.semibold).frame(minHeight:44)
                 HStack(spacing:16) {
                     familyButton("Golf",0);familyButton("Paths",1)
                     if family == 0 {
@@ -68,8 +71,9 @@ struct ReefDesignLab:View {
                     .id(selectedID)
             }.padding(16).frame(maxWidth:620).frame(maxWidth:.infinity)
         }.foregroundStyle(ReefTheme.ink).environment(\.reefPaused,false)
-        .task(id:"\(family)-\(newGolf)-\(golfIndex)-\(slingIndex)-\(scenePhase)") {
-            guard family == 0,scenePhase == .active else {return}
+        .sheet(item:$enemyTrial) {trial in ReefMiniPractice(trial:trial).presentationDetents([.large]).presentationBackground(.clear)}
+        .task(id:"\(family)-\(newGolf)-\(golfIndex)-\(slingIndex)-\(scenePhase)-\(enemyTrial?.rawValue ?? "none")") {
+            guard family == 0,scenePhase == .active,enemyTrial == nil else {return}
             let game=golfers[golfIndex]
             let sling=slingers[slingIndex],isNew=newGolf
             while !Task.isCancelled {
@@ -420,4 +424,3 @@ enum LabSketch {
         TrailArt.draw(kind%3 == 0 ? .kelpForest:kind%3 == 1 ? .sandpit:.enemySchool,in:c,at:CGPoint(x:p.x,y:p.y),size:size,time:0)
     }
 }
-#endif

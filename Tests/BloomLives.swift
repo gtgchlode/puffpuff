@@ -70,8 +70,35 @@ import Foundation
             precondition(!ad.restartPuzzle(usingAdLife:true) && ad.progress.supplies.lives==1)
             let reload=ReefStore(defaults:defaults,saveDirectory:directory)
             precondition(reload.progress.supplies.lives==1 && reload.puzzle.attemptStarted==true)
-            precondition(ad.restartPuzzle() && ad.progress.supplies.lives==0 && ad.puzzle.attemptStarted != true)
+            precondition(ad.restartPuzzle() && ad.progress.supplies.lives==0 && ad.puzzle.attemptStarted==true && ad.canPlayBloom)
+            precondition(!ad.restartPuzzle(),"Zero blocks the next restart, not the funded attempt")
         }
+        let lastLifeDir=root.appendingPathComponent("last-life")
+        var five=ReefProgress();five.puzzle = .make(level:8);five.puzzle.attemptStarted=true
+        try ReefSaveFile(defaults:defaults,directory:lastLifeDir).write(five)
+        let fiveLives=ReefStore(defaults:defaults,saveDirectory:lastLifeDir)
+        for remaining in stride(from:4,through:0,by:-1) {
+            precondition(fiveLives.restartPuzzle())
+            precondition(fiveLives.progress.supplies.lives==remaining && fiveLives.canPlayBloom && !fiveLives.isComplete)
+            let resumed=ReefStore(defaults:defaults,saveDirectory:lastLifeDir)
+            precondition(resumed.progress.supplies.lives==remaining && resumed.canPlayBloom)
+        }
+        precondition(!fiveLives.canStartBloom && !fiveLives.restartPuzzle())
+        let moves=fiveLives.puzzle.moves
+        fiveLives.tapCoral(0)
+        precondition(fiveLives.puzzle.moves==moves+1,"The zero-life final attempt must accept taps")
+        var one=five;one.supplies.lives=1;one.supplies.nextLifeAt=Date().addingTimeInterval(300)
+        let lastBlockedDir=root.appendingPathComponent("last-life-save-failure")
+        try ReefSaveFile(defaults:defaults,directory:lastBlockedDir).write(one)
+        let lastBlocked=ReefStore(defaults:defaults,saveDirectory:lastBlockedDir)
+        let lastBackup=lastBlockedDir.appendingPathComponent("progress-backup.json")
+        if FileManager.default.fileExists(atPath:lastBackup.path) {
+            try FileManager.default.moveItem(at:lastBackup,to:lastBlockedDir.appendingPathComponent("retained-backup.json"))
+        }
+        try FileManager.default.createDirectory(at:lastBackup,withIntermediateDirectories:false)
+        precondition(!lastBlocked.restartPuzzle() && lastBlocked.progress.supplies.lives==1)
+        precondition(lastBlocked.puzzle.lifeLossHandled==one.puzzle.lifeLossHandled && lastBlocked.puzzle.cells==one.puzzle.cells)
+        print("Restart sequence 5→4→3→2→1→0 stays playable, survives reload and accepts taps at zero; next restart is blocked and failed saves roll back")
         let (refill,_)=try fixture("general-refill")
         let originalBoard=refill.puzzle.cells,originalMoves=refill.puzzle.moves
         precondition(refill.claimFreeLifeRefill() && refill.progress.supplies.lives==3)
@@ -114,7 +141,7 @@ import Foundation
         let migrateDir=root.appendingPathComponent("gift-migration")
         try ReefSaveFile(defaults:defaults,directory:migrateDir).write(oldSave)
         let migrated=ReefStore(defaults:defaults,saveDirectory:migrateDir)
-        precondition(migrated.progress.version==20 && migrated.progress.supplies==oldSave.supplies && migrated.progress.lifeGiftSeed==oldSave.lifeGiftSeed)
+        precondition(migrated.progress.version==28 && migrated.progress.supplies==oldSave.supplies && migrated.progress.lifeGiftSeed==oldSave.lifeGiftSeed)
         print("Exact 3%/5%/0.5% reward buckets; native win grants; refill adds no unlimited time; overflow and format-17 migration preserved")
 
 

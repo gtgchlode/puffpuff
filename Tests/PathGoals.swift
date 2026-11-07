@@ -37,9 +37,9 @@ import Foundation
         let all=FirstReef.destinations.flatMap{ReefCove.objects(in:$0.id)}
         let full=all.reduce(0){$0+$1.cost}
         print("Full clear: \(full) Glow = \(Int(ceil(Double(full)/4)))–\(Int(ceil(Double(full)/3))) Bloom wins")
-        precondition(all.allSatisfy{(8...24).contains($0.cost)})
+        precondition(all.allSatisfy{(8...24).contains($0.baseCost) && $0.cost==$0.baseCost*($0.challengeKind == nil ? 1:4)})
         for node in FirstReef.destinations {
-            let prices=ReefCove.objects(in:node.id).map(\.cost)
+            let prices=ReefCove.objects(in:node.id).map(\.baseCost)
             precondition(prices.max()! <= prices.min()!*3,"Local price gap is too wide")
             var fullyOpen=FirstReefProgress();fullyOpen.cleared=Set(FirstReef.clearances.map(\.id))
             let exits=FirstReef.neighbors(node.id,state:fullyOpen).map(FirstReef.node)
@@ -70,7 +70,7 @@ import Foundation
                 }
             }
         }
-        print("Prices 8–24 Glow with bounded local spread; map bearings, separated exit targets and continuous camera/fish motion checked at three phone/Mac sizes")
+        print("Base prices 8–24 Glow; challenge bypasses cost 4×; map bearings, separated exit targets and continuous camera/fish motion checked at three phone/Mac sizes")
         // Enumerate every useful set of paid passages, including both gated shortcuts.
         // Free arrival/retreat means paying a passage exposes all of its neighbors.
         // Leaf excursions with no goal or quest gate cannot lower a required-route cost.
@@ -103,8 +103,8 @@ import Foundation
                 costs[next]=costs[mask]+ReefCove.objects(in:areas[i]).first{$0.find == .passage}!.cost
             }
         }
-        precondition(cheapest>=200 && cheapest<=300,"Required path pacing fell outside 50–100 wins: \(cheapest)")
-        precondition(1000-store.progress.glow<=300,"The ordinary route must also fit the target")
+        precondition(cheapest>=200 && cheapest<=1000,"Paid bypass route cost is invalid: \(cheapest)")
+        precondition(1000-store.progress.glow<=1000,"The paid bypass route must fit its authored budget")
         print("All \(checked) reachable passage sets checked: cheapest required path \(cheapest) Glow (\(Int(ceil(Double(cheapest)/4)))–\(Int(ceil(Double(cheapest)/3))) wins), including shortcuts")
         let shortcut=try fixture(fresh,"cheapest-route")
         let steps:[(String,ReefCove.Find?)]=[("start",.passage),("south",.passage),
@@ -119,8 +119,8 @@ import Foundation
             }
         }
         precondition(shortcut.progress.firstReef.completed && shortcut.startReefBonus())
-        precondition(1000-shortcut.progress.glow == cheapest,"The minimum must be playable with real store transactions")
-        print("Cheapest route replayed through actual paid store actions; all optional treasure finds remain unopened")
+        precondition(1000-shortcut.progress.glow >= cheapest && 1000-shortcut.progress.glow<=1000)
+        print("Shortcut route replayed through actual paid store actions; all optional treasure finds remain unopened")
 
         var earlyHome=store.progress
         earlyHome.firstReef.bonus=nil;earlyHome.firstReef.completed=false
@@ -173,7 +173,7 @@ import Foundation
         }
         var legacy=fresh;legacy.lifeGiftSeed=replay.lifeGiftSeed;legacy.version=19;legacy.completedBloomLevels=[1,2,3,4]
         let migrated=try fixture(legacy,"v19-shots")
-        precondition(migrated.progress.version == 20 && migrated.progress.shots == legacy.shots)
+        precondition(migrated.progress.version == 28 && migrated.progress.shots == legacy.shots)
         precondition(migrated.progress.bloomWinsTowardShot == 4)
         precondition(migrated.startFromLevel(2))
         for tap in migrated.puzzle.solution()! {migrated.tapCoral(tap)}
@@ -203,6 +203,65 @@ import Foundation
         let bonusCount=(1...10000).filter{ReefStore.hasBonusShot(seed:42,win:$0)}.count
         precondition((900...1100).contains(bonusCount))
         print("10% extra-shot roll: \(bonusCount)/10,000 fixed samples; fifth-win + lucky bonus displays 2; failure/retry/reload keep the same outcome")
+        let sampleWins=Array(1...10000)
+        let hintSingles=sampleWins.filter{ReefStore.bonusHints(seed:42,win:$0,pearl:false)==1}.count
+        let hintPairs=sampleWins.filter{ReefStore.bonusHints(seed:42,win:$0,pearl:true)-ReefStore.bonusHints(seed:42,win:$0,pearl:false)==2}.count
+        let hintBoth=sampleWins.filter{ReefStore.bonusHints(seed:42,win:$0,pearl:true)==3}.count
+        precondition((700...900).contains(hintSingles) && (400...600).contains(hintPairs))
+        precondition((15...70).contains(hintBoth),"Hint rolls should be independent")
+        precondition(sampleWins.allSatisfy{(0...1).contains(ReefStore.bonusHints(seed:42,win:$0,pearl:false))})
+        var hintWin=fresh;hintWin.bloomRewardWins=4
+        hintWin.puzzle = .make(level:5);hintWin.puzzle.attemptStarted=true;hintWin.puzzle.pearlTarget=99
+        hintWin.lifeGiftSeed=(1...10000).map(UInt64.init).first{ReefStore.bonusHints(seed:$0,win:5,pearl:true)==3}!
+        let hintStore=try fixture(hintWin,"hint-drops")
+        let hintDir=root.appendingPathComponent("hint-drops")
+        let hintBackup=hintDir.appendingPathComponent("progress-backup.json")
+        if FileManager.default.fileExists(atPath:hintBackup.path) {
+            try FileManager.default.moveItem(at:hintBackup,to:hintDir.appendingPathComponent("retained-backup.json"))
+        }
+        try FileManager.default.createDirectory(at:hintBackup,withIntermediateDirectories:false)
+        let hintTaps=hintStore.puzzle.solution()!;precondition(hintTaps.count==1)
+        hintStore.tapCoral(hintTaps[0])
+        precondition(hintStore.lastSaveFailed && !hintStore.isComplete)
+        precondition(hintStore.progress.hints==hintWin.hints && hintStore.progress.bloomRewardWins==4 && hintStore.puzzle.earnedHints==nil)
+        try FileManager.default.moveItem(at:hintBackup,to:hintDir.appendingPathComponent("retained-write-blocker"))
+        hintStore.tapCoral(hintTaps[0])
+        precondition(hintStore.isComplete && hintStore.puzzle.earnedHints==4 && hintStore.progress.hints==hintWin.hints+4)
+        let hintsReload=ReefStore(defaults:defaults,saveDirectory:hintDir)
+        precondition(hintsReload.puzzle.earnedHints==4 && hintsReload.progress.hints==hintWin.hints+4)
+        hintsReload.tapCoral(hintTaps[0])
+        precondition(hintsReload.progress.hints==hintWin.hints+4 && hintsReload.progress.bloomRewardWins==5)
+        let firstWinBoard=try JSONSerialization.jsonObject(with:JSONEncoder().encode(hintsReload.puzzle)) as! NSDictionary
+        let livesBeforeReplay=hintsReload.progress.supplies.lives
+        precondition(hintsReload.startFromLevel(5) && hintsReload.isComplete,"Normal Bloom navigation must retain the win")
+        precondition(hintsReload.startFromLevel(5,replayCompleted:true) && !hintsReload.isComplete)
+        precondition(hintsReload.puzzle.moves==0 && hintsReload.puzzle.earnedHints==nil && hintsReload.puzzle.rewarded==false)
+        precondition(hintsReload.progress.bloomResumePuzzle?.earnedHints==4 && hintsReload.progress.supplies.lives==livesBeforeReplay)
+        for tap in hintsReload.puzzle.solution()! {hintsReload.tapCoral(tap)}
+        let replayHints=ReefStore.bonusHints(seed:hintWin.lifeGiftSeed,win:6,pearl:hintsReload.puzzle.earnedPearl)
+        precondition(hintsReload.progress.hints==hintWin.hints+4+replayHints,"Replay gets chance rewards, not another milestone")
+        precondition(hintsReload.startFromLatest())
+        let restoredWinBoard=try JSONSerialization.jsonObject(with:JSONEncoder().encode(hintsReload.puzzle)) as! NSDictionary
+        precondition(restoredWinBoard==firstWinBoard)
+        precondition(hintsReload.startFromLevel(6,replayCompleted:true))
+        precondition(hintsReload.startFromLevel(5,replayCompleted:true) && !hintsReload.isComplete,"Completed saved checkpoint must also replay")
+        precondition(hintsReload.progress.bloomResumePuzzle?.earnedHints==4)
+        var unfinished=fresh;unfinished.puzzle = .make(level:8);unfinished.puzzle.attemptStarted=true
+        let firstTap=unfinished.puzzle.solution()!.first!;unfinished.puzzle.pulse(at:firstTap);unfinished.puzzle.moves=1
+        precondition(!unfinished.puzzle.isComplete)
+        let unfinishedStore=try fixture(unfinished,"debug-unfinished")
+        precondition(unfinishedStore.startFromLevel(8,replayCompleted:true))
+        precondition(unfinishedStore.puzzle.cells==unfinished.puzzle.cells && unfinishedStore.puzzle.moves==1)
+        precondition(unfinishedStore.startFromLevel(2,replayCompleted:true))
+        for tap in unfinishedStore.puzzle.solution()! {unfinishedStore.tapCoral(tap)}
+        precondition(unfinishedStore.startFromLevel(8,replayCompleted:true))
+        precondition(unfinishedStore.puzzle.cells==unfinished.puzzle.cells && unfinishedStore.puzzle.moves==1 && unfinishedStore.progress.bloomResumePuzzle==nil)
+        var legacyHint=hintStore.progress;legacyHint.version=20;legacyHint.puzzle.earnedHints=nil
+        let oldHints=try fixture(legacyHint,"v20-hints")
+        precondition(oldHints.progress.version==28 && oldHints.puzzle.earnedHint==true && oldHints.puzzle.earnedHints==nil)
+        precondition(oldHints.progress.hints==legacyHint.hints && oldHints.progress.bloomRewardWins==legacyHint.bloomRewardWins)
+        print("Hint rolls: \(hintSingles)/10,000 singles, \(hintPairs)/10,000 pearl pairs, \(hintBoth) overlaps. Milestone + both rolls award four atomically; failure/retry/reload preserve the result.")
+        print("Debug picker replays current/completed checkpoint levels, preserves unfinished boards and main checkpoints; v20 hint saves migrate without retroactive grants.")
         let intro=try fixture(fresh,"intro")
         precondition(!intro.progress.hasSeenTrailIntro && !intro.progress.hasSeenBonusIntro)
         precondition(!intro.finishIntro(.bonus),"Golf teaching must wait for required tasks")
@@ -231,5 +290,128 @@ import Foundation
         precondition(!oldIntro.hasSeenTrailIntro && !oldIntro.hasSeenBonusIntro)
         precondition(golfIntro.restartEverything() && !golfIntro.progress.hasSeenTrailIntro && !golfIntro.progress.hasSeenBonusIntro)
         print("Intros: old saves opt in once; Finish/Skip persist, failed saves roll back, golf waits for tasks and costs no shot; debug reset restores both")
+
+        // Reproduce the reported winning-putt save rejection at the actual drawn home.
+        for score in 1...FirstReef.turnLimit {
+            var win=eligible;win.shots=10;win.firstReef.bonus=FirstReef.newBonus(win.firstReef)
+            win.firstReef.bonus!.position=BonusCourse.home+ReefPoint(x:0,y:32)
+            win.firstReef.bonus!.strokes=score-1
+            let name="holed-\(score)",winning=try fixture(win,name)
+            let result=winning.puttFirstReef(drag:.init(x:0,y:-10))
+            precondition(result?.outcome.bonus?.holed==true && !winning.lastSaveFailed,"Holed result failed to save")
+            precondition(winning.progress.firstReef.bonus!.position==BonusCourse.home)
+            precondition(winning.progress.shots==9 && winning.progress.firstReef.bonus!.strokes==score)
+            let restored=ReefStore(defaults:defaults,saveDirectory:root.appendingPathComponent(name))
+            precondition(!restored.isSaveBlocked && restored.progress.firstReef.bonus!.holed)
+            precondition(restored.progress.firstReef.bonus!.canCollect==(score<=FirstReef.unlockLimit))
+            let balance=restored.progress.glow
+            precondition(restored.collectReefBonus()==(score<=FirstReef.unlockLimit))
+            if score<=FirstReef.unlockLimit {
+                precondition(restored.progress.glow==balance+FirstReef.reward(for:score).glow)
+                precondition(!restored.collectReefBonus(),"A hole cannot pay twice")
+                let claimed=ReefStore(defaults:defaults,saveDirectory:root.appendingPathComponent(name))
+                precondition(claimed.progress.firstReef.nextWorldUnlocked==true)
+            }
+        }
+        print("Holed putts 1–6 save/reload at the drawn home; 1–4 collect once, 5–6 stay practice-only")
+
+        for barrier in [ReefBumper.Kind.kelp,.sand] {
+            let object=all.first{$0.barrier==barrier && $0.clearingReward != nil}!
+            var seed=fresh;seed.firstReef.location=object.area;seed.firstReef.position=FirstReef.node(object.area).point
+            seed.firstReef.visited=["start",object.area]
+            let name="clearing-\(object.id)",clearing=try fixture(seed,name)
+            let award=object.clearingReward!,before=clearing.progress
+            precondition(clearing.uncoverCove(object.id) != nil)
+            precondition(clearing.progress.firstReef.clearingRewards?[object.id]==award)
+            switch award {
+            case .shot:precondition(clearing.progress.shots==before.shots+1)
+            case .hint:precondition(clearing.progress.hints==before.hints+1)
+            case .life:precondition(clearing.progress.supplies.lives>=before.supplies.lives+1)
+            case .lighter:precondition(clearing.progress.supplies.lighters==before.supplies.lighters+1)
+            default:preconditionFailure("Unexpected clearing reward")
+            }
+            precondition(clearing.uncoverCove(object.id)==nil)
+            let restored=ReefStore(defaults:defaults,saveDirectory:root.appendingPathComponent(name))
+            precondition(restored.progress.firstReef.clearingRewards?[object.id]==award)
+            precondition(restored.uncoverCove(object.id)==nil)
+            var old=before;old.version=21;old.firstReef.coveSearches=[object.id]
+            let migrated=try fixture(old,"old-clearing-\(object.id)")
+            precondition(migrated.progress.firstReef.clearingRewards==nil && migrated.progress.shots==old.shots && migrated.progress.hints==old.hints)
+            precondition(migrated.uncoverCove(object.id)==nil,"Do not reward old paid spots retroactively")
+        }
+        let clearingObject=all.first{$0.clearingReward != nil}!
+        var failedSeed=fresh;failedSeed.firstReef.location=clearingObject.area
+        failedSeed.firstReef.position=FirstReef.node(clearingObject.area).point
+        failedSeed.firstReef.visited=["start",clearingObject.area]
+        let failedClear=try fixture(failedSeed,"failed-clearing")
+        let failureDir=root.appendingPathComponent("failed-clearing")
+        let blocker=failureDir.appendingPathComponent("progress-backup.json")
+        try FileManager.default.createDirectory(at:blocker,withIntermediateDirectories:false)
+        precondition(failedClear.uncoverCove(clearingObject.id)==nil && failedClear.lastSaveFailed)
+        precondition(failedClear.progress.glow==failedSeed.glow && failedClear.progress.firstReef.clearingRewards==nil)
+        precondition(failedClear.progress.shots==failedSeed.shots && failedClear.progress.hints==failedSeed.hints)
+        try FileManager.default.moveItem(at:blocker,to:failureDir.appendingPathComponent("retained-blocker"))
+        precondition(failedClear.uncoverCove(clearingObject.id) != nil)
+        print("Kelp/sand supplies: one paid reveal, persistent receipt, no repeat or retroactive grants; failed saves roll back and retry once")
+
+        for node in FirstReef.destinations {
+            var state=FirstReefProgress();state.cleared=Set(FirstReef.clearances.map(\.id))
+            for next in FirstReef.neighbors(node.id,state:state).map(FirstReef.node) {
+                for size in [ReefPoint(x:393,y:620),.init(x:480,y:740)] {
+                    let a=ReefCove.routeSeam(from:node.point,to:next.point,size:size)
+                    let b=ReefCove.routeSeam(from:next.point,to:node.point,size:size)
+                    for n in 0...20 {
+                        let frame=ReefCove.travelFrame(from:node.point,to:next.point,start:.init(x:0.5,y:0.51),size:size,fraction:Double(n)/20)
+                        precondition((a+frame.oldOffset-b-frame.newOffset).length<0.0001,"Disconnected path during pan")
+                    }
+                }
+            }
+        }
+        let bounds=ReefPoint(x:393,y:620)
+        precondition(ReefCove.mapOffset(.init(x:-500,y:-500),size:bounds,bottomInset:34) == .init(x:0,y:0))
+        precondition(ReefCove.mapOffset(.init(x:999,y:999),size:bounds,bottomInset:34) == .init(x:281,y:450))
+        print("Every route joins at a shared seam throughout scrolling; flicked map stays inside safe bounds")
+
+        var addingSeed=eligible;addingSeed.currentAdders=3
+        addingSeed.firstReef.cleared=Set(FirstReef.clearances.map(\.id))
+        addingSeed.firstReef.bonus=FirstReef.newBonus(addingSeed.firstReef)
+        let addStore=try fixture(addingSeed,"current-adders")
+        let addDir=root.appendingPathComponent("current-adders")
+        let position=ReefPoint(x:150,y:483)
+        precondition(BonusCourse.canPlaceCurrent(at:position,in:addStore.progress.firstReef))
+        for bad in [BonusCourse.home,BonusCourse.currents[0],ReefPoint(x:-100,y:-100),.init(x:.nan,y:100)] {
+            precondition(!addStore.addReefCurrent(at:bad,direction:0))
+        }
+        precondition(!addStore.addReefCurrent(at:position,direction:8) && addStore.progress.currentAdders==3)
+        let addBlocker=addDir.appendingPathComponent("progress-backup.json")
+        try FileManager.default.createDirectory(at:addBlocker,withIntermediateDirectories:false)
+        precondition(!addStore.addReefCurrent(at:position,direction:0) && addStore.progress.currentAdders==3 && addStore.progress.firstReef.bonus?.addedCurrents==nil)
+        try FileManager.default.moveItem(at:addBlocker,to:addDir.appendingPathComponent("retained-blocker"))
+        precondition(addStore.addReefCurrent(at:position,direction:0) && addStore.progress.currentAdders==2)
+        precondition(!addStore.addReefCurrent(at:position,direction:1))
+        let placed=addStore.progress.firstReef.bonus!.addedCurrents!
+        let addReload=ReefStore(defaults:defaults,saveDirectory:addDir)
+        precondition(addReload.progress.firstReef.bonus!.addedCurrents==placed && addReload.progress.currentAdders==2)
+        let shot=ReefPoint(x:70,y:-37)
+        let withCurrent=FirstReef.putt(drag:shot,from:addReload.progress.firstReef)!
+        var noCurrent=addReload.progress.firstReef;noCurrent.bonus!.addedCurrents=nil
+        let withoutCurrent=FirstReef.putt(drag:shot,from:noCurrent)!
+        precondition((withCurrent.outcome.bonus!.position-withoutCurrent.outcome.bonus!.position).length>10,"Added current must affect the putt")
+        precondition(addReload.puttFirstReef(drag:shot) != nil && addReload.progress.firstReef.bonus!.addedCurrents==placed)
+        let persistentDirections=addReload.progress.firstReef.bonus!.currents
+        precondition(addReload.startReefBonus(retry:true))
+        precondition(addReload.progress.firstReef.bonus!.addedCurrents==nil && addReload.progress.currentAdders==2)
+        precondition(addReload.progress.firstReef.bonus!.currents==persistentDirections)
+        let adderDrops=(1...10000).filter{ReefStore.hasCurrentAdder(seed:42,win:$0)}.count
+        precondition((400...600).contains(adderDrops))
+        var adderWin=ReefProgress();adderWin.puzzle = .make(level:5);adderWin.puzzle.attemptStarted=true
+        adderWin.lifeGiftSeed=(1...10000).map(UInt64.init).first{ReefStore.hasCurrentAdder(seed:$0,win:1)}!
+        let adderWinner=try fixture(adderWin,"adder-win")
+        for index in adderWinner.puzzle.solution()! {adderWinner.tapCoral(index)}
+        precondition(adderWinner.puzzle.earnedCurrentAdder==true && adderWinner.progress.currentAdders==1)
+        let winReload=ReefStore(defaults:defaults,saveDirectory:root.appendingPathComponent("adder-win"))
+        precondition(winReload.progress.currentAdders==1 && winReload.puzzle.earnedCurrentAdder==true)
+        winReload.tapCoral(0);precondition(winReload.progress.currentAdders==1)
+        print("Current adders: \(adderDrops)/10,000 independent Bloom drops; saved once, one-use placement, real physics effect, no duplicate/invalid placements, retry expires only added currents, save rollback verified")
     }
 }

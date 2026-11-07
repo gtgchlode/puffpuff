@@ -8,7 +8,7 @@ enum BonusCourse {
     static let tee = ReefPoint(x:80,y:520)
     static let home = ReefPoint(x:260,y:80)
     static let fairway = [tee,.init(x:270,y:420),.init(x:70,y:310),.init(x:270,y:200),home]
-    static let laneRadius = 52.0, ballRadius = 7.0, holeRadius = 15.0, captureSpeed = 230.0
+    static let laneRadius = 52.0, ballRadius = 7.0, holeRadius = 15.0
     static let currents:[ReefPoint] = [.init(x:220,y:393),.init(x:150,y:266),.init(x:265,y:150)]
     static let currentRadius = 32.0, currentMomentumRetention = 0.72, currentImpulse = 135.0
     static let legacyTee = ReefPoint(x:80,y:490), legacyHome = ReefPoint(x:260,y:100)
@@ -19,6 +19,28 @@ enum BonusCourse {
         // Carry a prior player's custom directions forward, but adapt the old defaults to the new bends.
         if (bonus.courseRevision ?? 2) < revision && currents == previousCurrents {return defaultCurrents}
         return currents
+    }
+    static func activeCurrents(_ state:FirstReefProgress)->[(position:ReefPoint,direction:Int)] {
+        let directions=initialCurrents(state)
+        return currents.enumerated().map{($0.element,directions[$0.offset])}
+            + (state.bonus?.addedCurrents ?? []).map{($0.position,$0.direction)}
+    }
+    static func canPlaceCurrent(at point:ReefPoint,in state:FirstReefProgress)->Bool {
+        guard point.x.isFinite,point.y.isFinite,
+              nearestWater(point,cleared:state.cleared).clearance>=18,
+              (point-home).length>=48,
+              (state.bonus?.bouncyBlocks ?? []).allSatisfy({($0.position-point).length>=52}),
+              activeCurrents(state).allSatisfy({($0.position-point).length>=64}),
+              bumpers.filter({!state.cleared.contains($0.clearance ?? "")}).allSatisfy({($0.point-point).length>=$0.radius+18}) else{return false}
+        return true
+    }
+    static func canPlaceBlock(at point:ReefPoint,in state:FirstReefProgress)->Bool {
+        point.x.isFinite && point.y.isFinite
+            && nearestWater(point,cleared:state.cleared).clearance>=PlacedBouncyBlock.radius+2
+            && (point-home).length>=50
+            && activeCurrents(state).allSatisfy{($0.position-point).length>=52}
+            && (state.bonus?.bouncyBlocks ?? []).allSatisfy{($0.position-point).length>=44}
+            && bumpers.filter{!state.cleared.contains($0.clearance ?? "")}.allSatisfy{($0.point-point).length>=$0.radius+PlacedBouncyBlock.radius+3}
     }
     static func currentDirection(_ direction:Int)->ReefPoint {
         let angle = -Double.pi/2+Double(direction)*Double.pi/4
@@ -88,6 +110,38 @@ struct ReefPoint: Codable, Equatable {
     func dot(_ other: Self) -> Double { x * other.x + y * other.y }
 }
 
+struct PlacedReefCurrent:Codable,Identifiable,Equatable {
+    var id=UUID()
+    let position:ReefPoint
+    let direction:Int
+}
+
+enum ReefGolfAid:String,CaseIterable,Identifiable {
+    case current,block
+    var id:String {rawValue}
+}
+struct PlacedBouncyBlock:Codable,Identifiable,Equatable {
+    var id=UUID()
+    let position:ReefPoint
+    static let radius=19.0
+}
+enum ReefGolfPhysics {
+    /// Shared by the final course and every mini challenge, for fish and Puff Puff.
+    @discardableResult static func bounce(_ p:inout ReefPoint,velocity v:inout ReefPoint,
+                                         radius:Double,off blocks:[PlacedBouncyBlock])->Bool {
+        var hit=false
+        for block in blocks {
+            let delta=p-block.position,limit=radius+PlacedBouncyBlock.radius
+            if delta.length<limit {
+                let n=delta.length>0.001 ? delta*(1/delta.length):ReefPoint(x:0,y:-1)
+                p=block.position+n*(limit+0.05)
+                if v.dot(n)<0 {v=(v-n*(2*v.dot(n)))*0.96;hit=true}
+            }
+        }
+        return hit
+    }
+}
+
 struct ReefBonusProgress: Codable {
     var position: ReefPoint
     var courseRevision: Int? = nil
@@ -98,9 +152,11 @@ struct ReefBonusProgress: Codable {
     var claimed = false
     var attempts = 1
     var currents: [Int]? = nil
+    var addedCurrents:[PlacedReefCurrent]? = nil
+    var bouncyBlocks:[PlacedBouncyBlock]? = nil
 
     var canCollect: Bool {
-        finished && holed && !claimed && position == FirstReef.home
+        finished && holed && !claimed && position == BonusCourse.home
             && (1...FirstReef.unlockLimit).contains(strokes)
             && bestStrokes.map { (1...FirstReef.unlockLimit).contains($0) } == true
     }
@@ -119,6 +175,8 @@ struct FirstReefProgress: Codable {
     var bonus: ReefBonusProgress?
     var nextWorldUnlocked: Bool? = false
     var coveSearches: Set<String>? = []
+    var clearingRewards: [String:ReefDiscovery]? = nil
+    var miniChallenges:[String:ReefMiniAttempt]? = nil
     var hasFoundHome: Bool { completed || visited?.contains("home") == true }
 }
 
@@ -483,6 +541,7 @@ enum FirstReef {
               (0..<turnLimit).contains(bonus.strokes),
               drag.x.isFinite,drag.y.isFinite,drag.length >= 6 else { return nil }
         var next=state,p=bonus.position
+        let home=BonusCourse.home
         let radius=BonusCourse.ballRadius
         let strength=min(1,drag.length/110)
         var v=drag*(1/drag.length)*(90+strength*350)
@@ -490,7 +549,7 @@ enum FirstReef {
         let dt=1.0/120.0
         var time=0.0,holed=false
         var touched=Set<Int>()
-        let currents=BonusCourse.initialCurrents(state)
+        let currents=BonusCourse.activeCurrents(state)
         for step in 1...1200 {
             let previous=p
             p=p+v*dt;time += dt
@@ -508,15 +567,16 @@ enum FirstReef {
                     if v.dot(n)<0 { v=(v-n*(2*v.dot(n)))*0.78 }
                 }
             }
-            for i in BonusCourse.currents.indices where !touched.contains(i) && (p-BonusCourse.currents[i]).length<BonusCourse.currentRadius {
+            ReefGolfPhysics.bounce(&p,velocity:&v,radius:radius,off:bonus.bouncyBlocks ?? [])
+            for i in currents.indices where !touched.contains(i) && (p-currents[i].position).length<BonusCourse.currentRadius {
                 // A push steers once through the bend; it never homes toward the doorway.
-                v=v*BonusCourse.currentMomentumRetention+BonusCourse.currentDirection(currents[i])*BonusCourse.currentImpulse
+                v=v*BonusCourse.currentMomentumRetention+BonusCourse.currentDirection(currents[i].direction)*BonusCourse.currentImpulse
                 touched.insert(i)
             }
             // Swept capture prevents a fast putt from stepping over the entrance.
             let segment=p-previous
             let t=min(1,max(0,(home-previous).dot(segment)/max(0.001,segment.dot(segment))))
-            if (home-(previous+segment*t)).length < BonusCourse.holeRadius && v.length < BonusCourse.captureSpeed {
+            if (home-(previous+segment*t)).length < BonusCourse.holeRadius {
                 p=home;holed=true
             }
             let speed=v.length
@@ -543,12 +603,41 @@ enum FirstReef {
               p.cleared.isSubset(of:Set(clearances.map(\.id))),p.shotsTaken>=0,
               !p.completed || p.food.count == 3 else { return false }
         if let searches=p.coveSearches,!searches.isSubset(of:ReefCove.allIDs) {return false}
+        if let rewards=p.clearingRewards {
+            guard Set(rewards.keys).isSubset(of:p.coveSearches ?? []),
+                  rewards.allSatisfy({id,item in
+                      ReefCove.allIDs.contains(id) && [.shot,.hint,.life,.lighter,.currentAdder,.bouncyBlock].contains(item)
+                  }) else{return false}
+        }
+        if let attempts=p.miniChallenges {
+            for (id,attempt) in attempts {
+                guard let object=destinations.flatMap({ReefCove.objects(in:$0.id)}).first(where:{$0.id==id}),
+                      object.challengeKind==attempt.kind,ReefMiniChallenge.valid(attempt),
+                      attempt.result != .won || p.coveSearches?.contains(id)==true else{return false}
+            }
+        }
         if revision < 3 { return true }
         guard let visited=p.visited,let location=p.location,let unlocked=p.nextWorldUnlocked,
               visited.isSubset(of:Set(destinations.map(\.id))),visited.contains(location),visited.contains("start"),
               p.position == node(location).point else { return false }
         if let b=p.bonus {
             if let currents=b.currents, currents.count != 3 || !currents.allSatisfy({(0..<8).contains($0)}) {return false}
+            if let additions=b.addedCurrents {
+                guard Set(additions.map(\.id)).count==additions.count else{return false}
+                var tested=p;tested.bonus?.addedCurrents=[]
+                for current in additions {
+                    guard (0..<8).contains(current.direction),BonusCourse.canPlaceCurrent(at:current.position,in:tested) else{return false}
+                    tested.bonus?.addedCurrents?.append(current)
+                }
+            }
+            if let blocks=b.bouncyBlocks {
+                guard Set(blocks.map(\.id)).count==blocks.count else{return false}
+                var tested=p;tested.bonus?.bouncyBlocks=[]
+                for block in blocks {
+                    guard BonusCourse.canPlaceBlock(at:block.position,in:tested) else{return false}
+                    tested.bonus?.bouncyBlocks?.append(block)
+                }
+            }
             let currentCourse=b.courseRevision == BonusCourse.revision
             let previousCourse=b.courseRevision == 2 || b.courseRevision == 3
             let holePosition=currentCourse ? BonusCourse.home : previousCourse ? BonusCourse.legacyHome : BonusCourse.home

@@ -1,4 +1,3 @@
-#if DEBUG
 import Foundation
 import Observation
 
@@ -301,4 +300,3 @@ struct LabPathNode:Identifiable {
     func reset() {visited=[0];cleared=[0];foods=[];finds=[];location=0;stage=kind == .hub ? -1:0;glow=18;won=false;message="";loops=0}
     func returnHome() {if foods.count==3 {won=true;location=12;message="Home! Your finds help in every golf demo."} else {message="Find \(3-foods.count) more snacks."}}
 }
-#endif

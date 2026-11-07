@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="600" height="500" viewBox="100 0 140 117">
+<ellipse id="prison-hole" cx="170" cy="59" rx="59" ry="47" fill="#163F48" stroke="#E8C982" stroke-width="8"/>
+<path id="coral-arch" d="M114 69 C102 -8 237 -8 226 69" fill="none" stroke="#DA9682" stroke-width="10" stroke-linecap="round"/>
+<path id="bar-0" d="M137 27 Q132 51 139 77" fill="none" stroke="#B8D4B7" stroke-opacity="0.72" stroke-width="4" stroke-linecap="round"/><path id="bar-1" d="M159 27 Q154 51 161 77" fill="none" stroke="#B8D4B7" stroke-opacity="0.72" stroke-width="4" stroke-linecap="round"/><path id="bar-2" d="M181 27 Q176 51 183 77" fill="none" stroke="#B8D4B7" stroke-opacity="0.72" stroke-width="4" stroke-linecap="round"/><path id="bar-3" d="M203 27 Q198 51 205 77" fill="none" stroke="#B8D4B7" stroke-opacity="0.72" stroke-width="4" stroke-linecap="round"/>
+<path id="entry-rim" d="M119 82 Q170 103 220 82" fill="none" stroke="#F5D997" stroke-width="7" stroke-linecap="round"/>
+</svg>

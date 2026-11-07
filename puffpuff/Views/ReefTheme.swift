@@ -227,12 +227,11 @@ extension View {
 }
 
 struct ReefSettingsView: View {
-    #if DEBUG
     @State private var showDesignLab = false
     @State private var showReset = false
-    #endif
     @Binding var appearance: ReefAppearance
     @AppStorage("puffpuff.celebrationAnimations") private var celebrationAnimations = true
+    @AppStorage("puffpuff.confirmHintUse") private var confirmHintUse = true
     @Environment(\.dismiss) private var dismiss
     @Environment(ReefStore.self) private var store
     var body: some View {
@@ -251,29 +250,41 @@ struct ReefSettingsView: View {
                     }
                     .toggleStyle(.switch).tint(ReefTheme.cyan)
                     .padding(.horizontal, 9).frame(minHeight: 44)
-                    #if DEBUG
+                    Toggle(isOn: $confirmHintUse) {
+                        Text("Confirm hints & Future Teller").reefFont(size: 15, weight: .semibold)
+                            .fixedSize(horizontal: false, vertical: true)
+                    }
+                    .toggleStyle(.switch).tint(ReefTheme.cyan)
+                    .padding(.horizontal, 9).frame(minHeight: 44)
+                    if store.testingToolsEnabled {
                     Button("Playground · golf & paths") { showDesignLab = true }
                         .buttonStyle(ReefButtonStyle(kind: .action))
                     ReefDebugRefills().padding(.bottom, 6)
                     ReefBloomStartOptions { dismiss() }
                     Button("Restart everything") {showReset=true}
                         .buttonStyle(ReefButtonStyle(kind:.quiet)).disabled(store.isSaveBlocked)
-                    #endif
+                    }
                 }.padding(22).frame(maxWidth: 460).frame(maxWidth: .infinity)
             }.scrollIndicators(.hidden).foregroundStyle(ReefTheme.ink)
         }
-        #if DEBUG
         .alert("Restart everything?",isPresented:$showReset) {
             Button("Cancel",role:.cancel) {}
             Button("Restart everything",role:.destructive) {
                 if store.restartEverything() {
-                    UserDefaults.standard.removeObject(forKey:"puffpuff.tutorial.verticalCoral")
+                    for key in ["verticalCoral", "diagonalCoral", "lineCoral", "burstCoral"] {
+                        UserDefaults.standard.removeObject(forKey:"puffpuff.tutorial." + key)
+                    }
                     dismiss()
                 }
             }
         } message: {Text("All levels, Trail progress and supplies will restart. A backup of this game is kept.")}
-        .sheet(isPresented: $showDesignLab) { ReefDesignLab().presentationDetents([.large]).presentationBackground(.clear) }
-        #endif
+        .sheet(isPresented: $showDesignLab) {
+            if store.testingToolsEnabled { ReefDesignLab().presentationDetents([.large]).presentationBackground(.clear) }
+        }
+        .task { await store.refreshTestingAccess() }
+        .onChange(of: store.testingToolsEnabled) { _, enabled in
+            if !enabled { showDesignLab = false; showReset = false }
+        }
         .environment(\.colorScheme, appearance.colorScheme)
         .preferredColorScheme(appearance.colorScheme)
         #if os(macOS)
@@ -282,7 +293,6 @@ struct ReefSettingsView: View {
     }
 }
 
-#if DEBUG
 /// Inventory tools stay in settings so gameplay has its player-facing layout.
 private struct ReefDebugRefills: View {
     @Environment(ReefStore.self) private var store
@@ -323,7 +333,6 @@ private struct ReefDebugRefills: View {
         }
     }
 }
-#endif
 
 
 enum ReefAppearance: String, CaseIterable, Identifiable {
@@ -359,18 +368,19 @@ struct ReefAppearanceOptions: View {
     }
 }
 
-#if DEBUG
 extension ReefDebugSupply {
     var iconKind: ReefIconKind {
         switch self {
         case .glow: .glow
         case .shots: .shot
         case .hints: .hint
+        case .futureTellers: .futureTeller
         case .lives: .life
         case .lighters: .lighter
         case .boosts: .boostStored
         case .currents: .current
+        case .currentAdders: .currentAdder
+        case .bouncyBlocks: .bouncyBlock
         }
     }
 }
-#endif

@@ -8,10 +8,6 @@ struct ReefIntroView: View {
     @State private var saveFailed = false
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
     private var count: Int { kind == .trail ? 3 : 2 }
-    private var scene: Int { kind == .trail ? page : page + 3 }
-    private var title: String {
-        ["Find home", "Play Bloom for Glow", "Win bonuses", "Putt Puff Puff home", "Explore for an easier putt"][scene]
-    }
 
     var body: some View {
         GeometryReader { geometry in
@@ -20,23 +16,35 @@ struct ReefIntroView: View {
                     Spacer()
                     Button("Skip", action: finish).buttonStyle(ReefButtonStyle(kind: .quiet))
                 }
-                ScrollView {
-                    VStack(spacing: 20) {
-                        ReefIntroArt(scene: scene)
-                            .frame(height: min(280, max(170, geometry.size.height * 0.38)))
-                            .accessibilityHidden(true)
-                        Text(title).reefFont(.title2, weight: .semibold)
-                            .accessibilityAddTraits(.isHeader)
-                        explanation
+                #if os(iOS)
+                TabView(selection: $page) {
+                    ForEach(0..<count, id: \.self) { index in
+                        slide(index, height: geometry.size.height).tag(index)
+                            .accessibilityHidden(index != page)
                     }
-                    .frame(maxWidth: .infinity).padding(.horizontal, 8).padding(.bottom, 12)
+                }.tabViewStyle(.page(indexDisplayMode: .never))
+                #else
+                GeometryReader { viewport in
+                    ScrollView(.horizontal) {
+                        LazyHStack(spacing: 0) {
+                            ForEach(0..<count, id: \.self) { index in
+                                slide(index, height: geometry.size.height)
+                                    .frame(width: viewport.size.width, height: viewport.size.height)
+                                    .id(index).accessibilityHidden(index != page)
+                            }
+                        }.scrollTargetLayout()
+                    }
+                    .scrollIndicators(.hidden)
+                    .scrollTargetBehavior(.paging)
+                    .scrollPosition(id: Binding<Int?>(get: { page }, set: { if let value = $0 { page = value } }))
+                    #if os(macOS)
+                    .simultaneousGesture(DragGesture(minimumDistance: 35).onEnded { value in
+                        guard abs(value.translation.width) > abs(value.translation.height) * 1.5 else { return }
+                        changePage(value.translation.width < 0 ? 1 : -1)
+                    })
+                    #endif
                 }
-                .scrollIndicators(.hidden)
-                .id(page)
-                .simultaneousGesture(DragGesture(minimumDistance: 35).onEnded { value in
-                    guard abs(value.translation.width) > abs(value.translation.height) * 1.5 else { return }
-                    changePage(value.translation.width < 0 ? 1 : -1)
-                })
+                #endif
                 HStack(spacing: 10) {
                     ForEach(0..<count, id: \.self) { index in
                         Circle().fill(index == page ? ReefTheme.cyan : ReefTheme.bone.opacity(0.4))
@@ -49,16 +57,15 @@ struct ReefIntroView: View {
                     Text("Couldn't save. Please try again.").reefFont(size: 13)
                 }
                 HStack(spacing: 12) {
-                    if page > 0 {
-                        Button { changePage(-1) } label: {
-                            Image(systemName: "chevron.left").frame(width: 44, height: 44)
-                        }.buttonStyle(ReefButtonStyle(kind: .quiet)).accessibilityLabel("Previous slide")
-                    }
+                    Button { changePage(-1) } label: {
+                        Text("Back").frame(maxWidth: .infinity, minHeight: 32)
+                    }.buttonStyle(ReefButtonStyle(filled: true)).disabled(page == 0)
+                        .accessibilityLabel("Previous slide")
                     Button {
                         if page == count - 1 { finish() } else { changePage(1) }
                     } label: {
                         Text(page < count - 1 ? "Next" : kind == .trail ? "Let's explore" : "Let's putt")
-                            .frame(maxWidth: .infinity)
+                            .frame(maxWidth: .infinity, minHeight: 32)
                     }.buttonStyle(ReefButtonStyle(filled: true))
                 }.padding(.top, 8)
             }
@@ -70,7 +77,20 @@ struct ReefIntroView: View {
         .multilineTextAlignment(.center)
     }
 
-    @ViewBuilder private var explanation: some View {
+    private func slide(_ index: Int, height: CGFloat) -> some View {
+        let scene = kind == .trail ? index : index + 3
+        let title = ["Find home", "Play Bloom for Glow", "Win bonuses", "Putt Puff Puff home", "Explore for an easier putt"][scene]
+        return ScrollView {
+            VStack(spacing: 20) {
+                ReefIntroArt(scene: scene)
+                    .frame(height: min(280, max(170, height * 0.38))).accessibilityHidden(true)
+                Text(title).reefFont(.title2, weight: .semibold).accessibilityAddTraits(.isHeader)
+                explanation(scene: scene)
+            }.frame(maxWidth: .infinity).padding(.horizontal, 8).padding(.bottom, 12)
+        }.scrollIndicators(.hidden)
+    }
+
+    @ViewBuilder private func explanation(scene: Int) -> some View {
         switch scene {
         case 0:
             Text("Explore the path. Complete your tasks.")

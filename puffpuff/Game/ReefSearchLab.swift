@@ -1,4 +1,3 @@
-#if DEBUG
 import Foundation
 import Observation
 
@@ -81,4 +80,3 @@ struct SearchSpot:Identifiable {
         opened=kind == .hub || kind == .hunt ? [0,1,2]:[0]
     }
 }
-#endif

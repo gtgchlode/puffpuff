@@ -96,7 +96,6 @@ struct ReefExploredMap: View {
             let found = progress.treasures.contains(node.id)
             let asset = node.chestArt(open: found)
             TrailArt.draw(asset, in: c, at: point, size: 42)
-            if found { ReefTreasureArt.draw(ReefTreasureArt.rewards(for:node),in:c,at:point,chestSize:42) }
         case .food:
             TrailArt.draw(.food, in: c, at: point, size: 32)
         case .clearance:
@@ -232,5 +231,23 @@ struct ReefExploredMapSheet: View {
         #if os(macOS)
         .frame(minWidth: 380, idealWidth: 440, minHeight: 620, idealHeight: 720)
         #endif
+    }
+}
+
+
+/// A compact version of the Trail chart, used to return from Bloom.
+struct ReefTrailReturnButton: View {
+    let progress: FirstReefProgress
+    let action: () -> Void
+    var body: some View {
+        Button(action: action) {
+            ReefExploredMap(progress: progress, compact: true)
+                .padding(.horizontal, 7).padding(.vertical, 8)
+                .frame(width: 44, height: 44)
+                .background(FoldedReefMapPaper())
+        }
+        .buttonStyle(ReefButtonStyle(kind: .navigation))
+        .accessibilityLabel("Back to trail")
+        .accessibilityHint("Your Bloom board is saved.")
     }
 }

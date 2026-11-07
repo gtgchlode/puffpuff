@@ -66,7 +66,7 @@ def main():
             match = re.search(r'(?:frond(?:-vein)?|leaf)-(\d+)', label)
             sway = int(match.group(1)) if name == 'kelpForest' and match else -1
             matrix = ','.join(f'{key}:{vector.number(v)}' for key, v in zip(('a','b','c','d','tx','ty'), transform))
-            out.append(f'            // {label}\n            Layer(path:Path {{ p in {swift_path(ops, points)} }},fill:{fill},stroke:{stroke},width:{vector.number(width)},swayGroup:{sway},transform:CGAffineTransform({matrix})),')
+            out.append(f'            // {label}\n            Layer(name:"{label}",path:Path {{ p in {swift_path(ops, points)} }},fill:{fill},stroke:{stroke},width:{vector.number(width)},swayGroup:{sway},transform:CGAffineTransform({matrix})),')
         out.append('        ],')
         total += len(parts)
         group.attrib.pop('transform', None)  # Remove sheet position, keep all inner edits.

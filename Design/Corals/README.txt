@@ -54,3 +54,5 @@ arrow icons. They retain the existing root-anchored sway and completion colors.
 Ordinary tiles keep the original three species; game rules and saves are unchanged.
 The new paths come from scripts/make-directional-corals.py. Preserve later edits
 to the Affinity master; the script does not overwrite any .af document.
+
+Burst-Coral.af / Burst-Coral.svg: editable faceless rounded anemone for level-85 burst coral. Matches the burstAnemone paths in CoralPaths.swift, color #E997AD, highlights #FFE0C7, centered eight-ray rule glyph. Uses the existing root-anchored sway and lit/completed states. Preserve user edits.

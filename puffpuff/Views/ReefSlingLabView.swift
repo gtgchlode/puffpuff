@@ -1,4 +1,3 @@
-#if DEBUG
 import SwiftUI
 
 struct ReefSlingLabView:View {
@@ -146,4 +145,3 @@ struct ReefSlingLabView:View {
         }
     }
 }
-#endif

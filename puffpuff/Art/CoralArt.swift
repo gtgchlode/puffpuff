@@ -2,20 +2,21 @@ import SwiftUI
 
 /// Three decorative corals plus distinct vertical and horizontal current corals.
 enum CoralSpecies: Int, CaseIterable {
-    case peachSprig, rosyFan, honeyCups, tideSpires, driftShelf
+    case peachSprig, rosyFan, honeyCups, tideSpires, driftShelf, burstAnemone
 
-    var color: UInt32 { [0xF49B87, 0xEB8196, 0xF2BA76, 0x70C7B5, 0xE9A279][rawValue] }
-    var tip: UInt32 { [0xFFD0AF, 0xFFB4BD, 0xFFE0A4, 0xD8F3BC, 0xFFE0AE][rawValue] }
-    var left: Path { [CoralPaths.peachSprigLeft, CoralPaths.rosyFanLeft, CoralPaths.honeyCupsLeft, CoralPaths.tideSpiresLeft, CoralPaths.driftShelfLeft][rawValue] }
-    var right: Path { [CoralPaths.peachSprigRight, CoralPaths.rosyFanRight, CoralPaths.honeyCupsRight, CoralPaths.tideSpiresRight, CoralPaths.driftShelfRight][rawValue] }
-    var body: Path { [CoralPaths.peachSprigBody, CoralPaths.rosyFanBody, CoralPaths.honeyCupsBody, CoralPaths.tideSpiresBody, CoralPaths.driftShelfBody][rawValue] }
-    var veins: Path { [CoralPaths.peachSprigVeins, CoralPaths.rosyFanVeins, CoralPaths.honeyCupsVeins, CoralPaths.tideSpiresVeins, CoralPaths.driftShelfVeins][rawValue] }
+    var color: UInt32 { [0xF49B87, 0xEB8196, 0xF2BA76, 0x70C7B5, 0xE9A279, 0xE997AD][rawValue] }
+    var tip: UInt32 { [0xFFD0AF, 0xFFB4BD, 0xFFE0A4, 0xD8F3BC, 0xFFE0AE, 0xFFE0C7][rawValue] }
+    var left: Path { [CoralPaths.peachSprigLeft, CoralPaths.rosyFanLeft, CoralPaths.honeyCupsLeft, CoralPaths.tideSpiresLeft, CoralPaths.driftShelfLeft, CoralPaths.burstAnemoneLeft][rawValue] }
+    var right: Path { [CoralPaths.peachSprigRight, CoralPaths.rosyFanRight, CoralPaths.honeyCupsRight, CoralPaths.tideSpiresRight, CoralPaths.driftShelfRight, CoralPaths.burstAnemoneRight][rawValue] }
+    var body: Path { [CoralPaths.peachSprigBody, CoralPaths.rosyFanBody, CoralPaths.honeyCupsBody, CoralPaths.tideSpiresBody, CoralPaths.driftShelfBody, CoralPaths.burstAnemoneBody][rawValue] }
+    var veins: Path { [CoralPaths.peachSprigVeins, CoralPaths.rosyFanVeins, CoralPaths.honeyCupsVeins, CoralPaths.tideSpiresVeins, CoralPaths.driftShelfVeins, CoralPaths.burstAnemoneVeins][rawValue] }
     var dots: [(Double, Double, Double)] {
         switch self {
         case .peachSprig: return [(44,18,2),(24,32,1.6),(78,32,1.6),(37,80,1.6),(61,81,1.5)]
         case .rosyFan: return [(48,21,1.8),(32,32,1.6),(66,30,1.7),(17,45,1.5),(83,46,1.5)]
         case .honeyCups: return [(21,60,1.6),(40,48,1.4),(61,53,1.7),(80,54,1.5),(36,80,1.6),(52,76,1.5)]
         case .tideSpires: return [(36,20,1.4),(25,24,1.2),(65,22,1.3),(74,25,1.2),(56,13,1.4),(46,77,1.4),(55,86,1.1)]
+        case .burstAnemone: return [(16,40,1.5),(24,28,1.4),(37,24,1.4),(64,23,1.3),(82,40,1.5),(85,59,1.2),(25,70,1.6),(39,72,1.5),(61,69,1.3),(49,86,1.3)]
         case .driftShelf: return [(16,39,1.4),(28,39,1.2),(72,39,1.3),(86,38,1.3),(35,54,1.2),(63,54,1.3),(55,85,1.1)]
         }
     }

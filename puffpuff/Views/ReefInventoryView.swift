@@ -6,37 +6,46 @@ extension ReefDiscovery {
         case .glow:"Glow"
         case .snack:"Snacks"
         case .hint:"Hints"
+        case .futureTeller:"Future Teller"
         case .life:"Lives"
         case .lighter:"Lighters"
         case .instantBoost:"Unlimited lives"
         case .storedBoost:"Saved unlimited lives"
         case .shot:"Shots"
         case .current:"Current changers"
+        case .currentAdder:"Current adders"
+        case .bouncyBlock:"Bouncy blocks"
         }
     }
     var explanation:String {
         switch self {
         case .glow:"Spend Glow to uncover the Trail and collect supplies. Earn more by playing Bloom."
         case .snack:"Find three snacks and Puff Puff’s home to unlock bonus golf."
-        case .hint:"Shows one useful coral to tap in Bloom. Each hint is used once."
+        case .hint:"Reveal one useful coral to tap in Bloom. Uses one hint, with no tap cost."
+        case .futureTeller:"Glimpse one possible board just before the winning tap. Work toward that arrangement, then tap the marked coral. Reopen your glimpse freely this attempt."
         case .life:"Lose one if a Bloom attempt fails or you restart. One refills every five minutes, up to five. Winning costs nothing."
         case .lighter:"Light one coral and keep it glowing for that Bloom attempt. Uses no taps."
         case .instantBoost:"Starts immediately: fifteen minutes of unlimited Bloom lives, with your lives refilled."
         case .storedBoost:"Keep this gold boost until you need it. Activate it for fifteen minutes of unlimited Bloom lives and a refill."
-        case .shot:"Each putt uses one shot. Every five Bloom wins earn one, plus a 10% chance of an extra shot each win. Replays count. Shot chests give three shots once."
-        case .current:"Use one to redirect a golf current. Your chosen direction lasts through retries."
+        case .shot:"Each putt or Trail challenge move uses one shot. Collect more in Bloom and while exploring."
+        case .bouncyBlock:"Place a bouncy coral block to bank Puff Puff or an enemy fish. Uses one block in any golf challenge. It disappears on Retry."
+        case .current:"Use one to redirect a current in bonus golf."
+        case .currentAdder:"Place an extra current and choose its direction. Uses one adder. Use it in bonus golf, kelp runs or enemy challenges. It disappears on Retry."
         }
     }
     var icon:ReefIconKind {
         switch self {
         case .glow,.snack:.glow
         case .hint:.hint
+        case .futureTeller:.futureTeller
         case .life:.life
         case .lighter:.lighter
         case .instantBoost:.boostLive
         case .storedBoost:.boostStored
         case .shot:.shot
         case .current:.current
+        case .currentAdder:.currentAdder
+        case .bouncyBlock:.bouncyBlock
         }
     }
     func balance(_ p:ReefProgress,at now:Date)->String {
@@ -45,12 +54,15 @@ extension ReefDiscovery {
         case .glow:return "\(p.glow)"
         case .snack:return "\(p.firstReef.food.count)/3"
         case .hint:return "\(p.hints)"
+        case .futureTeller:return "\(p.futureTellers)"
         case .life:return "\(s.lives)"
         case .lighter:return "\(s.lighters)"
         case .instantBoost:return s.unlimited(at:now) ? BloomLivesStatus.countdown(s.unlimitedUntil!,at:now):"Inactive"
         case .storedBoost:return "\(s.unlimitedBoosts)"
         case .shot:return "\(p.shots)"
         case .current:return "\(p.currentChangers)"
+        case .currentAdder:return "\(p.currentAdders)"
+        case .bouncyBlock:return "\(p.bouncyBlocks)"
         }
     }
 }
@@ -97,8 +109,8 @@ struct ReefInventoryView:View {
                             .buttonStyle(ReefButtonStyle(kind:.quiet)).accessibilityLabel("Close treasure chest")
                     }
                     row(.glow)
-                    section("Bloom",items:[.life,.hint,.lighter,.instantBoost,.storedBoost])
-                    section("Bonus golf",items:[.shot,.current])
+                    section("Bloom",items:[.life,.hint] + (store.progress.futureTellerUnlocked ? [.futureTeller]:[]) + [.lighter,.instantBoost,.storedBoost])
+                    section("Golf",items:[.shot,.current,.currentAdder,.bouncyBlock])
                 }.padding(24).frame(maxWidth:480).frame(maxWidth:.infinity)
             }.scrollIndicators(.visible)
         }.foregroundStyle(ReefTheme.ink)
@@ -125,10 +137,7 @@ struct ReefInventoryView:View {
                     }
                 }
                 Text(item.explanation).reefFont(size:13).foregroundStyle(ReefTheme.muted).fixedSize(horizontal:false,vertical:true)
-                if item == .shot {
-                    Text("\(store.progress.bloomWinsTowardShot)/\(ReefStore.bloomWinsPerShot) Bloom wins toward a shot")
-                        .reefFont(size:13,weight:.semibold).foregroundStyle(ReefTheme.ink)
-                }
+
                 if item == .storedBoost,store.progress.supplies.unlimitedBoosts>0 {
                     Button("Use 15 min") {_ = store.activateUnlimitedLives()}
                         .buttonStyle(ReefButtonStyle(kind:.action)).disabled(store.isSaveBlocked)
