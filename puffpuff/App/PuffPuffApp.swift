@@ -64,9 +64,6 @@ struct ReefRootView: View {
         .task(id: scenePhase) {
             if scenePhase == .active { await store.refreshTestingAccess() }
         }
-        .onChange(of:store.discoveryReceipt?.id) { _,_ in
-            if let receipt=store.discoveryReceipt,receipt.source == .bonus {presentDiscovery(receipt.id)}
-        }
         .sheet(item:$discovery,onDismiss:{discoveryItems=[]}) {item in
             ReefDiscoverySheet(item:item) {
                 if store.acknowledgeDiscovery(item) {
@@ -111,7 +108,7 @@ struct ReefRootView: View {
               receipt.id==receiptID else{return}
         switch receipt.source {
         case .bloom(let level): guard store.progress.activeScreen == .bloom,store.puzzle.level==level,store.isComplete else{return}
-        case .trail,.bonus: guard store.progress.activeScreen == .trail else{return}
+        case .trail: guard store.progress.activeScreen == .trail else{return}
         }
         discoveryItems=store.discoveryItems(for:receiptID)
         store.cancelDiscoveryReceipt()
@@ -162,14 +159,13 @@ private struct ReefPauseView: View {
     var body: some View {
         VStack(spacing: 22) {
             PipView(paused: true, happy: true).frame(width: 150, height: 127)
-            Text("puffpuff").reefFont(size: 32, weight: .semibold, display: true)
+            Text("puffpuff").reefFont(size: 27, weight: .semibold, display: true).multilineTextAlignment(.center)
             HStack(spacing: 24) {
-                ResourceOrb(kind: .glow, count: store.progress.glow, label: "Glow")
-                ResourceOrb(kind: .shot, count: store.progress.shots, label: "shots")
+                ResourceOrb(kind: .glow, count: store.progress.glow, label: "Lumes")
             }
             ReefChestButton(labelled:true)
             Button("Resume", action: onResume).buttonStyle(ReefButtonStyle(filled: true))
-            Button { onHome() } label: { Label("Home", systemImage: "house.fill") }
+            Button { onHome() } label: { Label("Trail", systemImage: "map") }
                 .buttonStyle(ReefButtonStyle())
             HStack(spacing: 24) {
                 Button(action: onSave) { Image(systemName: "checkmark.seal") }.accessibilityLabel("Saved reef")
@@ -200,7 +196,7 @@ struct ReefBloomStartOptions: View {
                     TextField("1–\(ReefStore.levelLimit)", text: $levelText).textFieldStyle(.plain)
                         .multilineTextAlignment(.center).frame(width: 60, height: 44)
                         .background(MembraneSurface(tint: ReefTheme.honey, round: true))
-                        .accessibilityLabel("Starting Bloom level")
+                        .accessibilityLabel("Starting Glow level")
                         #if os(iOS)
                         .keyboardType(.numberPad)
                         #endif

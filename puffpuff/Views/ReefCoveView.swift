@@ -4,12 +4,14 @@ struct CoveActionTiming {
     let scares:Bool
     let eats:Bool
     let treasure:Bool
+    let restores:Bool
     var clearedAt:Double {scares ? 1.65:0.8}
     var eatAt:Double {clearedAt+0.15}
-    var duration:Double {clearedAt+(treasure ? 1.55:0.45)}
+    var duration:Double {clearedAt+(treasure || restores ? 1.55:0.45)}
     init(_ object:ReefCove.Object) {
-        scares=object.barrier == .enemy && !object.isChest
-        eats=object.find == .food
+        scares=object.barrier == .enemy && !object.isChest && object.find != .food && object.find != .home
+        eats=false
+        restores=object.find == .food || object.find == .home
         treasure=object.isChest || object.find == .treasure || object.clearingReward != nil
     }
 }
@@ -25,9 +27,6 @@ struct ReefCoveView:View {
     let onVisit:(FirstReef.Destination)->Void
     let onUncover:(ReefCove.Object)->Void
     let onMap:()->Void
-    var onChallenge:(ReefCove.Object)->Void = {_ in}
-    var onReplayChallenge:(ReefCove.Object)->Void = {_ in}
-    var testingToolsEnabled = false
     var bottomInset:Double = 0
     @Environment(\.reefPaused) private var paused
     @Environment(\.scenePhase) private var scenePhase
@@ -46,6 +45,12 @@ struct ReefCoveView:View {
     private var area:String {progress.location ?? "start"}
     private var objects:[ReefCove.Object] {ReefCove.objects(in:area)}
     private var searches:Set<String> {progress.coveSearches ?? []}
+    private var hasPatrollingEnemies:Bool {
+        objects.contains { object in
+            object.barrier == .enemy && !object.isChest && object.find != .food && object.find != .home
+                && !searches.contains(object.id)
+        }
+    }
     private var action:ReefCove.Object? {objects.first{$0.id == journey?.coveDiscovery}}
     private var exits:[FirstReef.Destination] {
         FirstReef.neighbors(area,state:progress).filter {
@@ -54,7 +59,7 @@ struct ReefCoveView:View {
     }
     var body:some View {
         GeometryReader {g in
-            TimelineView(.animation(minimumInterval:1.0/30,paused:!swimming || paused || reduceMotion)) { clock in
+            TimelineView(.animation(minimumInterval:1.0/30,paused:(!swimming && !hasPatrollingEnemies) || paused || reduceMotion)) { clock in
                 scene(size:g.size,now:clock.date)
             }
         }
@@ -122,7 +127,7 @@ struct ReefCoveView:View {
                     self.selectedID=nil
                     if enabled {swim(to:p,in:size)}
                 }.accessibilityLabel("Dismiss details").accessibilityAddTraits(.isButton)
-                let halfHeight=object.challengeKind == nil ? 86.0:126.0
+                let halfHeight=86.0
                 details(object,size:size)
                     .position(x:min(size.width-140,max(140,point(object.slot,in:size).x)),
                               y:min(size.height-bottomInset-halfHeight-12,max(halfHeight+12,point(object.slot,in:size).y+(object.slot<2 ? 120:-120))))
@@ -166,16 +171,22 @@ struct ReefCoveView:View {
                 let p=point(object.slot,in:s)
                 let bed=SeaGlassShape(seed:Double(object.slot+area.count)).path(in:
                     CGRect(x:p.x-s.width*0.23,y:p.y-s.height*0.035,width:s.width*0.46,height:s.height*0.20))
-                c.fill(bed,with:.color(ReefTheme.sand.opacity(0.13)))
+                let life=light(object)
+                c.fill(bed,with:.color(CoralArt.blend(0x747F70,0xEAD7A6,life).opacity(0.20)))
+                for chip in 0..<9 {
+                    let x=p.x+Double((chip*31+object.slot*17)%97-48)*s.width/300
+                    let y=p.y+s.height*0.10+Double((chip*13)%19)
+                    c.fill(Path(ellipseIn:.init(x:x,y:y,width:4+Double(chip%3)*3,height:2.5)),with:.color(Color(hex:0xA2AA94).opacity((1-life)*0.55)))
+                }
             }
-            WaterDrawing.caustics(in:c,size:s,time:time,strength:0.45)
+            WaterDrawing.caustics(in:c,size:s,time:time,strength:0.14+0.31*areaRestoration)
             for i in 0..<4 {
                 let x=Double(i)*s.width/3
                 var ray=Path();ray.move(to:.init(x:x,y:0));ray.addLine(to:.init(x:x-75,y:s.height));ray.addLine(to:.init(x:x+40,y:s.height));ray.closeSubpath()
-                c.fill(ray,with:.color(ReefTheme.glint.opacity(0.05)))
+                c.fill(ray,with:.color(ReefTheme.glint.opacity(0.015+areaRestoration*0.035)))
             }
             drawGarden(in:c,size:s)
-            if area == "home" {CoralHomeArt.draw(in:c,at:.init(x:s.width/2,y:s.height*0.50),scale:0.53,open:progress.completed)}
+
             for object in objects {drawObject(object,in:c,size:s,artSize:artSize,pose:pose)}
         }
         .frame(width:size.width+bleed*2,height:size.height+bleed*2)
@@ -190,9 +201,10 @@ struct ReefCoveView:View {
             Canvas {c,s in
                 for object in objects where object.isChest || object.find == .treasure {
                     drawTreasure(object,in:c,size:s,artSize:artSize)
-                    if object.find == .food { drawFood(object,in:c,size:s,artSize:artSize,pose:pose) }
+
                 }
                 for object in objects {
+                    drawRestoration(object,in:c,size:s,artSize:artSize)
                     drawKelpGate(object,in:c,size:s,artSize:artSize)
                     drawEnemyPatrol(object,in:c,size:s,artSize:artSize)
                     if let item=progress.clearingRewards?[object.id],
@@ -223,22 +235,10 @@ struct ReefCoveView:View {
                         .contentShape(Rectangle())
                 }.buttonStyle(.plain).disabled(!enabled || !interactive)
                     .position(point(object.slot,in:size))
-                    .accessibilityLabel(object.isChest ? "Open treasure chest, \(object.cost) Glow":"\(object.cost) Glow to uncover hiding place \(object.slot+1)")
-                    .accessibilityHint("Show the action and Glow price.")
+                    .accessibilityLabel(object.isChest ? "Open treasure chest, \(object.cost) Lumes":"\(object.cost) Lumes to uncover hiding place \(object.slot+1)")
+                    .accessibilityHint("Show the action and Lumes price.")
             }
-            if testingToolsEnabled {
-            ForEach(objects.filter{searches.contains($0.id) && $0.challengeKind != nil}) {object in
-                Button {onReplayChallenge(object)} label: {
-                    Label("Replay",systemImage:"arrow.counterclockwise")
-                        .reefFont(size:13,weight:.semibold)
-                        .padding(.horizontal,12).padding(.vertical,10)
-                        .background(MembraneShape().fill(ReefTheme.glass.opacity(0.94)))
-                        .frame(minWidth:64,minHeight:44)
-                }.buttonStyle(.plain).disabled(!interactive)
-                    .position(x:point(object.slot,in:size).x,y:point(object.slot,in:size).y+artSize*0.34)
-                    .accessibilityLabel(object.challengeKind == .kelp ? "Replay kelp challenge":"Replay enemy challenge")
-            }
-            }
+
         }
     }
     private func details(_ object:ReefCove.Object,size:CGSize)->some View {
@@ -246,21 +246,15 @@ struct ReefCoveView:View {
             Text(object.action).reefFont(size:18,weight:.semibold)
                 .multilineTextAlignment(.center).fixedSize(horizontal:false,vertical:true)
                 .frame(maxWidth:.infinity)
-            if object.challengeKind != nil {
-                Button {selectedID=nil;onChallenge(object)} label: {
-                    ReefIconLabel("Play",.shot,size:28).frame(maxWidth:.infinity)
-                }.buttonStyle(ReefButtonStyle(kind:.action)).disabled(!enabled)
-                Text("or").reefFont(size:13).foregroundStyle(ReefTheme.muted)
-            }
             Button {
                 actionFrom=freeSpot(at:Date())
                 facing=object.slot%2 == 0 ? -1:1
                 selectedID=nil;onUncover(object)
             } label: {
-                HStack(spacing:8) {Text("\(object.cost) Glow").reefFont(size:16,weight:.semibold);ReefIcon(.glow,size:27)}
+                HStack(spacing:8) {Text("\(object.cost) Lumes").reefFont(size:16,weight:.semibold);ReefIcon(.glow,size:27)}
                     .frame(maxWidth:.infinity,alignment:.center)
             }.buttonStyle(ReefButtonStyle(kind:.action)).disabled(!enabled)
-                .accessibilityLabel("\(object.cost) Glow, \(object.action.lowercased())")
+                .accessibilityLabel("\(object.cost) Lumes, \(object.action.lowercased())")
         }.padding(.horizontal,24).padding(.top,18).padding(.bottom,26).frame(width:min(280,size.width-24))
             .background(MembraneShape().fill(ReefTheme.glass))
             .shadow(color:ReefTheme.abyss.opacity(0.4),radius:12,y:4)
@@ -271,15 +265,33 @@ struct ReefCoveView:View {
         guard let action,action.id == object.id,!reduceMotion else{return 1}
         return smooth((elapsed-CoveActionTiming(action).clearedAt)/0.65)
     }
+    private var areaRestoration:Double { objects.isEmpty ? 0:objects.map(light).reduce(0,+)/Double(objects.count) }
+    private func restoration(at p:CGPoint,size:CGSize)->Double {
+        guard let nearest=objects.min(by:{
+            let a=point($0.slot,in:size),b=point($1.slot,in:size)
+            return hypot(a.x-p.x,a.y-p.y)<hypot(b.x-p.x,b.y-p.y)
+        }) else{return 0}
+        return light(nearest)
+    }
+    private func pathTint(restoration:Double)->Color {
+        let amount=min(1,max(0,restoration))
+        func blend(_ from:UInt32,_ to:UInt32)->UInt32 {
+            func component(_ shift:UInt32)->UInt32 {
+                let a=Double((from>>shift)&255),b=Double((to>>shift)&255)
+                return UInt32((a+(b-a)*amount).rounded())
+            }
+            return (component(16)<<16)|(component(8)<<8)|component(0)
+        }
+        return .adaptive(light:blend(0x5F5747,0xEAD7A6),dark:blend(0x213A3A,0x91BBB1))
+    }
     private func drawPaths(in context:GraphicsContext,size:CGSize,overShadow:Bool=false) {
         let center=CGPoint(x:size.width*0.5,y:size.height*0.51)
-        let pathTint=Color.adaptive(light:0xEAD7A6,dark:0x91BBB1)
         let exitsHere=exitPositions(in:size)
         let routeExits=exits.filter{exitsHere[$0.id] != nil}
         let connections=objects.map { (point($0.slot,in:size),light($0)) }
             + routeExits.map {destination in
                 let p=exitsHere[destination.id]!
-                return (CGPoint(x:p.x,y:p.y),1.0)
+                return (CGPoint(x:p.x,y:p.y),areaRestoration)
             }
         for (index,connection) in connections.enumerated() {
             let end=connection.0,dx=end.x-center.x,dy=end.y-center.y
@@ -297,12 +309,13 @@ struct ReefCoveView:View {
                               control1:.init(x:end.x+(seam.x-end.x)*0.45,y:end.y+(seam.y-end.y)*0.45),
                               control2:.init(x:seam.x-step.x*0.12,y:seam.y-step.y*0.12))
             }
+            let wornPath=pathTint(restoration:connection.1)
             var sand=context
-            sand.addFilter(.blur(radius:overShadow ? 2:4))
-            sand.stroke(path,with:.color(pathTint.opacity(overShadow ? 0.045:0.24+connection.1*0.06)),
+            sand.addFilter(.blur(radius:overShadow ? 1.2:1.8))
+            sand.stroke(path,with:.color(wornPath.opacity(overShadow ? 0.12+connection.1*0.035:0.38+connection.1*0.08)),
                         style:.init(lineWidth:index<objects.count ? 24:32,lineCap:.round))
             if !overShadow {
-                context.stroke(path,with:.color(ReefTheme.glint.opacity(0.07)),
+                context.stroke(path,with:.color(ReefTheme.glint.opacity(0.015+connection.1*0.075)),
                                style:.init(lineWidth:9,lineCap:.round))
             }
         }
@@ -318,7 +331,7 @@ struct ReefCoveView:View {
                 let dx=[side*0.12,-side*0.075,side*0.015][j]*size.width
                 let dy=[0.075,0.105,0.16][j]*size.height
                 plants.append(.init(x:p.x+dx,y:p.y+dy,size:size.width*[0.31,0.28,0.34][j],
-                    species:(seed+object.slot+j)%3,opacity:j == 0 ? 0.72:0.96,seed:Double(object.slot*3+j)))
+                    species:(seed+object.slot+j)%3,opacity:j == 0 ? 0.72:0.96,seed:Double(object.slot*3+j),restored:light(object)))
             }
         }
         // Cropped foreground fronds and larger corals make this a close-up reef.
@@ -326,18 +339,21 @@ struct ReefCoveView:View {
             (0.03,0.97,0.46),(0.22,1.06,0.44),(0.76,1.03,0.46),(1.03,0.78,0.40)]
         for (i,edge) in edges.enumerated() {
             plants.append(.init(x:edge.0*size.width,y:edge.1*size.height,size:edge.2*size.width,
-                species:(seed+i+1)%3,opacity:0.88,seed:Double(i+20)))
+                species:(seed+i+1)%3,opacity:0.88,seed:Double(i+20),
+                restored:restoration(at:.init(x:edge.0*size.width,y:edge.1*size.height),size:size)))
         }
         for plant in plants.sorted(by:{$0.y<$1.y}) {
             var coral=c;coral.opacity=plant.opacity
-            ReefQuestArt.coral(CoralSpecies.allCases[plant.species],in:coral,
+            ReefRestorationArt.coral(CoralSpecies.allCases[plant.species],in:coral,
                 at:.init(x:plant.x,y:plant.y),size:plant.size,time:time,
-                seed:plant.seed,moving:!reduceMotion,light:1)
+                seed:plant.seed,moving:!reduceMotion,restored:plant.restored)
         }
         if seed%3 != 1 {
-            var kelp=c;kelp.opacity=0.52
+            let health=restoration(at:.init(x:0,y:size.height*0.88),size:size)
+            var kelp=c;kelp.opacity=0.42+health*0.10
+            kelp.addFilter(.saturation(0.1+health*0.9))
             TrailArt.draw(.kelpForest,in:kelp,at:.init(x:-size.width*0.08,y:size.height*0.88),
-                size:size.width*0.64,time:time)
+                size:size.width*0.64,time:health>0.5 && !reduceMotion ? time:0)
         }
         // Slow, sparse plankton stays part of the shared, pausable ocean clock.
         for i in 0..<20 {
@@ -345,7 +361,7 @@ struct ReefCoveView:View {
             let y=Double((i*137+seed*11)%991)/991*size.height
             let drift=reduceMotion ? 0:sin(time/8000 * .pi*2+Double(i))*2
             c.fill(Path(ellipseIn:.init(x:x+drift,y:y,width:i%4 == 0 ? 2:1.1,height:i%4 == 0 ? 2:1.1)),
-                with:.color(ReefTheme.glint.opacity(i%3 == 0 ? 0.5:0.23)))
+                with:.color(ReefTheme.glint.opacity((i%3 == 0 ? 0.5:0.23)*(0.15+0.85*restoration(at:.init(x:x,y:y),size:size)))))
         }
     }
     private func drawTravelDarkness(in c:GraphicsContext,size:CGSize,movement:ReefCove.TravelFrame,previous:ReefCoveView,fish:CGPoint) {
@@ -369,6 +385,7 @@ struct ReefCoveView:View {
         for (scene,offset) in scenes {
             var translated=c;translated.translateBy(x:offset.x,y:offset.y)
             scene.drawPaths(in:translated,size:size,overShadow:true)
+            scene.drawTumbleweeds(in:translated,size:size)
             for object in scene.objects where scene.searches.contains(object.id) {
                 let local=scene.point(object.slot,in:size),p=CGPoint(x:local.x+offset.x,y:local.y+offset.y)
                 c.fill(bounds,with:.radialGradient(Gradient(colors:[ReefTheme.honey.opacity(0.1),.clear]),center:p,startRadius:0,endRadius:100))
@@ -395,11 +412,49 @@ struct ReefCoveView:View {
             let p=point(object.slot,in:size),amount=light(object)
             c.fill(bounds,with:.radialGradient(Gradient(colors:[ReefTheme.honey.opacity(0.1*amount),.clear]),center:p,startRadius:0,endRadius:100))
         }
+        drawTumbleweeds(in:c,size:size)
+    }
+    private func drawTumbleweeds(in context:GraphicsContext,size:CGSize) {
+        let seed=area.utf8.reduce(0){$0+Int($1)}
+        let darkStrand=Color.adaptive(light:0x766348,dark:0x91A999)
+        let lightStrand=Color.adaptive(light:0xA28B63,dark:0xC0CBAF)
+        for i in 0..<3 {
+            let drift=reduceMotion ? (Double(i)+0.5)/3:(time/48000+Double(i)*0.37).truncatingRemainder(dividingBy:1)
+            let x=(drift*1.18-0.09)*size.width
+            let lane=0.22+Double((seed+i*29)%54)/100
+            let y=lane*size.height+(reduceMotion ? 0:sin(time/8000 * .pi*2+Double(i)*2.1)*7)
+            let center=CGPoint(x:x,y:y)
+            let restored=restoration(at:center,size:size)
+            let opacity=0.44*(1-restored)
+            guard opacity>0.04 else{continue}
+
+            var weed=context
+            weed.translateBy(x:center.x,y:center.y)
+            if !reduceMotion {weed.rotate(by:.radians(time/8000 * .pi*2*Double(i%2 == 0 ? 1:-1)))}
+            weed.opacity=opacity
+            let radius=9.0+Double((seed+i*11)%5)
+            for strand in 0..<10 {
+                let angle=Double(strand)/10 * .pi*2+Double(i)*0.47
+                let length=radius*(0.7+Double((strand*7+i)%5)*0.075)
+                let base=CGPoint(x:cos(angle)*radius*0.12,y:sin(angle)*radius*0.12)
+                let tip=CGPoint(x:cos(angle)*length,y:sin(angle)*length)
+                let control=CGPoint(x:cos(angle+0.5)*length*0.48,y:sin(angle+0.5)*length*0.48)
+                var twig=Path();twig.move(to:base);twig.addQuadCurve(to:tip,control:control)
+                weed.stroke(twig,with:.color(strand%3 == 0 ? lightStrand:darkStrand),
+                            style:.init(lineWidth:strand%3 == 0 ? 1.45:1.1,lineCap:.round))
+
+                let split=CGPoint(x:base.x+(tip.x-base.x)*0.62,y:base.y+(tip.y-base.y)*0.62)
+                let branchAngle=angle+(strand%2 == 0 ? 0.75:-0.75)
+                let branchTip=CGPoint(x:split.x+cos(branchAngle)*radius*0.40,y:split.y+sin(branchAngle)*radius*0.40)
+                var branch=Path();branch.move(to:split);branch.addQuadCurve(to:branchTip,control:CGPoint(x:split.x+cos(branchAngle+0.35)*radius*0.22,y:split.y+sin(branchAngle+0.35)*radius*0.22))
+                weed.stroke(branch,with:.color(darkStrand),style:.init(lineWidth:0.9,lineCap:.round))
+            }
+        }
     }
     private func drawObject(_ object:ReefCove.Object,in c:GraphicsContext,size:CGSize,artSize:Double,pose:CoveFishPose) {
         let p=point(object.slot,in:size),active=action?.id == object.id,timing=CoveActionTiming(object)
         let opened=searches.contains(object.id),reveal=active && !reduceMotion ? smooth((elapsed-timing.clearedAt)/0.4):opened ? 1.0:0.0
-        if !object.isChest && object.barrier != .kelp && (!opened || active && reveal<1) {
+        if object.find != .food && object.find != .home && !object.isChest && object.barrier != .kelp && (!opened || active && reveal<1) {
             var obstacle=c
             if active && timing.scares && !reduceMotion {
                 let flee=smooth((elapsed-0.9)/0.85)
@@ -410,7 +465,7 @@ struct ReefCoveView:View {
             if object.barrier == .enemy {obstacle=c;obstacle.opacity=0.75}
             TrailArt.draw(object.barrier == .sand ? .sandpit:.kelpForest,in:obstacle,at:p,size:artSize,time:reduceMotion ? 0:time)
         }
-        guard opened else{return}
+        guard opened,object.find != .food,object.find != .home else{return}
         var found=c;found.opacity=reveal
         if object.find == .treasure || object.isChest {
             // Rendered above the water shadow, with the saved prize contents.
@@ -429,16 +484,16 @@ struct ReefCoveView:View {
         }
     }
     private func drawKelpGate(_ object:ReefCove.Object,in c:GraphicsContext,size:CGSize,artSize:Double) {
-        guard object.barrier == .kelp,!object.isChest else{return}
+        guard object.barrier == .kelp,!object.isChest,object.find != .food,object.find != .home else{return}
         let opened=searches.contains(object.id),active=action?.id == object.id
         let spread=opened ? (active && !reduceMotion ? smooth((elapsed-0.10)/0.65):1):0
         let p=point(object.slot,in:size)
-        var plants=c;plants.addFilter(.saturation(1.12))
+        var plants=c;plants.addFilter(.saturation(0.18+spread*0.94))
         TrailArt.draw(.kelpForest,in:plants,at:.init(x:p.x,y:p.y-artSize*0.02),
                       size:artSize*1.28,time:reduceMotion ? 0:time,spread:spread)
     }
     private func drawEnemyPatrol(_ object:ReefCove.Object,in c:GraphicsContext,size:CGSize,artSize:Double) {
-        guard object.barrier == .enemy,!object.isChest else{return}
+        guard object.barrier == .enemy,!object.isChest,object.find != .food,object.find != .home else{return}
         let active=action?.id == object.id
         guard !searches.contains(object.id) || active && !reduceMotion else{return}
         let flee=active && !reduceMotion ? smooth((elapsed-0.9)/0.85):0
@@ -470,22 +525,31 @@ struct ReefCoveView:View {
         TrailArt.draw(asset,in:chest,at:p,size:chestSize)
         guard revealed,let revealTime,revealTime<1.55 else{return}
         var prize=c;prize.opacity *= max(0,min(1,(1.55-revealTime)/0.3))
-        ReefTreasureArt.draw(ReefTreasureArt.rewards(for:object),in:prize,at:p,chestSize:chestSize,elapsed:revealTime)
+        ReefTreasureArt.draw(ReefTreasureArt.contents(for:object,in:progress),in:prize,at:p,chestSize:chestSize,elapsed:revealTime)
         if object.find == .food { ReefTreasureArt.bubbles(in:c,at:p,chestSize:chestSize,elapsed:revealTime) }
     }
-    private func drawFood(_ object:ReefCove.Object,in c:GraphicsContext,size:CGSize,artSize:Double,pose:CoveFishPose) {
-        let timing=CoveActionTiming(object)
-        guard searches.contains(object.id) else{return}
-        let p=point(object.slot,in:size)
-        let eating=action?.id == object.id && !reduceMotion
-        if !eating || elapsed>=timing.eatAt+0.55 {
-            TrailArt.drawFoodStems(in:c,at:.init(x:p.x,y:p.y-artSize*0.39),size:artSize*0.40)
+    private func drawRestoration(_ object:ReefCove.Object,in c:GraphicsContext,size:CGSize,artSize:Double) {
+        guard object.find == .food || object.find == .home else{return}
+        let p=point(object.slot,in:size),opened=searches.contains(object.id)
+        let amount=light(object)
+        if object.find == .home {
+            var cottage=c;cottage.addFilter(.saturation(0.08+amount*0.92));cottage.addFilter(.brightness(-0.18*(1-amount)))
+            CoralHomeArt.draw(in:cottage,at:.init(x:p.x,y:p.y+artSize*0.37),scale:artSize*1.12/300,open:opened)
+        } else {
+            for i in 0..<3 {
+                ReefRestorationArt.coral(CoralSpecies.allCases[i],in:c,
+                    at:.init(x:p.x+Double(i-1)*artSize*0.28,y:p.y+Double(i%2)*12),size:artSize*0.75,
+                    time:time,seed:Double(i),moving:opened && !reduceMotion,restored:amount)
+            }
         }
-        guard eating,elapsed>=timing.clearedAt,elapsed<timing.eatAt+0.85 else{return}
-        let bite=smooth((elapsed-timing.eatAt)/0.85)
-        let mouth=CGPoint(x:pose.point.x+facing*18,y:pose.point.y+8)
-        let food=CGPoint(x:p.x+(mouth.x-p.x)*bite,y:p.y+(mouth.y-p.y)*bite)
-        TrailArt.draw(.food,in:c,at:food,size:artSize*0.6*(1-bite),time:time)
+        if action?.id == object.id,opened,!reduceMotion {
+            let t=max(0,elapsed-CoveActionTiming(object).clearedAt)
+            if t<1.4 {
+                var halo=c;halo.addFilter(.blur(radius:12));halo.opacity=sin(min(1,t/1.4) * .pi)*0.45
+                halo.fill(Path(ellipseIn:.init(x:p.x-artSize*0.55,y:p.y-artSize*0.55,width:artSize*1.1,height:artSize*1.1)),with:.color(ReefTheme.gold))
+                ReefTreasureArt.bubbles(in:c,at:p,chestSize:artSize,elapsed:t)
+            }
+        }
     }
     private func drawLifeGift(in c:GraphicsContext,size:CGSize) {
         guard let gift=journey?.lifeGift else{return}
@@ -528,13 +592,6 @@ struct ReefCoveView:View {
         } else if let movement=travel(in:size),let departure {
             p = .init(x:movement.fish.x/size.width,y:movement.fish.y/size.height)
             heading=progress.position.x>=departure.position.x ? 1:-1
-            if departure.location == "home",departure.completed {fishSize *= 0.22+0.78*smooth(elapsed/0.4)}
-            if area == "home",progress.completed {p.y += 30*movement.progress/size.height}
-        }
-        if area == "home",progress.completed,!hasSwum,action == nil {
-            let enter=journey == nil || reduceMotion ? 1:smooth((elapsed-ReefQuestView.duration(journey!))/1.1)
-            if journey != nil,!reduceMotion {p.y -= 30*enter/size.height}
-            fishSize *= 1-enter*0.78
         }
         return .init(point:.init(x:p.x*size.width,y:p.y*size.height),size:fishSize,inflation:inflation,chew:chew,facing:heading)
     }
@@ -584,7 +641,7 @@ struct ReefCoveView:View {
             .accessibilityHint("Swim \(ReefCove.exitDirectionName(to:destination,from:area)) on the map")
     }
 }
-private struct CoveCoralPlant {var x:Double;var y:Double;var size:Double;var species:Int;var opacity:Double;var seed:Double}
+private struct CoveCoralPlant {var x:Double;var y:Double;var size:Double;var species:Int;var opacity:Double;var seed:Double;var restored:Double}
 private struct CoveFishPose {var point:CGPoint;var size:Double;var inflation:Double;var chew:Double;var facing:Double}
 
 
@@ -596,8 +653,8 @@ enum ReefTreasureArt {
         var count = 1
         var label:String {
             let unit:String = switch item {
-            case .glow:"Glow"
-            case .snack:count == 1 ? "snack":"snacks"
+            case .glow:"Lumes"
+            case .snack:count == 1 ? "coral garden":"coral gardens"
             case .hint:count == 1 ? "hint":"hints"
             case .futureTeller:count == 1 ? "Future Teller":"Future Tellers"
             case .life:count == 1 ? "life":"lives"
@@ -618,7 +675,6 @@ enum ReefTreasureArt {
         var result:[Prize]=[]
         if loot.hints>0 {result.append(.init(item:.hint,count:loot.hints))}
         if loot.lives>0 {result.append(.init(item:.life,count:loot.lives))}
-        if loot.shots>0 {result.append(.init(item:.shot,count:loot.shots))}
         if loot.lighters>0 {result.append(.init(item:.lighter,count:loot.lighters))}
         if loot.instantBoost {result.append(.init(item:.instantBoost))}
         return result
@@ -630,15 +686,14 @@ enum ReefTreasureArt {
         case .hint: [.init(item:.hint)]
         case .lives: [.init(item:.life,count:2)]
         case .lighter: [.init(item:.lighter)]
-        case .current: [.init(item:.current)]
-        case .shot: [.init(item:.shot,count:ReefCove.shotsPerFind)]
         default: []
         }
     }
 
-    // The snack is eaten on discovery; its receipt remains inspectable afterward.
+    // Legacy garden receipts retain their serialized discovery key.
     static func contents(for object:ReefCove.Object,in progress:FirstReefProgress?=nil)->[Prize] {
-        if let item=progress?.clearingRewards?[object.id] {return [.init(item:item)]}
+        if progress?.legacyGolfFinds?.contains(object.id) == true { return [] }
+        if let item=progress?.clearingRewards?[object.id] {return item.isGolfSupply ? [] : [.init(item:item)]}
         return object.find == .food ? [.init(item:.snack)] : rewards(for:object)
     }
 

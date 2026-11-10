@@ -142,7 +142,7 @@ import Foundation
             let dir=root.appendingPathComponent("draft-\(started)")
             try ReefSaveFile(defaults:defaults,directory:dir).write(p)
             let reloaded=ReefStore(defaults:defaults,saveDirectory:dir)
-            precondition(!reloaded.isSaveBlocked && reloaded.progress.version==28 && reloaded.progress.glow==91 && reloaded.progress.shots==21)
+            precondition(!reloaded.isSaveBlocked && reloaded.progress.version==31 && reloaded.progress.glow==91 && reloaded.progress.shots==21)
             precondition(reloaded.puzzle.size==(started ? 5:4))
             precondition(reloaded.progress.bloomResumePuzzle?.size==(started ? 5:4))
             if started {precondition(reloaded.puzzle.cells==p.puzzle.cells)}

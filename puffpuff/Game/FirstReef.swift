@@ -126,7 +126,7 @@ struct PlacedBouncyBlock:Codable,Identifiable,Equatable {
     static let radius=19.0
 }
 enum ReefGolfPhysics {
-    /// Shared by the final course and every mini challenge, for fish and Puff Puff.
+    /// Shared by the final course and every mini challenge, for fish and PuffPuff.
     @discardableResult static func bounce(_ p:inout ReefPoint,velocity v:inout ReefPoint,
                                          radius:Double,off blocks:[PlacedBouncyBlock])->Bool {
         var hit=false
@@ -163,6 +163,15 @@ struct ReefBonusProgress: Codable {
 }
 
 struct FirstReefProgress: Codable {
+    var rescueRevision: Int? = 1
+    var bubbaRescued: Bool? = false // Legacy serialized home:2 flag; now means home restored, NOT Bailey rescued.
+    var homeDecorations: Set<String>? = []
+    var homeRoom: ReefHomeRoom? = nil
+    var furnishedRoom: ReefHomeRoom { homeRoom ?? ReefHomeRoom.defaults(owned:homeDecorations ?? []) }
+    var hasRestoredHome: Bool { bubbaRescued == true }
+    var restoredGardens: Set<String> { food } // Preserve the original serialized quest IDs.
+    var glowPuzzleRevision: Int? = 1
+    var legacyGolfFinds: Set<String>? = []
     var layoutRevision: Int? = 3
     var position = FirstReef.start
     var food: Set<String> = []
@@ -219,7 +228,7 @@ struct ReefJourney: Identifiable {
     }
 }
 
-/// The quest graph. Bonus golf carries its clearances into a separate fairway.
+/// The paid exploration graph. Golf data below is retained only to read older saves.
 enum FirstReef {
     static let width = 340.0, height = 780.0, radius = 11.0
     static let start = ReefPoint(x: 70, y: 710)
@@ -268,7 +277,7 @@ enum FirstReef {
         var treasureReward: String {
             switch id {
             case "hint-shell": "+1 hint · +2 lives"
-            case "shot-pearl": "+1 lighter · +2 shots"
+            case "shot-pearl": "+1 lighter"
             case "coral-cache": "15 min now · lives refilled · +2 hints"
             case "frond-cache": "+2 lives"
             case "lantern-cache": "+1 lighter"
@@ -279,7 +288,7 @@ enum FirstReef {
         var loot: TreasureLoot {
             switch id {
             case "hint-shell": .init(hints:1,lives:2)
-            case "shot-pearl": .init(shots:2,lighters:1)
+            case "shot-pearl": .init(lighters:1)
             case "coral-cache": .init(hints:2,instantBoost:true)
             case "frond-cache": .init(lives:2)
             case "lantern-cache": .init(lighters:1)
@@ -299,7 +308,7 @@ enum FirstReef {
         var clearanceResult: String {
             switch id {
             case "ribbon-kelp": "Ribbon channel open!"
-            case "shell-sand": "Bank-shot passage clear!"
+            case "shell-sand": "Sandy passage clear!"
             case "fin-school": "Home approach clear!"
             case "kelp": "Kelp parted!"
             case "sand": "Sand swept away! Shortcut open."
@@ -466,7 +475,7 @@ enum FirstReef {
             ? destination.glowCost : 0
     }
     static func visit(_ destination:Destination,from state:FirstReefProgress) -> ReefJourney? {
-        guard state.bonus?.claimed != true, visibleIDs(state).contains(destination.id),
+        guard visibleIDs(state).contains(destination.id),
               let route=route(to:destination.id,state:state) else { return nil }
         var next=state,points=[state.position]
         for (a,b) in zip(route,route.dropFirst()) {
@@ -485,7 +494,7 @@ enum FirstReef {
         if state.coveSearches == nil && destination.kind == .treasure && wasVisited && !state.treasures.contains(destination.id) {
             next.treasures.insert(destination.id); cleared=destination.id
         }
-        if destination.kind == .home && next.food.count == 3 { next.completed=true }
+        if next.rescueRevision == nil && destination.kind == .home && next.food.count == 3 { next.completed=true; next.nextWorldUnlocked=true }
         // Quest discoveries and clearances carry into bonus golf without moving its tee.
         var frames=[ReefFlightFrame(time:0,position:state.position,food:state.food,treasures:state.treasures)]
         var elapsed=0.0,last=state.position
@@ -612,7 +621,7 @@ enum FirstReef {
         if let attempts=p.miniChallenges {
             for (id,attempt) in attempts {
                 guard let object=destinations.flatMap({ReefCove.objects(in:$0.id)}).first(where:{$0.id==id}),
-                      object.challengeKind==attempt.kind,ReefMiniChallenge.valid(attempt),
+                      object.legacyChallengeKind==attempt.kind,ReefMiniChallenge.valid(attempt),
                       attempt.result != .won || p.coveSearches?.contains(id)==true else{return false}
             }
         }
@@ -651,8 +660,98 @@ enum FirstReef {
                   b.bestStrokes.map({(1...turnLimit).contains($0)}) ?? true,
                   b.finished == (b.holed || b.strokes == turnLimit),
                   !b.holed || (b.position == holePosition && b.strokes > 0 && b.bestStrokes != nil),
-                  !b.claimed || b.bestStrokes != nil,unlocked == b.claimed else { return false }
-        } else if unlocked { return false }
+                  !b.claimed || b.bestStrokes != nil,
+                  p.glowPuzzleRevision != nil || unlocked == b.claimed else { return false }
+        } else if p.glowPuzzleRevision == nil && unlocked { return false }
+        if p.glowPuzzleRevision != nil {
+            guard p.glowPuzzleRevision == 1, unlocked == p.completed,
+                  !p.completed || visited.contains("home"),
+                  (p.legacyGolfFinds ?? []).isSubset(of:p.coveSearches ?? []) else {return false}
+        }
+        if let revision=p.rescueRevision {
+            guard revision == 1, p.bubbaRescued != nil,
+                  (p.homeDecorations ?? []).isSubset(of:Set(ReefHomeItem.allCases.map(\.rawValue))),
+                  p.completed == (p.food.count == 3 && p.hasRestoredHome),
+                  !p.hasRestoredHome || (visited.contains("home") && p.coveSearches?.contains("home:2") == true) else {return false}
+        }
+        guard p.furnishedRoom.valid(owned:p.homeDecorations ?? []) else {return false}
         return true
     }
+}
+
+
+/// World pacing is design data, never a counter or a required puzzle-number range.
+enum ReefWorldPlan {
+    struct World: Identifiable {
+        let id:Int
+        let title:String
+        let story:String
+        let glowWins:ClosedRange<Int>
+        let built:Bool
+    }
+    static let worlds:[World] = [
+        .init(id:1,title:"The Faded Garden",story:"A storm dimmed the reef. Relight three coral gardens and find PuffPuff’s home.",glowWins:50...100,built:true),
+        .init(id:2,title:"The Hidden Reef",story:"Light the hidden coral paths and rescue Bailey, a little clownfish lost in the dark.",glowWins:75...125,built:false),
+        .init(id:3,title:"The Deep Blue",story:"Awaken the deep coral lights and guide a baby sea turtle back to its mom.",glowWins:100...150,built:false),
+        .init(id:4,title:"The Kelp Maze",story:"Light a safe route through the kelp and rescue Seabiscuit the seahorse.",glowWins:100...150,built:false)
+    ]
+}
+
+enum ReefHomeItem:String,CaseIterable,Identifiable {
+    case shellSeat,pearlLantern,coralPlanter
+    var id:String {rawValue}
+    var title:String {switch self {case .shellSeat:"Shell seat";case .pearlLantern:"Pearl lantern";case .coralPlanter:"Coral planter"}}
+    var cost:Int {switch self {case .shellSeat:12;case .pearlLantern:18;case .coralPlanter:15}}
+}
+
+
+/// Normalized room coordinates keep arrangements independent of screen size and zoom.
+struct ReefHomePlacement:Codable,Equatable {
+    var position:ReefPoint
+    var flipped=false
+}
+struct ReefHomeRoom:Codable,Equatable {
+    var placements:[String:ReefHomePlacement]=[:]
+    var lanternOn=true
+    static func defaults(owned:Set<String>)->Self {
+        var room=Self()
+        for item in ReefHomeItem.allCases where owned.contains(item.id) {
+            room.placements[item.id] = .init(position:item.homePosition)
+        }
+        return room
+    }
+    static func validPosition(_ p:ReefPoint)->Bool {
+        p.x.isFinite && p.y.isFinite && (0.12...0.88).contains(p.x) && (0.46...0.86).contains(p.y)
+    }
+    static func clamped(_ p:ReefPoint)->ReefPoint {
+        .init(x:min(0.88,max(0.12,p.x)),y:min(0.86,max(0.46,p.y)))
+    }
+    func canPlace(_ item:ReefHomeItem,at p:ReefPoint)->Bool {
+        Self.validPosition(p) && placements.allSatisfy { key,value in
+            key == item.id || abs(value.position.x-p.x)>0.15 || abs(value.position.y-p.y)>0.13
+        }
+    }
+    func firstSpace(for item:ReefHomeItem)->ReefPoint? {
+        if canPlace(item,at:item.homePosition) {return item.homePosition}
+        for y in [0.56,0.73,0.85] {for x in [0.18,0.38,0.60,0.82] {
+            let p=ReefPoint(x:x,y:y);if canPlace(item,at:p) {return p}
+        }}
+        return nil
+    }
+    func valid(owned:Set<String>)->Bool {
+        placements.allSatisfy {key,value in
+            guard let item=ReefHomeItem(rawValue:key),owned.contains(key) else{return false}
+            return canPlace(item,at:value.position)
+        }
+    }
+}
+extension ReefHomeItem {
+    var homePosition:ReefPoint {
+        switch self {
+        case .shellSeat:.init(x:0.23,y:0.69)
+        case .pearlLantern:.init(x:0.53,y:0.59)
+        case .coralPlanter:.init(x:0.78,y:0.73)
+        }
+    }
+    var useTitle:String {switch self {case .shellSeat:"Rest";case .pearlLantern:"Light";case .coralPlanter:"Play"}}
 }

@@ -1,0 +1,37 @@
+PuffPuff: Glow Puzzle — storm, home and friends
+
+1. THE FADED GARDEN · 50–100 Glow wins · playable
+A storm scattered the reef and put out its coral lights. PuffPuff follows the dark
+trail, relights three gardens, and restores his cottage so it feels like home again.
+Goal bar: mystery house outline + ?, then a check. Tap for the brief story/tasks.
+Required route: 220 Lumes (about 55–74 wins at 3–4 Lumes each); straightforward 242.
+Optional treasure chests and furnishings cost extra. No extra completion requirement.
+
+2. THE HIDDEN REEF · 75–125 Glow wins · planned
+PuffPuff lights hidden coral paths and rescues Bailey, a little clownfish lost in
+the dark. Bailey is the new name for the draft previously called Bubba.
+
+3. THE DEEP BLUE · planned
+Awaken deep coral lights and guide a baby sea turtle back to its mom.
+Provisional target 100–150 Glow wins; final pacing/layout not yet designed.
+
+4. THE KELP MAZE · planned
+Light a safe route through kelp and rescue Seabiscuit the seahorse.
+Earlier 100–150-win target remains provisional until this later world is designed.
+
+Targets are rounds needed per world, not exclusive ranges of puzzle numbers.
+Only 100 Glow levels and the first Trail are currently built.
+
+HOME
+Visit after relighting the cottage. Existing owners retain access. The shop opens
+after World 1 is complete. Optional furnishings: shell seat 12, coral planter 15,
+pearl lantern 18 Lumes. Place, flip, move and store owned items without paying again.
+Future rescued friends can visit. Customization will expand as the game grows.
+
+ART AND SAVE SAFETY
+Official PuffPuff and cottage masters unchanged. Rescue characters are still held
+out of the game until the user approves their Affinity designs. Keep user-edited
+masters and old draft layer IDs intact despite the Bailey display-name change.
+Storm/restored coral uses approved faceless paths; each paid patch restores locally.
+The legacy serialized bubbaRescued/home:2 credit now means restored home only.
+No future Bailey rescue is pre-awarded; no balances, boards or paid discoveries reset.

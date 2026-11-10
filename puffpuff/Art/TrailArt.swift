@@ -103,6 +103,7 @@ enum TrailArt {
             c.translateBy(x:anchor.x,y:anchor.y);c.rotate(by:.degrees(degrees));c.translateBy(x:-anchor.x,y:-anchor.y)
         }
         for part in rig.parts {
+            if part.name.hasSuffix("-cheeky-brow") { continue }
             var c=fish
             if part.name.hasSuffix("-tail") || part.name.hasSuffix("-tail-lines") {pivot(&c,rig.tail,tailAngle)}
             if part.name.hasSuffix("-side-fin") {pivot(&c,rig.fin,finAngle)}
@@ -116,23 +117,54 @@ enum TrailArt {
             if let f=part.fill {c.fill(part.path,with:.color(Color(hex:f)))}
             if let stroke=part.stroke {c.stroke(part.path,with:.color(Color(hex:stroke)),style:.init(lineWidth:part.width,lineCap:.round,lineJoin:.round))}
         }
+        // A heavy, downturned brow and small hooked beak turn the fish into
+        // patient scavengers without replacing the user's editable base art.
+        var scavenger=fish
+        let span=rig.bounds.width
+        var brow=Path()
+        brow.move(to:.init(x:rig.eye.x-span*0.075,y:rig.eye.y-span*0.085))
+        brow.addCurve(to:.init(x:rig.eye.x+span*0.075,y:rig.eye.y-span*0.055),
+                      control1:.init(x:rig.eye.x-span*0.015,y:rig.eye.y-span*0.10),
+                      control2:.init(x:rig.eye.x+span*0.035,y:rig.eye.y-span*0.035))
+        scavenger.stroke(brow,with:.color(Color(hex:0x365D57)),style:.init(lineWidth:3.2,lineCap:.round,lineJoin:.round))
+        var beak=Path()
+        let base=CGPoint(x:rig.eye.x+span*0.105,y:rig.eye.y+span*0.105)
+        beak.move(to:base)
+        beak.addCurve(to:.init(x:rig.eye.x+span*0.205,y:rig.eye.y+span*0.135),
+                      control1:.init(x:rig.eye.x+span*0.15,y:rig.eye.y+span*0.09),
+                      control2:.init(x:rig.eye.x+span*0.205,y:rig.eye.y+span*0.085))
+        beak.addCurve(to:.init(x:rig.eye.x+span*0.165,y:rig.eye.y+span*0.235),
+                      control1:.init(x:rig.eye.x+span*0.215,y:rig.eye.y+span*0.205),
+                      control2:.init(x:rig.eye.x+span*0.18,y:rig.eye.y+span*0.255))
+        beak.addCurve(to:.init(x:rig.eye.x+span*0.135,y:rig.eye.y+span*0.19),
+                      control1:.init(x:rig.eye.x+span*0.15,y:rig.eye.y+span*0.225),
+                      control2:.init(x:rig.eye.x+span*0.125,y:rig.eye.y+span*0.205))
+        beak.closeSubpath()
+        scavenger.fill(beak,with:.color(Color(hex:0xD6A264)))
+        scavenger.stroke(beak,with:.color(Color(hex:0x426F67)),style:.init(lineWidth:1.8,lineCap:.round,lineJoin:.round))
     }
     /// Small, separate swimming arcs; fish keep their silhouette instead of
     /// flattening to zero width on a circular orbit. The fins do the swimming.
     static func drawPatrol(in context:GraphicsContext,at point:CGPoint,size:Double,time:Double,moving:Bool,flee:Double=0,direction:Double=1) {
-        let anchors=[CGPoint(x:-0.29,y:0.02),CGPoint(x:0.20,y:-0.25),CGPoint(x:0.24,y:0.22)]
+        // A loose, slow orbit reads as scavengers circling a find. They scatter
+        // along the player's direction when startled, then regroup on replay.
+        let orbitDirection=direction < 0 ? -1.0:1.0
         for i in 0..<3 {
-            let phase=Double(i)*0.29
-            let dx=moving ? ReefMotion.wave(time,period:12000,phase:phase)*0.075:0
-            let dy=moving ? ReefMotion.wave(time,period:8000,phase:phase+0.14)*0.045:0
-            let p=CGPoint(x:point.x+(anchors[i].x+dx+direction*flee*3)*size,
-                          y:point.y+(anchors[i].y+dy-flee*0.8)*size)
+            let phase = Double(i) * 2.0 * Double.pi / 3.0
+            let angle = phase + (moving ? time / 24000.0 * 2.0 * Double.pi * orbitDirection : 0)
+            let radiusX=0.27,radiusY=0.20
+            let dx=cos(angle)*radiusX
+            let dy=sin(angle)*radiusY
+            let p=CGPoint(x:point.x+(dx+direction*flee*3)*size,
+                          y:point.y+(dy-flee*0.8)*size)
             var fish=context;fish.opacity *= 1-flee
             fish.addFilter(.saturation(1.2));fish.addFilter(.brightness(0.035))
-            let heading=i == 1 ? -1.0:1.0
             fish.translateBy(x:p.x,y:p.y)
-            fish.rotate(by:.degrees(heading == direction ? -12*flee:168*flee))
-            drawEnemy(in:fish,at:.zero,size:size*0.54,index:i,time:time,moving:moving,facing:heading,effort:flee)
+            let tangentX = -sin(angle)*orbitDirection*radiusX
+            let tangentY = cos(angle)*orbitDirection*radiusY
+            let orbitHeading=atan2(tangentY,tangentX)*180.0/Double.pi
+            fish.rotate(by:.degrees(orbitHeading+direction*flee*18))
+            drawEnemy(in:fish,at:.zero,size:size*0.54,index:i,time:time,moving:moving,facing:1,effort:flee)
         }
     }
 

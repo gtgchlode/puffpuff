@@ -7,6 +7,7 @@ struct CoralPuzzle: Codable {
     var moves = 0 // Every physical tap, including reversals; used by playback/pearl scores.
     var countedMoves: Int? = nil // Optional for legacy saves; the tap allowance uses this.
     var undoTap: Int? = nil // Only the immediately preceding un-reversed tap can refund.
+    var undoTapRefundable: Bool? = nil // A mini-pattern advance cannot be refunded by reversing only Glow.
     var history: [[Bool]] = [] // Retain legacy save data; Restart replaced Undo.
     var recording: BloomRecording? = nil // Actual actions; absent on older attempts.
     var rewarded = false
@@ -20,7 +21,16 @@ struct CoralPuzzle: Codable {
     var rowCorals: [Int]? = nil
     var columnCorals: [Int]? = nil
     var burstCorals: [Int]? = nil // Self plus all eight adjacent coral; introduced at 85.
+    var linkedPairs: [[Int]]? = nil // Legacy key; each array is a color-coded linked group.
+    var cagedCorals: [Int]? = nil // Cannot be tapped directly; ripples can still flip it.
+    var miniCells: [Bool]? = nil
+    var miniColorCorals: [Int]? = nil // Main-board coral for colors 0...3.
+    var miniPatterns: [[Int]]? = nil // Mini-board cells toggled by each color.
+    var miniOrder: [Int]? = nil // Required color sequence; wrong colors still pulse Glow.
+    var miniStep: Int? = nil
     var pearlTarget: Int? = nil
+    var specialLevel: Bool? = nil
+    var isSpecialLevel: Bool { specialLevel ?? (level == 100) }
     var feature = "classic"
     // Optional for decoding saves made before the tap-budget content update.
     var tapLimit: Int? = nil
@@ -55,27 +65,52 @@ struct CoralPuzzle: Codable {
     func isRowCoral(_ index: Int) -> Bool { rowCorals?.contains(index) == true }
     func isColumnCoral(_ index: Int) -> Bool { columnCorals?.contains(index) == true }
     func isBurst(_ index: Int) -> Bool { burstCorals?.contains(index) == true }
+    func isCaged(_ index: Int) -> Bool { cagedCorals?.contains(index) == true }
+    func linkedGroupID(at index: Int) -> Int? {
+        (linkedPairs ?? []).firstIndex(where: { $0.contains(index) })
+    }
+    func linkedGroup(at index: Int) -> [Int] {
+        guard let group = linkedGroupID(at: index) else { return [] }
+        return (linkedPairs ?? [])[group]
+    }
+    func linkedPartners(of index: Int) -> [Int] { linkedGroup(at: index).filter { $0 != index } }
+    func linkedPartner(of index: Int) -> Int? { linkedPartners(of: index).first }
+    func isLinked(_ index: Int) -> Bool { linkedGroupID(at: index) != nil }
+    var hasExpandedLinkedGroup: Bool { (linkedPairs ?? []).contains { $0.count > 2 } }
+    func miniColorID(at index: Int) -> Int? { miniColorCorals?.firstIndex(of: index) }
+    var hasMiniBoard: Bool { miniCells?.isEmpty == false }
+    var nextMiniColor: Int? {
+        let order = miniOrder ?? []
+        let step = min(max(0, miniStep ?? 0), order.count)
+        return step < order.count ? order[step] : nil
+    }
     var hasLineCorals: Bool { !(rowCorals ?? []).isEmpty || !(columnCorals ?? []).isEmpty }
     func isCoral(_ index: Int) -> Bool { cells.indices.contains(index) && !isGap(index) && !stones.contains(index) }
     var hasGaps: Bool { !(gaps ?? []).isEmpty }
     var coralIndices: [Int] { cells.indices.filter(isCoral) }
-    var isComplete: Bool { coralIndices.allSatisfy { cells[$0] } }
+    var isComplete: Bool {
+        coralIndices.allSatisfy { cells[$0] } && (miniCells?.allSatisfy { $0 } ?? true)
+    }
     var baseTapLimit: Int { max(1, tapLimit ?? size * size + 18) }
     var allowedTaps: Int { baseTapLimit + max(0, extraTaps ?? 0) }
     var spentTaps: Int { countedMoves ?? moves }
     var tapsRemaining: Int { max(0, allowedTaps - spentTaps) }
-    func canUndoTap(_ index: Int) -> Bool { !isComplete && isCoral(index) && undoTap == index && spentTaps > 0 }
-    func canTap(_ index: Int) -> Bool { !isComplete && isCoral(index) && (!isOutOfTaps || canUndoTap(index)) }
+    func canUndoTap(_ index: Int) -> Bool {
+        !isComplete && isCoral(index) && !isCaged(index) && undoTap == index
+            && undoTapRefundable != false && spentTaps > 0
+    }
+    func canTap(_ index: Int) -> Bool { !isComplete && isCoral(index) && !isCaged(index) && (!isOutOfTaps || canUndoTap(index)) }
 
     @discardableResult
     mutating func playTap(at index: Int) -> Bool {
         guard canTap(index) else { return false }
-        let reversing = canUndoTap(index), spent = spentTaps
+        let reversing = canUndoTap(index), spent = spentTaps, miniStepBefore = miniStep ?? 0
         record(.init(kind: .tap, index: index))
-        pulse(at: index)
-        moves += 1
+        applyTap(at: index)
+        let advancedMiniPattern = (miniStep ?? 0) > miniStepBefore
         countedMoves = spent + (reversing ? -1 : 1)
         undoTap = reversing ? nil : index
+        undoTapRefundable = reversing ? nil : !advancedMiniPattern
         return true
     }
     var isOutOfTaps: Bool { !isComplete && tapsRemaining == 0 }
@@ -106,13 +141,22 @@ struct CoralPuzzle: Codable {
         case "star": "Diagonal coral flips itself and its four diagonal neighbors."
         case "burst": "Burst coral flips itself and every coral around it."
         case "line": "Line coral flips its whole row or column, including itself. Pebbles and water stay as they are."
+        case "linked": "Linked coral flips its mate once when tapped. The mate does not start another ripple."
+        case "linkedGroup": "Linked coral in the same color group flips together when you tap any member. The group does not start a second ripple."
+        case "cage": "Caged coral cannot be tapped directly, but ripples can flip it. It must be lit to win."
+        case "mini": "Glow taps still flip the main reef. Tap the colored coral in the shown order to flip its mini pattern. Light every coral on both boards."
         case "mixed": [
             stones.isEmpty ? nil : "Pebbles stay still.",
             currents.isEmpty ? nil : "Arrow coral flips itself and its left/right neighbors.",
             (verticals ?? []).isEmpty ? nil : "↕ coral flips itself and the coral just above and below.",
             stars.isEmpty ? nil : "Diagonal coral flips itself and its diagonal neighbors.",
             (burstCorals ?? []).isEmpty ? nil : "Burst coral flips itself and every coral around it.",
-            hasLineCorals ? "Line coral flips its whole row or column, including itself." : nil
+            hasLineCorals ? "Line coral flips its whole row or column, including itself." : nil,
+            (linkedPairs ?? []).isEmpty ? nil : hasExpandedLinkedGroup
+                ? "Tapping a linked coral flips every other coral in its same-color group once; group members do not ripple again."
+                : "A tapped linked coral flips its mate once; the mate does not ripple again.",
+            (cagedCorals ?? []).isEmpty ? nil : "Caged coral cannot be tapped directly, but ripples can flip it. It must be lit to win.",
+            hasMiniBoard ? "Glow still works on the main reef. Tap colored coral in the shown order to light every mini-board cell too." : nil
         ].compactMap { $0 }.joined(separator: " ")
         default: "Tap a coral to flip it and its up, down, left, and right neighbors."
         }
@@ -125,6 +169,10 @@ struct CoralPuzzle: Codable {
         case 3: "Light flips both ways"
         case 4: "One tap, five corals"
         case 5: "Your first solo bloom"
+        case 105: "Linked coral"
+        case 125: "Caged coral"
+        case 150: "Mini board"
+        case 170: "Linked coral groups"
         default: "Wake the whole reef"
         }
     }
@@ -146,7 +194,6 @@ struct CoralPuzzle: Codable {
         case 2: "Try two ripples"
         case 3: "Try a bigger reef"
         case 4: "Try it on your own"
-        case 100: "Bloom again"
         default: "Next patch"
         }
     }
@@ -171,31 +218,62 @@ struct CoralPuzzle: Codable {
     }
 
     func affected(at index: Int) -> [Int] {
-        guard isCoral(index) else { return [] }
+        guard isCoral(index), !isCaged(index) else { return [] }
         let row = index / size, column = index % size
         if isRowCoral(index) || isColumnCoral(index) {
-            return coralIndices.filter {
+            var targets = Set(coralIndices.filter {
                 (isRowCoral(index) ? $0 / size == row : $0 % size == column)
                     && !(lighterCorals ?? []).contains($0)
-            }
+            })
+            targets.formUnion(linkedPartners(of:index).filter { !(lighterCorals ?? []).contains($0) })
+            return targets.sorted()
         }
         let offsets: [(Int, Int)] = isBurst(index) ? [(0, 0), (-1, -1), (-1, 0), (-1, 1), (0, -1), (0, 1), (1, -1), (1, 0), (1, 1)] :
             isVertical(index) ? [(0, 0), (-1, 0), (1, 0)] :
             currents.contains(index) ? [(0, 0), (0, -1), (0, 1)] :
             stars.contains(index) ? [(0, 0), (-1, -1), (-1, 1), (1, -1), (1, 1)] :
             [(0, 0), (-1, 0), (1, 0), (0, -1), (0, 1)]
-        return offsets.compactMap { dr, dc in
+        var targets = Set(offsets.compactMap { dr, dc in
             let r = row + dr, c = column + dc, cell = r * size + c
             return (0..<size).contains(r) && (0..<size).contains(c) && isCoral(cell)
                 && !(lighterCorals ?? []).contains(cell) ? cell : nil
-        }
+        })
+        targets.formUnion(linkedPartners(of:index).filter { !(lighterCorals ?? []).contains($0) })
+        return targets.sorted()
     }
 
     mutating func pulse(at index: Int) { for cell in affected(at: index) { cells[cell].toggle() } }
 
+    /// A valid tap advances the ordered mini-board pattern when its color is next.
+    mutating func applyTap(at index: Int) {
+        pulse(at: index)
+        moves += 1
+        if let color = miniColorID(at: index), nextMiniColor == color,
+           var lights = miniCells, let patterns = miniPatterns, patterns.indices.contains(color) {
+            for miniIndex in patterns[color] where lights.indices.contains(miniIndex) { lights[miniIndex].toggle() }
+            miniCells = lights
+            miniStep = (miniStep ?? 0) + 1
+        }
+    }
+
     func solution() -> [Int]? {
-        let targets = cells.indices.map { isCoral($0) ? cells[$0] : true }
-        return Self.solve(targets, size: size, affected: { affected(at: $0) })
+        var projected = cells
+        var requiredMiniTaps: [Int] = []
+        if hasMiniBoard {
+            let order = miniOrder ?? []
+            for color in order.dropFirst(min(max(0, miniStep ?? 0), order.count)) {
+                guard let colors = miniColorCorals, colors.indices.contains(color) else { return nil }
+                let tap = colors[color]
+                for cell in affected(at: tap) { projected[cell].toggle() }
+                requiredMiniTaps.append(tap)
+            }
+        }
+        let targets = cells.indices.map { index in
+            isCoral(index) ? projected[index] : true
+        }
+        guard let remaining = Self.solve(targets, size: size,
+                                         affected: { affected(at: $0) }) else { return nil }
+        return requiredMiniTaps + remaining
     }
 
     /// Build the one-tap-from-winning target independently of the live cells.
@@ -204,8 +282,24 @@ struct CoralPuzzle: Codable {
         guard let final = futureTellerFinalTap, isCoral(final), !affected(at: final).isEmpty else { return nil }
         var target = self
         target.cells = Array(repeating: true, count: cells.count)
+        if let miniCells {
+            target.miniCells = Array(repeating: true, count: miniCells.count)
+            target.miniStep = miniOrder?.count ?? miniStep
+            if let color = miniColorID(at: final),
+               miniOrder?.last == color, let patterns = miniPatterns, patterns.indices.contains(color) {
+                if var lights = target.miniCells {
+                    for miniIndex in patterns[color] where lights.indices.contains(miniIndex) {
+                        lights[miniIndex].toggle()
+                    }
+                    target.miniCells = lights
+                }
+                target.miniStep = max(0, (miniOrder?.count ?? 1) - 1)
+            }
+        }
+        // Present the exact one-move-before-win state.
         target.pulse(at: final)
-        target.moves = 0; target.countedMoves = nil; target.undoTap = nil
+        target.moves = 0
+        target.countedMoves = nil; target.undoTap = nil; target.undoTapRefundable = nil
         target.recording = nil; target.history = []; target.rewarded = false
         return target
     }
@@ -224,20 +318,27 @@ struct CoralPuzzle: Codable {
 
     // Gaussian elimination over GF(2), then minimize over the null space so a
     // hint follows the shortest remaining solution and respects the tap budget.
-    static func solve(_ cells: [Bool], size: Int, affected: ((Int) -> [Int])? = nil) -> [Int]? {
+    static func solve(_ cells: [Bool], size: Int, affected: ((Int) -> [Int])? = nil,
+                      requiredTapParity: Int? = nil) -> [Int]? {
         let count = size * size
         guard count < 63, cells.count == count else { return nil }
         let rhs = UInt64(1) << count
         var rows = (0..<count).map { cells[$0] ? UInt64(0) : rhs }
+        let effects = (0..<count).map { affected?($0) ?? neighbors(size: size, at: $0) }
         for move in 0..<count {
-            for cell in affected?(move) ?? neighbors(size: size, at: move) { rows[cell] |= UInt64(1) << move }
+            for cell in effects[move] { rows[cell] |= UInt64(1) << move }
+        }
+        if let requiredTapParity {
+            var parityRow = requiredTapParity.isMultiple(of: 2) ? UInt64(0) : rhs
+            for move in 0..<count where !effects[move].isEmpty { parityRow |= UInt64(1) << move }
+            rows.append(parityRow)
         }
         var rank = 0
         var pivots: [Int] = []
         for column in 0..<count {
-            guard let pivot = (rank..<count).first(where: { rows[$0] & (UInt64(1) << column) != 0 }) else { continue }
+            guard let pivot = (rank..<rows.count).first(where: { rows[$0] & (UInt64(1) << column) != 0 }) else { continue }
             rows.swapAt(rank, pivot)
-            for row in 0..<count where row != rank && rows[row] & (UInt64(1) << column) != 0 {
+            for row in rows.indices where row != rank && rows[row] & (UInt64(1) << column) != 0 {
                 rows[row] ^= rows[rank]
             }
             pivots.append(column)
@@ -248,7 +349,7 @@ struct CoralPuzzle: Codable {
             mask | (rows[pair.offset] & rhs != 0 ? UInt64(1) << pair.element : 0)
         }
         let freeColumns = (0..<count).filter { column in
-            !pivots.contains(column) && !(affected?(column) ?? neighbors(size: size, at: column)).isEmpty
+            !pivots.contains(column) && !effects[column].isEmpty
         }
         let basis = freeColumns.map { column in
             pivots.enumerated().reduce(UInt64(1) << column) { mask, pair in
@@ -297,6 +398,8 @@ struct BloomMove: Codable, Equatable {
 struct BloomRecording: Codable {
     var initialCells: [Bool]
     var moves: [BloomMove] = []
+    var initialMiniCells: [Bool]? = nil
+    var initialMiniStep: Int? = nil
 }
 
 struct BloomMoveFrame {
@@ -305,6 +408,8 @@ struct BloomMoveFrame {
     var move: BloomMove?
     var affected: [Int]
     var taps: Int
+    var miniCells: [Bool]? = nil
+    var miniStep: Int? = nil
 }
 
 extension CoralPuzzle {
@@ -313,7 +418,7 @@ extension CoralPuzzle {
     mutating func record(_ move: BloomMove) {
         if recording == nil {
             guard moves == 0, (lighterCorals ?? []).isEmpty else { return }
-            recording = BloomRecording(initialCells: cells)
+            recording = BloomRecording(initialCells: cells, initialMiniCells: miniCells, initialMiniStep: miniStep)
         }
         guard (recording?.moves.count ?? 0) < 4096 else { recording = nil; return }
         recording?.moves.append(move)
@@ -323,31 +428,38 @@ extension CoralPuzzle {
     var recordedFrames: [BloomMoveFrame]? {
         guard let recording, recording.initialCells.count == cells.count,
               !recording.moves.isEmpty, recording.moves.count <= 4096,
+              recording.initialMiniCells?.count == miniCells?.count,
               (stones + (gaps ?? [])).allSatisfy({ recording.initialCells[$0] }) else { return nil }
         var board = self
         board.cells = recording.initialCells
         board.moves = 0
+        if board.hasMiniBoard {
+            board.miniCells = recording.initialMiniCells ?? board.miniCells
+            board.miniStep = recording.initialMiniStep ?? 0
+        }
         board.lighterCorals = []
         board.recording = nil
-        var result = [BloomMoveFrame(cells: board.cells, held: [], move: nil, affected: [], taps: 0)]
+        var result = [BloomMoveFrame(cells: board.cells, held: [], move: nil, affected: [], taps: 0,
+                                     miniCells: board.miniCells, miniStep: board.miniStep)]
         for move in recording.moves {
-            guard board.isCoral(move.index), !board.isComplete else { return nil }
+            guard board.isCoral(move.index), !board.isCaged(move.index), !board.isComplete else { return nil }
             let affected: [Int]
             switch move.kind {
             case .tap:
                 affected = board.affected(at: move.index)
-                board.pulse(at: move.index)
-                board.moves += 1
+                board.applyTap(at: move.index)
             case .lighter:
-                guard !board.cells[move.index] else { return nil }
+                guard !board.cells[move.index], !board.isCaged(move.index) else { return nil }
                 affected = [move.index]
                 board.cells[move.index] = true
                 board.lighterCorals = (board.lighterCorals ?? []) + [move.index]
             }
             result.append(.init(cells: board.cells, held: board.lighterCorals ?? [],
-                                move: move, affected: affected, taps: board.moves))
+                                move: move, affected: affected, taps: board.moves,
+                                miniCells: board.miniCells, miniStep: board.miniStep))
         }
         guard board.cells == cells, board.moves == moves,
+              board.miniCells == miniCells, board.miniStep == miniStep,
               Set(board.lighterCorals ?? []) == Set(lighterCorals ?? []) else { return nil }
         return result
     }
@@ -358,8 +470,12 @@ extension CoralPuzzle {
         if let recording, recordedFrames != nil {
             board = self
             board.cells = recording.initialCells
+            if board.hasMiniBoard {
+                board.miniCells = recording.initialMiniCells ?? board.miniCells
+                board.miniStep = recording.initialMiniStep ?? 0
+            }
         }
-        board.moves = 0; board.countedMoves = nil; board.undoTap = nil
+        board.moves = 0; board.countedMoves = nil; board.undoTap = nil; board.undoTapRefundable = nil
         board.history = []; board.recording = nil
         board.rewarded = false; board.pearlTarget = nil; board.extraTaps = nil
         board.lighterCorals = nil; board.revealedHint = nil

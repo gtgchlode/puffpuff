@@ -1,3 +1,106 @@
+# App Store title — November 9, 2026
+
+The exact App Store listing title is **PuffPuff: Glow Puzzle**. This is a store-only name.
+Keep home-screen, pause and Settings labels as puffpuff; the character remains PuffPuff.
+Do not rename the Xcode project/scheme, bundle ID, save keys or in-game screens.
+APP_STORE_METADATA.txt records the listing name; changing it does not update Apple automatically.
+
+# Storm restoration and Bailey — November 7, 2026
+
+World 1 remains The Faded Garden: a storm damaged the reef and dimmed its coral.
+PuffPuff relights three gardens and his cottage to make it livable again. Its goal
+is an outlined mystery house with a question mark, then a check when restored.
+Tap goals to read the short story. No visible Bubba name/fish target in World 1.
+House visits unlock after restoring home; grandfather any existing owned furniture.
+The shop still requires completed World 1. Treasure and furniture stay optional.
+
+World 2 The Hidden Reef will rescue Bailey (the clownfish previously called Bubba).
+Turtle reunion and Seabiscuit move to later planned worlds. Only World 1 is playable.
+Never ship draft friend artwork before the user approves it, or rename the official
+PuffPuff. Old Affinity layer names remain intact while the user edits the drafts.
+
+Preserve all saved progress: bubbaRescued is a legacy serialized key now read as
+hasRestoredHome, and home:2 keeps its existing paid credit/cost. This does not award
+any future Bailey rescue. No new save schema or costs. Three garden IDs stay as food.
+
+Unrestored scenery is pale, chipped, drooping and silted. Paths begin dark, matte and low-glint, then brighten as their cove is restored. Each paid patch restores
+its own colors, shape and gentle motion; no whole-cove instant restoration. Darkness
+and price/readability remain. The same saved lighting/finite reveal clock animates
+restoration and honors Reduce Motion. Design/Trail/Reef-Restoration.svg/.af/.png
+is the editable style study, derived from existing faceless coral paths.
+
+# Everyone gets beta tools — November 7, 2026
+
+The user explicitly wants everyone using current builds to have Debug. Both Debug
+and Release define PUFFPUFF_BETA_TOOLS; the normal Release archive enables Settings
+Debug refills, Debug levels and Restart everything immediately, without StoreKit,
+network, receipts or account state. Keep Release optimization; do not add DEBUG to
+Release. Permission is build-derived, never saved. Existing reset confirmation,
+backup and save-failure protections remain. No new artwork or gameplay migration.
+Remove PUFFPUFF_BETA_TOOLS from Release before a future public App Store launch;
+without it the existing verified-sandbox runtime gate remains. This supersedes the
+older sandbox-only TestFlight instructions. Build 2026110701 is the first fixed beta.
+An already-uploaded TestFlight build cannot be changed; distribute a fresh archive.
+
+Character name: **PuffPuff**, exactly (not Puffpuff or Puff Puff). Use this in game copy and accessibility labels. Keep existing bundle IDs, file paths, saved keys and separately chosen store/home-screen labels unchanged.
+
+# Expanded house — November 7, 2026
+
+House navigation uses symbols only: enter/leave doorway, map to Trail, shell-awning
+shop, and a furniture crate for owned items. The shop unlocks only when World 1 is
+complete; gate both the UI and purchase API. Existing owned furniture stays usable
+before that point. The crate never mixes in unowned items. Keep short item titles
+and placement/error guidance only when needed. House-Controls.af/.svg/.png are in
+Design/CoralHome. Screen-reader labels remain descriptive.
+
+
+The house is an explorable room, not a fixed furnished thumbnail. Tap to swim; idle
+PuffPuff wanders gently. Use the room/window/nook/coral symbols or pinch/drag to view it.
+One continuous swim starts from the current visible position, including retargeting.
+Reduce Motion settles movement; backgrounding stops it. Character drafts remain excluded.
+
+Owned furniture can be moved, flipped or put away for free. Tap/drag a placement
+preview, then Place saves it; Cancel/Outside/Trail abandon only that preview. Stored
+items stay owned and can be placed again without buying. Furniture actions: rest in
+the shell seat, toggle the pearl lantern, swim over and play with coral bubbles.
+No interaction grants resources or changes puzzles/trail goals. Existing one-time
+purchase prices remain 12/18/15 Lumes. Purchases and arrangements roll back on save failure.
+
+Format31 adds optional homeRoom (normalized placements, flip flags and lantern state).
+Old owned furniture uses default spots; absent/stored placements remain distinct.
+Reject unowned/unknown/non-finite/outside/overlapping placement without changing anything.
+Controls stay outside the room camera in a bounded scrolling tray. New editable room:
+Design/CoralHome/Coral-Cottage-Spacious-Room.af, matching SVG/PNG. Original exterior,
+older interiors and all user-editable rescue-character drafts remain preserved.
+
+# Character artwork hold — November 7, 2026
+
+The user is perfecting the Affinity character designs. DO NOT import or show any new
+rescue character artwork in the game until the user explicitly approves the finished
+masters. Reef-Friends-Family-Draft.af is an editable draft with larger adult-turtle
+proportions, not approved game art. Prior color/style sheets remain untouched.
+The rescue story/save state and house stay; visitor rendering is pending art approval.
+This instruction supersedes the character integration notes below.
+
+# Reef rescue and home — November 7, 2026
+
+Latest direction supersedes older snack/home and golf notes below.
+Store listing: PuffPuff: Glow Puzzle. Pause/settings title: puffpuff. Homescreen stays puffpuff.
+World 1 The Faded Garden: relight three coral gardens and rescue Bubba the clownfish.
+World 2 The Deep Blue: awaken coral lights and reunite a baby turtle with its mom.
+World 3 The Kelp Maze: light a safe kelp route and rescue Seabiscuit the seahorse.
+Required-world pacing targets: 50–100 / 75–125 / 100–150 Glow wins; optional treasure and house purchases are extra. Only World 1 is implemented. Future worlds stay visibly coming later.
+The old food IDs/serialized set now preserve the three garden restorations. home:2 is the paid Bubba rescue. Schema 30 credits old home visits as rescues without charging again; preserves puzzle, balances, opened finds and golf history.
+Puffpuff has a separate coral cottage with an enterable interior. Rescued Bubba visits. Three optional one-time furnishings cost Lumes, save atomically, and never gate rescue/progression. Keep the existing official fish and cottage masters unchanged. New named vector layers are in Design/RescueFriends. The current master is Reef-Friends-Color-Study.af; match the official Puffpuff outlines and expressive faces, with distinct character palettes and subtle eye variations. Keep earlier sheets as concept history.
+
+# Current product decision — November 7, 2026
+
+- [x] Puzzle mode renamed Glow; currency renamed Lumes.
+- [x] Paid Trail exploration completes with three snacks and home.
+- [x] Golf screens/rewards removed and art/code preserved for a separate game.
+
+Older golf ideas below are archived design history, not requirements for this app.
+
 # puffpuff mechanics checklist
 
 Ideas from play on October 24, 2026. Consult this checklist when considering new tile types, power-ups, or ways to vary level difficulty. Unchecked items are ideas awaiting implementation; check them off when they are in the app.
@@ -6,9 +109,7 @@ Ideas from play on October 24, 2026. Consult this checklist when considering new
 
 - [ ] **Tiles that only turn off.** They can change from glowing to sleepy, but cannot turn back on through their normal rule.
   - Settle how these tiles fit the win condition before using them: the current goal is to make every coral glow.
-- [ ] **Linked tiles.** A tile does the same as a designated tile above, below, or in another direction.
-  - Settle whether it copies that tile's glowing/sleepy state or mirrors its changes.
-  - Define what happens when links form a chain or point outside the board.
+- [x] **Linked coral pairs.** Tapping a linked coral applies its normal Glow pulse and flips its designated partner once. The partner does not trigger a second ripple. Both members share a group hue; each coral has a centered chain symbol in their shared hue, with no connector line between them. Authored pairs do not overlap other special tiles.
 
 - [x] **Up/down coral.** Tapping a ↕ tile flips itself and existing coral immediately above/below, with no side or diagonal changes. Gaps and pebbles block that neighbor; no skipping. Ordinary neighboring taps can affect the tile normally. Levels 36–38 introduce one, one and two such tiles. It returns at 45 and stays available for later combinations indefinitely; keep selecting it only on some boards. Hints use the same rule. Saved attempts retain their existing tiles until Restart.
 - [x] **Unnumbered practices.** Before the first up/down board, a short skippable practice demonstrates the rule without spending moves/hints, granting rewards or advancing a level. Store dismissal locally. Use these separate teaching moments at key introductions; regular level numbers do not need to serve as tutorials.
@@ -22,7 +123,7 @@ Ideas from play on October 24, 2026. Consult this checklist when considering new
 Power-ups are single-use items. Placement can be reversible before an item is used.
 
 - [x] **Hint.** Spend one collected hint to reveal one useful next tap with a bright gold ring, pale core and breathing halo. Only the suggested coral is highlighted; no dotted outlines on neighbors. Hint controls wrap to a second row when needed instead of truncating. Reduce Motion keeps the glow steady. It does not use a tap or change any tiles.
-  - Start with 3 hints. Collect 1 on the first completion of patches 5, 10, 15…100, and 1 with each newly found trail treasure. Earlier completed milestones and treasures are credited once when upgrading an existing save.
+  - Start with 3 hints. Collect 1 on the first completion of patches 5, 10, 15…185, and 1 with each newly found trail treasure. Earlier completed milestones and treasures are credited once when upgrading an existing save.
   - Replays do not award the same hint milestone again. Glow replay rewards remain; shots now follow the first-clear milestone rule below.
   - Buy 3 hints or watch an ad for 1. Both are explicitly **free previews** for now: no payment, ad network, or real purchase is performed. Production grants must wait for verified purchase or ad reward confirmation.
   - Opening tutorial patches 1–4 retain free guidance. No hint is consumed if the board is complete, out of taps, or cannot be solved with the taps remaining.
@@ -31,15 +132,16 @@ Power-ups are single-use items. Placement can be reversible before an item is us
   - The visible Hint count spends one; the adjacent + opens an inline refill panel that leaves the board visible. A zero balance also opens this panel when a useful hint is requested.
 - [x] **Collectible lighters.** Existing Trail sources remain, plus one lighter on the first clear of every seventh Bloom (7, 14, 21…). No replay farming or retroactive grants. It joins the floating reward bubbles and first-pickup explanation, then stays in the Bloom bag.
 - [x] **Lighter.** One collected lighter turns a chosen sleepy coral on without changing its neighbors or spending a tap. It stays lit for this attempt; normal taps can still originate there and affect its neighbors. This preserves solvability and hints use the same held-on rule. Canceling selection spends nothing; tapping a lit coral/pebble/gap spends nothing. Can rescue an out-of-taps board. Restart clears the held-on tiles without refunding spent lighters. Debit, tile and any win rewards save atomically; checkpoints preserve them.
-- [ ] **Required protective cover levels (after level 100).** A board supplies one permanent cover; it is not a collectible, prize, purchase or inventory item. The cover must always sit on one coral and can move between coral without a tap cost. It blocks that coral's flips for as long as it is there; never consume it. Design the board around needing the cover, with a verified solution including cover placements/moves. Hints can mark the required cover destination with × before giving the next coral tap. Teach it in a short unnumbered practice. Keep it out of levels 1–100 and the current prize pool.
+- [ ] **Required protective cover levels (after level 185).** A board supplies one permanent cover; it is not a collectible, prize, purchase or inventory item. The cover must always sit on one coral and can move between coral without a tap cost. It blocks that coral's flips for as long as it is there; never consume it. Design the board around needing the cover, with a verified solution including cover placements/moves. Hints can mark the required cover destination with × before giving the next coral tap. Teach it in a short unnumbered practice. Keep it out of levels 1–185 and the current prize pool.
   - A one-flip collectible was rejected: an audit of current 1–60 found 46 boards with unsafe positions (605 of 888 coral positions). After a blocked flip these positions cannot recover using normal taps alone. This is a mathematical placement audit, not a player failure rate. Do not restore that collectible implementation.
 
 ## Level difficulty
 
-- [x] **Playable through 60.** Levels 1–60 are playable; 61–100 remain drafts. Stop progression at 60 and offer an explicit replay or Home. Never erase older progress beyond the current limit.
+- [x] **Playable through 185.** Levels 1–185 are playable. Stop progression at 185 and offer an explicit replay or Home. Never erase older progress beyond the current limit.
 
 
-- [x] **Room to experiment.** Tap-budget revision 4 gives patches 1–4 6/10/12/14 taps; 5–9 get 18; 10–19 get 24; 20–40 get 30; 41–60 get 34; 61–80 get 38; 81–100 get 42. Existing attempts and latest replay checkpoints receive the increase while keeping their moves, coral arrangement, hint reveal and extra taps. Pearl targets remain optional efficiency bonuses.
+- [x] **Expanded linked coral groups.** Revised levels 161–185 keep each linked group to two or three coral, mostly one group per board with occasional two-pair boards. Level 170 introduces the trio. Mix links with existing pebbles, directional, diagonal, line, burst and cage tiles; levels 165 (burst plus pebbles) and 180 (whole-row plus up/down) are link-free palate cleansers. Level 185 pairs a trio with a separate pair. Each link group shares a hue and a centered same-color symbol on every member, with no connector line. All levels keep 42 taps.
+- [x] **Room to experiment.** Tap-budget revision 4 gives patches 1–4 6/10/12/14 taps; 5–9 get 18; 10–19 get 24; 20–40 get 30; 41–60 get 34; 61–80 get 38; 81–149 get 42; 150–154 get 34; 155–185 get 42. Existing attempts and latest replay checkpoints receive the increase while keeping their moves, coral arrangement, hint reveal and extra taps. Pearl targets remain optional efficiency bonuses.
 - [x] **Restart instead of Undo.** Restart recreates the current patch with its full base budget. Added taps belong to the old attempt; collected hints, Glow, shots, trail progress and completed patches stay saved. Legacy undo history is retained for save compatibility but no longer records new moves or exposes an action.
 - [x] **Distinct lit state.** Glowing tiles have a watery interior, sparkle marker, full-color coral, visible detail and gentle movement; no circular perimeter outline. Unlit tiles have still dark water and a smaller muted silhouette. Pebbles keep their separate matte grey appearance.
 
@@ -56,6 +158,7 @@ Build only the first playable reef before creating further courses. Use the user
 - [x] **Close-up quest areas.** Swim through sandy shallows, kelp groves, coral gardens and hidden coves with a following camera. Only local connected exits appear; unknown paths hide their destination. Tap a blockage's artwork/cost to clear it. Reuse the saved course graph, current location and official vector art. The full course overview remains exclusive to the golf bonus. Pause settles travel; Reduce Motion skips camera motion.
 - [x] **Explored-area map.** A folded nautical chart in the upper-left corner has a zigzag paper outline and fold creases. It charts visited places and their known active connections, with the official happy Puff Puff as the current-location marker in both sizes. Tap to expand; select discovered landmarks to read their names/status. Unknown places stay hidden. The map pauses exploration, uses existing save data and never moves the fish or grants/spends resources.
 - [x] **Glow wakes the reef.** Paid local reveals each light their own water and coral pool; unopened pockets stay dark. Puff Puff carries a small temporary halo while swimming. Paid lighting persists through coveSearches and the map reflects paid reveals. Pause and Reduce Motion settle to the saved result.
+- [x] **Scavenger fish.** Enemy fish have a downturned hooked beak and heavy brow, circle lazily around their obstacle, and dart away when startled.
 - [x] **Tap to clear the way.** First arrival reveals kelp, sand or enemy fish; the second tap spends 3/4/5 Glow to clear. Retreat is always possible. Sand opens an additional central shortcut.
 - [x] **Exploration improves bonus golf.** Three accent-color chests grant one-time power-ups (mint: +1 hint/+2 lives; coral: +2 shots/+1 lighter; gold: +2 hints/one 15-minute unlimited-lives boost) while optional side excursions open easier putting routes. Cleared obstacles remain absent. Explore more before deciding on the final reward.
 - [x] **Small bonus round after home.** Pull back from Puff Puff opposite the intended direction; longer drags give more strength. Release to putt, with bank shots and a six-putt cap. Par four. Deflate through the doorway after landing.
@@ -309,3 +412,16 @@ A pinned Slow–Fast slider interpolates between the relaxed 220–380ms move in
 - [x] Future Teller appears on the actual board over a hazy game background; no modal. Use/reopen control sits under Hint, and the saved glimpse remains free to revisit. Tap away or Keep playing to return to the unchanged board.
 
 - [x] Icon/count Hint controls, glowing saved Future Teller glimpse, and default-on use confirmations with one persistent Settings switch. Free glimpse reopening never asks or spends again.
+
+
+### Glow mini-board playground — November 8, 2026
+- [x] Two isolated Glow-level experiments use the normal neighbor-flip rule on a 3×3 coral board. Four colored corner coral also flip independent patterns on a 2×2 mini board. Normal Glow taps always work; the mini pattern fires only when its shown color order is met. Both boards target all lights on; Reset is free and no save, campaign progress, lives, or rewards are changed.
+
+
+### Approved Glow extension, levels 101–185 — November 9, 2026
+- [x] Levels 101–185 implemented with levels 1–100 preserved. The exact special-tile combination of every level is in BLOOM_LEVEL_GUIDE.txt.
+- [x] Introductory beats: linked pairs at 105; caged coral at 125; coupled mini-board at 150. Each new mechanic has a skippable unnumbered practice.
+- [x] Linked coral groups flip their other same-color members once per tap without a second ripple; distinct groups have distinct colors. In revised levels 161–185, no group exceeds three coral; most boards have one linked pair or trio, with occasional two-pair boards. Level 170 introduces a trio, levels 165 and 180 are link-free palate cleansers, and level 185 ends with a trio plus a separate pair. The boards mix links with existing tiles. Caged coral cannot be tapped directly, but ripples can flip it; it counts toward the all-lit win.
+- [x] On levels 150–160, the ordered colors operate a 2×2 mini-board alongside the main Glow board. The mini-board begins with an alternating on/off pattern; the four ordered patterns leave all four lights on. Wrong-order colors still ripple the main board but do not advance the mini sequence. Both boards must be all lit to win. Levels 155–160 add two pebbles and alternate up/down and left/right coral.
+
+- [x] **Level 100 milestone marker and scale.** Century Reef is a 6×6 special level, uses the existing special-coral mix, and is visibly marked in Bloom. Extra bonus reward types and payouts remain undecided; do not grant a placeholder reward.

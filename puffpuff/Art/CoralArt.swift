@@ -28,6 +28,8 @@ struct CoralArt: View {
     var bloom = 0.0
     var swell = 0.0
     var seed = 0.0
+    var linkedFill: UInt32? = nil
+    var linkedTip: UInt32? = nil
     @Environment(\.oceanTime) private var time
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
 
@@ -36,8 +38,10 @@ struct CoralArt: View {
             let unit = min(size.width, size.height) / 100
             context.translateBy(x: (size.width - unit * 100) / 2, y: (size.height - unit * 100) / 2)
             context.scaleBy(x: unit, y: unit)
-            let fill = lit ? Self.blend(species.color, 0xFFD6A0, bloom) : ReefTheme.sleepyCoral
-            let tip = lit ? Self.blend(species.tip, 0xFFF0C9, bloom) : ReefTheme.sleepyTip
+            let fill = lit ? Self.blend(linkedFill ?? species.color, 0xFFD6A0, bloom)
+                : linkedFill.map { Self.blend($0, 0x345F5D, 0.70) } ?? ReefTheme.sleepyCoral
+            let tip = lit ? Self.blend(linkedTip ?? species.tip, 0xFFF0C9, bloom)
+                : linkedTip.map { Self.blend($0, 0x56706D, 0.62) } ?? ReefTheme.sleepyTip
             let moving = !reduceMotion && lit
             let sway = moving ? ReefMotion.wave(time, period: 8000, phase: seed * 0.13) : 0
             let ripple = moving ? ReefMotion.wave(time, period: 12000, phase: seed * 0.13 + 0.18) : 0

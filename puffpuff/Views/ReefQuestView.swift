@@ -29,7 +29,7 @@ struct ReefQuestView: View {
         case "enemy": "Fish passage"
         case "north": "Sunbeam glade"
         case "food-middle": "Honey garden"
-        case "home": "Coral cottage"
+        case "home": "Coral doorstep"
         case "hint-shell": "Shell nook"
         case "shot-pearl": "Pearl pocket"
         case "coral-cache": "Golden grotto"
@@ -78,10 +78,10 @@ struct ReefQuestView: View {
                             ReefClearanceLabel(destination: destination, cost: destination.glowCost)
                         }
                         .buttonStyle(ReefButtonStyle(kind: .coral))
-                        // Keep the action above its artwork and away from Puff Puff below.
+                        // Keep the action above its artwork and away from PuffPuff below.
                         .position(x: actionX, y: actionY)
-                        .accessibilityLabel("\(destination.actionLabel), \(destination.glowCost) Glow")
-                        .accessibilityHint(destination.kind == .treasure ? "Spends Glow to uncover this hidden find." : "Spends Glow to open this passage and light its corals.")
+                        .accessibilityLabel("\(destination.actionLabel), \(destination.glowCost) Lumes")
+                        .accessibilityHint(destination.kind == .treasure ? "Spends Lumes to uncover this hidden find." : "Spends Lumes to open this passage and light its corals.")
                         .disabled(!enabled)
                     }
                     // Retreat arrows stay above obstacle hit areas and are always usable.
@@ -129,7 +129,7 @@ struct ReefQuestView: View {
         }
         .buttonStyle(ReefButtonStyle(kind: .navigation))
         .disabled(!enabled)
-        .accessibilityLabel(cost > 0 ? "\(destination.actionLabel), \(cost) Glow" : known ? "Swim to \(Self.areaName(destination.id))" : "Explore an unknown path")
+        .accessibilityLabel(cost > 0 ? "\(destination.actionLabel), \(cost) Lumes" : known ? "Swim to \(Self.areaName(destination.id))" : "Explore an unknown path")
     }
 
     /// Separate adjacent exits into eight shore positions, keeping targets clear of the fish.
@@ -167,7 +167,7 @@ private struct ReefClearanceLabel: View {
                 .reefFont(size: compact ? 11 : 13, weight: .semibold)
                 .lineLimit(2).multilineTextAlignment(.center)
                 .fixedSize(horizontal: false, vertical: true)
-            ReefIconLabel("\(cost) Glow", .glow, size: 22)
+            ReefIconLabel("\(cost) Lumes", .glow, size: 22)
                 .reefFont(size: 12, weight: .medium)
         }
         .padding(.horizontal, 16).padding(.vertical, 10)
@@ -318,7 +318,7 @@ enum ReefQuestArt {
         }
 
         // Darkness belongs to the reef, not the controls. Coral beds open pools
-        // of visibility; Puff Puff carries a small halo to keep dark routes usable.
+        // of visibility; PuffPuff carries a small halo to keep dark routes usable.
         context.drawLayer { shade in
             shade.fill(bounds, with: .color(ReefTheme.abyss.opacity(0.9)))
             shade.blendMode = .destinationOut
@@ -406,5 +406,89 @@ enum ReefQuestArt {
         c.fill(species.right, with: .color(color.opacity(0.85)))
         c.fill(species.body, with: .color(color))
         c.stroke(species.veins, with: .color(CoralArt.blend(0x466970, species.tip, light)), style: .init(lineWidth: 2.5, lineCap: .round))
+    }
+}
+
+/// Presentation-only restoration, using the approved coral paths. No rescue character drafts.
+enum ReefRestorationArt {
+    static func coral(_ species:CoralSpecies,in context:GraphicsContext,at point:CGPoint,size:Double,
+                      time:Double,seed:Double,moving:Bool,restored:Double) {
+        let life=min(1,max(0,restored)),wear=1-life
+        var c=context;c.translateBy(x:point.x,y:point.y);c.scaleBy(x:size/100,y:size/100)
+        c.fill(Path(ellipseIn:.init(x:-37,y:-2,width:76,height:10)),with:.color(Color(hex:0x586A60).opacity(0.27*wear)))
+        rubble(in:c,wear:wear,seed:seed)
+        c.rotate(by:.degrees(moving ? sin(time/8000 * .pi*2+seed)*1.7*life:0))
+        c.scaleBy(x:1+wear*0.06,y:1-wear*0.24)
+        c.translateBy(x:-50,y:-87)
+        let fill=CoralArt.blend(0xAAB4A6,species.color,life)
+        let tip=CoralArt.blend(0xD6D9C4,species.tip,life)
+        c.drawLayer {plant in
+            for (branch,direction) in [(species.left,-1.0),(species.right,1.0)] {
+                var side=plant;side.translateBy(x:50,y:80)
+                side.rotate(by:.degrees(direction*wear*14));side.translateBy(x:-50,y:-80)
+                side.fill(branch,with:.color(fill.opacity(0.9)))
+            }
+            plant.fill(species.body,with:.color(fill))
+            plant.stroke(species.veins,with:.color(tip),style:.init(lineWidth:2.5,lineCap:.round))
+            for (x,y,r) in species.dots {
+                plant.fill(Path(ellipseIn:.init(x:x-r,y:y-r,width:r*2,height:r*2)),with:.color(tip.opacity(0.3+life*0.7)))
+            }
+            if wear>0.001 {
+                // Small missing tips and a weathered seam, clipped to the original coral.
+                var damage=plant;damage.opacity=wear
+                var outline=species.body;outline.addPath(species.left);outline.addPath(species.right)
+                damage.clip(to:outline)
+                var cracks=Path();cracks.move(to:.init(x:53,y:87));cracks.addLine(to:.init(x:48,y:71))
+                cracks.addLine(to:.init(x:55,y:63));cracks.addLine(to:.init(x:51,y:54))
+                cracks.move(to:.init(x:48,y:71));cracks.addLine(to:.init(x:37,y:67))
+                damage.stroke(cracks,with:.color(Color(hex:0x64796C).opacity(0.65)),style:.init(lineWidth:1.3,lineCap:.round,lineJoin:.round))
+                var cut=Path();cut.move(to:.init(x:18,y:15));cut.addLine(to:.init(x:34,y:14));cut.addLine(to:.init(x:28,y:37));cut.addLine(to:.init(x:19,y:31));cut.closeSubpath()
+                cut.move(to:.init(x:72,y:17));cut.addLine(to:.init(x:88,y:22));cut.addLine(to:.init(x:81,y:44));cut.addLine(to:.init(x:72,y:39));cut.closeSubpath()
+                damage.blendMode = .destinationOut;damage.fill(cut,with:.color(.black))
+            }
+        }
+    }
+    private static func rubble(in context:GraphicsContext,wear:Double,seed:Double) {
+        guard wear>0.001 else{return}
+        var c=context;c.opacity *= wear
+        for i in 0..<3 {
+            var chip=c;chip.translateBy(x:Double(i-1)*27+sin(seed)*3,y:2+Double(i%2)*4)
+            chip.rotate(by:.degrees(Double(i%2 == 0 ? -24:28)))
+            var stem=Path();stem.move(to:.init(x:-9,y:0));stem.addQuadCurve(to:.init(x:9,y:0),control:.init(x:0,y:-3))
+            stem.move(to:.init(x:1,y:-1));stem.addLine(to:.init(x:4,y:-7))
+            chip.stroke(stem,with:.color(Color(hex:0x9DA89A)),style:.init(lineWidth:4,lineCap:.butt,lineJoin:.round))
+            chip.stroke(stem,with:.color(Color(hex:0xD5D5BC).opacity(0.65)),style:.init(lineWidth:1,lineCap:.round))
+        }
+        for i in 0..<13 {
+            let x=Double((i*19+Int(seed)*7)%73)-36,y=Double((i*11)%9)
+            c.fill(Path(ellipseIn:.init(x:x,y:y,width:1.2,height:0.8)),with:.color(Color(hex:0xB4B49A).opacity(0.65)))
+        }
+    }
+    static func homeMarker(in context:GraphicsContext,at point:CGPoint,size:Double,restored:Bool) {
+        var c=context;c.translateBy(x:point.x-size/2,y:point.y-size/2);c.scaleBy(x:size/100,y:size/100)
+        let ink=restored ? ReefTheme.gold:ReefTheme.ink
+        var house=Path();house.move(to:.init(x:20,y:44));house.addLine(to:.init(x:20,y:85))
+        house.addQuadCurve(to:.init(x:80,y:85),control:.init(x:50,y:96));house.addLine(to:.init(x:80,y:44))
+        house.addCurve(to:.init(x:86,y:34),control1:.init(x:97,y:50),control2:.init(x:99,y:32))
+        house.addCurve(to:.init(x:62,y:19),control1:.init(x:88,y:17),control2:.init(x:72,y:11))
+        house.addCurve(to:.init(x:35,y:22),control1:.init(x:53,y:3),control2:.init(x:34,y:7))
+        house.addCurve(to:.init(x:13,y:36),control1:.init(x:21,y:16),control2:.init(x:11,y:23))
+        house.addCurve(to:.init(x:20,y:44),control1:.init(x:1,y:39),control2:.init(x:9,y:52));house.closeSubpath()
+        c.fill(house,with:.color(ink.opacity(0.06)))
+        c.stroke(house,with:.color(ink),style:.init(lineWidth:3.4,lineCap:.round,lineJoin:.round))
+        if restored {
+            var check=Path();check.move(to:.init(x:35,y:61));check.addLine(to:.init(x:46,y:71));check.addLine(to:.init(x:66,y:48))
+            c.stroke(check,with:.color(ink),style:.init(lineWidth:5,lineCap:.round,lineJoin:.round))
+        } else {
+            c.draw(Text("?").font(.custom("ChalkboardSE-Bold",size:43)).foregroundColor(ink),at:.init(x:51,y:59))
+        }
+    }
+}
+
+struct ReefMysteryHome:View {
+    var restored=false
+    var body:some View {
+        Canvas {c,s in ReefRestorationArt.homeMarker(in:c,at:.init(x:s.width/2,y:s.height/2),size:min(s.width,s.height),restored:restored)}
+            .accessibilityHidden(true)
     }
 }

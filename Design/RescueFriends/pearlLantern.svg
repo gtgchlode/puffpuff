@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="600" height="600" viewBox="0 0 300 300"><g id="pearlLantern"><path id="stem" d="M 146 223 C 144 171 132 89 160 70 C 185 53 211 80 194 99" fill="none" stroke="#81AE96" stroke-width="10" stroke-linecap="round" stroke-linejoin="round"/>
+<path id="foot" d="M 112 234 C 124 207 165 205 178 233 C 164 244 126 246 112 234 Z" fill="#A5CAB3" stroke="#47796F" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+<path id="cage" d="M 173 100 C 151 110 149 152 174 165 C 202 160 218 120 194 100 Z" fill="#EED59C" stroke="#47796F" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+<path id="pearl" d="M 161 131 C 161 118.29745075 169.954305 108 181 108 C 192.045695 108 201 118.29745075 201 131 C 201 143.70254925 192.045695 154 181 154 C 169.954305 154 161 143.70254925 161 131 Z" fill="#FFF7CE" stroke="#D8BE83" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+<path id="cage-ribs" d="M 173 100 C 164 125 166 147 174 165 M 194 100 C 203 125 197 149 174 165" fill="none" stroke="#92BAA3" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></g></svg>

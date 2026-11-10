@@ -1,0 +1,41 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="960" height="700" viewBox="0 0 960 700"><rect width="960" height="700" fill="#C9E6DB"/>
+<g id="enterHome" transform="translate(25 12) scale(.88)"><path id="arch" d="M 87 263 L 87 122 C 80 23 248 22 246 123 L 247 263 Z" fill="#F7DFAD" stroke="#47796F" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"/>
+<path id="door-water" d="M 112 261 L 112 125 C 108 57 221 56 221 126 L 223 261 Z" fill="#488C86" stroke="#47796F" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/>
+<path id="door-shine" d="M 127 130 C 125 91 149 83 164 81" fill="none" stroke="#BFE8D5" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/>
+<path id="threshold" d="M 77 263 C 122 251 213 251 257 264 L 254 281 C 204 291 116 292 79 280 Z" fill="#F7DFAD" stroke="#47796F" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/>
+<path id="arrow" d="M 27 180 L 174 180 M 138 146 L 176 180 L 138 214" fill="none" stroke="#FFF0BF" stroke-width="25" stroke-linecap="round" stroke-linejoin="round"/>
+<path id="arrow-edge" d="M 27 180 L 174 180 M 138 146 L 176 180 L 138 214" fill="none" stroke="#235653" stroke-width="12" stroke-linecap="round" stroke-linejoin="round"/></g>
+<text x="157" y="317" text-anchor="middle" font-family="Chalkboard SE" font-size="20" fill="#23514E">enterHome</text>
+<g id="leaveHome" transform="translate(335 12) scale(.88)"><path id="arch" d="M 87 263 L 87 122 C 80 23 248 22 246 123 L 247 263 Z" fill="#F7DFAD" stroke="#47796F" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"/>
+<path id="door-water" d="M 112 261 L 112 125 C 108 57 221 56 221 126 L 223 261 Z" fill="#488C86" stroke="#47796F" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/>
+<path id="door-shine" d="M 127 130 C 125 91 149 83 164 81" fill="none" stroke="#BFE8D5" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/>
+<path id="threshold" d="M 77 263 C 122 251 213 251 257 264 L 254 281 C 204 291 116 292 79 280 Z" fill="#F7DFAD" stroke="#47796F" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/>
+<path id="arrow" d="M 158 180 L 275 180 M 240 146 L 277 180 L 240 214" fill="none" stroke="#FFF0BF" stroke-width="25" stroke-linecap="round" stroke-linejoin="round"/>
+<path id="arrow-edge" d="M 158 180 L 275 180 M 240 146 L 277 180 L 240 214" fill="none" stroke="#235653" stroke-width="12" stroke-linecap="round" stroke-linejoin="round"/></g>
+<text x="467" y="317" text-anchor="middle" font-family="Chalkboard SE" font-size="20" fill="#23514E">leaveHome</text>
+<g id="homeShop" transform="translate(645 12) scale(.88)"><path id="shop" d="M 49 124 L 54 263 C 101 282 207 279 251 262 L 252 124 Z" fill="#9BCBBB" stroke="#47796F" stroke-width="7" stroke-linecap="round" stroke-linejoin="round"/>
+<path id="counter" d="M 66 167 L 236 167 L 234 215 L 67 216 Z" fill="#3D7A74" stroke="#47796F" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>
+<path id="shelf" d="M 47 217 C 104 210 213 209 258 218 L 256 234 L 49 235 Z" fill="#F7DFAD" stroke="#47796F" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/>
+<path id="awning" d="M 34 128 C 54 52 105 39 151 54 C 202 35 247 61 270 127 C 258 148 237 151 219 135 C 202 154 170 153 153 137 C 132 155 106 151 89 135 C 67 153 46 150 34 128 Z" fill="#EFA997" stroke="#47796F" stroke-width="7" stroke-linecap="round" stroke-linejoin="round"/>
+<path id="awning-stripes" d="M 90 135 C 90 104 101 77 117 60 M 153 137 L 152 58 M 219 135 C 216 105 198 74 186 59" fill="none" stroke="#F7DFAD" stroke-width="13" stroke-linecap="round" stroke-linejoin="round"/>
+<path id="shell-mark" d="M 132 253 C 115 240 123 227 137 237 C 137 218 159 218 160 237 C 176 227 187 242 166 254 Z" fill="#F7DFAD" stroke="#47796F" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/></g>
+<text x="777" y="317" text-anchor="middle" font-family="Chalkboard SE" font-size="20" fill="#23514E">homeShop</text>
+<g id="homeFurniture" transform="translate(25 357) scale(.88)"><path id="chair-back" d="M 85 165 C 59 136 57 93 86 88 C 99 86 105 96 108 106 C 99 68 123 55 139 80 C 143 47 170 50 175 83 C 197 62 220 82 207 112 C 240 104 245 135 215 165 Z" fill="#F7DFAD" stroke="#47796F" stroke-width="7" stroke-linecap="round" stroke-linejoin="round"/>
+<path id="ribs" d="M 100 114 L 124 169 M 144 91 L 147 167 M 193 114 L 172 168" fill="none" stroke="#F1BE7E" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/>
+<path id="box" d="M 40 168 C 104 155 210 158 262 169 L 255 261 C 205 281 94 280 47 260 Z" fill="#9BCBBB" stroke="#47796F" stroke-width="7" stroke-linecap="round" stroke-linejoin="round"/>
+<path id="rim" d="M 37 164 C 108 150 209 154 264 166 L 264 185 C 202 175 97 174 37 185 Z" fill="#F7DFAD" stroke="#47796F" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>
+<path id="box-grain" d="M 51 219 C 105 210 205 213 253 221 M 143 184 L 143 269" fill="none" stroke="#71A89B" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>
+<path id="handle" d="M 121 206 C 132 200 160 201 171 207 L 169 220 C 151 224 137 224 122 220 Z" fill="#3D7A74" stroke="#47796F" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></g>
+<text x="157" y="662" text-anchor="middle" font-family="Chalkboard SE" font-size="20" fill="#23514E">homeFurniture</text>
+<g id="roomOverview" transform="translate(335 357) scale(.88)"><path id="room" d="M 31 107 C 29 48 88 31 145 48 C 201 23 271 55 271 107 L 266 259 C 211 282 85 279 34 258 Z" fill="#9BCBBB" stroke="#47796F" stroke-width="7" stroke-linecap="round" stroke-linejoin="round"/>
+<path id="floor" d="M 34 184 C 105 197 210 196 269 182 L 266 259 C 208 280 81 280 34 258 Z" fill="#F7DFAD" stroke="#47796F" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>
+<path id="window" d="M 59 121 C 59 103.326888 72.4314575 89 89 89 C 105.5685425 89 119 103.326888 119 121 C 119 138.673112 105.5685425 153 89 153 C 72.4314575 153 59 138.673112 59 121 Z" fill="#65A99F" stroke="#F7DFAD" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"/>
+<path id="window-cross" d="M 89 94 L 89 148 M 63 121 L 116 121" fill="none" stroke="#F7DFAD" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>
+<path id="rug" d="M 101 238 C 101 229.71572875 124.72890825 223 154 223 C 183.27109175 223 207 229.71572875 207 238 C 207 246.28427125 183.27109175 253 154 253 C 124.72890825 253 101 246.28427125 101 238 Z" fill="#88BAA8" stroke="#47796F" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/></g>
+<text x="467" y="662" text-anchor="middle" font-family="Chalkboard SE" font-size="20" fill="#23514E">roomOverview</text>
+<g id="roomWindow" transform="translate(645 357) scale(.88)"><path id="rim" d="M 38 150 C 38 85.38268425 88.144108 33 150 33 C 211.85589199999998 33 262 85.38268425 262 150 C 262 214.61731575 211.85589199999998 267 150 267 C 88.144108 267 38 214.61731575 38 150 Z" fill="#F7DFAD" stroke="#47796F" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"/>
+<path id="water" d="M 63 150 C 63 99.189803 101.95122675 58 150 58 C 198.04877325 58 237 99.189803 237 150 C 237 200.81019700000002 198.04877325 242 150 242 C 101.95122675 242 63 200.81019700000002 63 150 Z" fill="#65A99F" stroke="#47796F" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>
+<path id="ripples" d="M 70 128 C 118 100 169 153 230 120 M 69 174 C 118 151 167 197 231 166" fill="none" stroke="#AEE2CD" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/>
+<path id="cross" d="M 150 61 L 150 238 M 65 150 L 235 150" fill="none" stroke="#F7DFAD" stroke-width="12" stroke-linecap="round" stroke-linejoin="round"/></g>
+<text x="777" y="662" text-anchor="middle" font-family="Chalkboard SE" font-size="20" fill="#23514E">roomWindow</text>
+</svg>

@@ -23,6 +23,7 @@ struct BloomView: View {
     @State private var pendingHintUse: BloomHintUse?
     @State private var showLives = false
     @State private var showRestart = false
+    @State private var showGlowPlayground = false
     @State private var celebrationOrigin: Int?
     @State private var celebrationID = 0
     @State private var playFishCelebration = false
@@ -34,6 +35,10 @@ struct BloomView: View {
     @AppStorage("puffpuff.tutorial.diagonalCoral") private var learnedDiagonalCoral = false
     @AppStorage("puffpuff.tutorial.lineCoral") private var learnedLineCoral = false
     @AppStorage("puffpuff.tutorial.burstCoral") private var learnedBurstCoral = false
+    @AppStorage("puffpuff.tutorial.linkedCoral") private var learnedLinkedCoral = false
+    @AppStorage("puffpuff.tutorial.linkedGroup") private var learnedLinkedGroup = false
+    @AppStorage("puffpuff.tutorial.cagedCoral") private var learnedCagedCoral = false
+    @AppStorage("puffpuff.tutorial.miniBoard") private var learnedMiniBoard = false
 
     private var victory: BloomVictoryStyle {
         .choose(level:store.puzzle.level,size:store.puzzle.size,
@@ -41,15 +46,15 @@ struct BloomView: View {
     }
     private var earnedRewards: [BloomBubbleReward] {
         BloomBubbleReward.earned(pearl: store.puzzle.earnedPearl, hint: store.puzzle.earnedHint == true,
-                                 shot: store.puzzle.earnedShot == true, gift: store.puzzle.earnedLifeGift,
-                                 lighter: store.puzzle.earnedLighter == true, shots: store.puzzle.earnedShots, hints: store.puzzle.earnedHints, currentAdder:store.puzzle.earnedCurrentAdder == true, bouncyBlock:store.puzzle.earnedBouncyBlock == true, futureTeller:store.puzzle.earnedFutureTeller == true)
+                                 shot: false, gift: store.puzzle.earnedLifeGift,
+                                 lighter: store.puzzle.earnedLighter == true, shots: nil, hints: store.puzzle.earnedHints, currentAdder:false, bouncyBlock:false, futureTeller:store.puzzle.earnedFutureTeller == true)
     }
     private var reinflating: Bool {
         reinflatingLevel == store.puzzle.level && !store.isComplete && celebrationAnimations && !reduceMotion
     }
 
     private var showingOverlay: Bool {
-        showRules || showCoralLesson || showLives || showRestart || inspectingCompletion || showLifePeek || showReplay || showMoves || showFuture || pendingHintUse != nil
+        showRules || showCoralLesson || showLives || showRestart || showGlowPlayground || inspectingCompletion || showLifePeek || showReplay || showMoves || showFuture || pendingHintUse != nil
     }
 
     private var inspectingCompletion: Bool { inspectedReward != nil || showTapSummary }
@@ -73,12 +78,28 @@ struct BloomView: View {
                     VStack(alignment: .leading, spacing: 7) {
                         Text("\(store.puzzle.level)").reefFont(size: 25, weight: .semibold, display: true).foregroundStyle(ReefTheme.ink)
                             .accessibilityLabel("Level \(store.puzzle.level)")
+                        if store.puzzle.isSpecialLevel {
+                            Label("SPECIAL LEVEL", systemImage: "sparkles")
+                                .reefFont(size: 11, weight: .bold)
+                                .foregroundStyle(ReefTheme.honey)
+                                .padding(.horizontal, 10).padding(.vertical, 6)
+                                .background(ReefTheme.honey.opacity(0.18), in: Capsule())
+                                .accessibilityLabel("Level 100 special level")
+                        }
                         Button { showLifePeek = true } label: {
                             BloomLivesStatus(compact: true, iconOnly: true).frame(width: 44, height: 44)
                         }
                         .buttonStyle(.plain)
                         .accessibilityLabel("Show lives")
                         .anchorPreference(key: BloomFishAnchors.self, value: .bounds) { ["lives": $0] }
+                        if store.testingToolsEnabled {
+                            Button { showGlowPlayground = true } label: {
+                                Label("Playground", systemImage: "circle.grid.2x2").frame(minHeight: 44)
+                            }
+                            .buttonStyle(ReefButtonStyle(kind: .quiet))
+                            .accessibilityLabel("Glow playground")
+                            .accessibilityHint("Try two mini-board color-order experiments without changing your game.")
+                        }
                     }.frame(maxWidth: .infinity, alignment: .leading)
                     Group {
                         if store.isComplete {
@@ -91,7 +112,7 @@ struct BloomView: View {
                     }.frame(width:104,height:88)
                         .anchorPreference(key:BloomFishAnchors.self,value:.bounds) { ["fish":$0] }
                         .accessibilityElement(children:.ignore)
-                        .accessibilityLabel(store.isComplete ? "Puff Puff, relaxed and smiling" : "Puff Puff. Tap for bubbles")
+                        .accessibilityLabel(store.isComplete ? "PuffPuff, relaxed and smiling" : "PuffPuff. Tap for bubbles")
                     ReefChestButton(onPresent:onOverlay)
                     VStack(spacing: 0) {
                         ReefTrailReturnButton(progress: store.progress.firstReef, action: onHome)
@@ -99,7 +120,7 @@ struct BloomView: View {
                     }
                 }
                 if store.bloomTrailGuidance {
-                    Text("Win Bloom to earn Glow and light your way through the trail.")
+                    Text("Win Glow to earn Lumes and light your way through the trail.")
                         .reefFont(size: 15, weight: .semibold).foregroundStyle(ReefTheme.ink)
                         .multilineTextAlignment(.center).fixedSize(horizontal: false, vertical: true)
                 }
@@ -121,7 +142,7 @@ struct BloomView: View {
                         tapsCounter
                         if !store.isComplete {
                         Button { showRules = true } label: { Image(systemName: "questionmark.circle").font(.title3).frame(width: 44, height: 44) }
-                            .buttonStyle(ReefButtonStyle(kind: .quiet)).accessibilityLabel("How to play Coral Bloom")
+                            .buttonStyle(ReefButtonStyle(kind: .quiet)).accessibilityLabel("How to play Glow")
                         }
                     }
                       if store.puzzle.isTutorial && !store.isComplete && !store.isOutOfTaps {
@@ -133,6 +154,7 @@ struct BloomView: View {
                                 .multilineTextAlignment(.center).fixedSize(horizontal: false, vertical: true)
                         }.padding(.vertical, 4)
                       }
+                      if store.puzzle.hasMiniBoard { BloomMiniBoard(puzzle: store.puzzle) }
                       CoralBoard(time:time,celebrationOrigin:celebrationOrigin,lighting:$lighting) { index in
                           var transaction = Transaction(animation:nil)
                           transaction.disablesAnimations = true
@@ -148,7 +170,7 @@ struct BloomView: View {
 
                     if !store.canPlayBloom {
                         VStack(spacing: 10) {
-                            Text(store.canStartBloom ? "Ready to bloom" : "Lives are refilling").reefFont(size: 18, weight: .semibold)
+                            Text(store.canStartBloom ? "Ready to play" : "Lives are refilling").reefFont(size: 18, weight: .semibold)
                             BloomLivesStatus()
                             Button("Play") { store.startBloomAttempt() }
                                 .buttonStyle(ReefButtonStyle(filled: true)).disabled(!store.canStartBloom)
@@ -375,6 +397,11 @@ struct BloomView: View {
                 .environment(\.reefPaused, false)
                 .presentationDetents([.large]).presentationBackground(.clear)
         }
+        .sheet(isPresented: $showGlowPlayground) {
+            GlowPlaygroundView()
+                .presentationDetents([.large]).presentationDragIndicator(.visible)
+                .presentationBackground(.clear)
+        }
         .sheet(isPresented: $showRestart) {
             OceanScene {
                 VStack(spacing: 22) {
@@ -412,7 +439,7 @@ struct BloomView: View {
             OceanScene {
               VStack(spacing: 20) {
                 Image(systemName: "camera.macro").font(.system(size: 48)).foregroundStyle(ReefTheme.coral)
-                Text("How to bloom").reefFont(.title2, weight: .heavy)
+                Text("How to play Glow").reefFont(.title2, weight: .heavy)
                 Text("Ordinary coral flips itself and its four side neighbors. Marked coral follows its arrows. Wake them all.").multilineTextAlignment(.center)
                 Text("Lose a life when you run out of taps or restart. One refills every 5 minutes.").multilineTextAlignment(.center)
                 Text("A lighter keeps one chosen coral glowing for this attempt. It uses no taps.").multilineTextAlignment(.center)
@@ -422,7 +449,7 @@ struct BloomView: View {
                     Text("Open water has no tile. Neighbor ripples never skip a gap. Whole-line coral reaches across the row or column.")
                         .multilineTextAlignment(.center).foregroundStyle(ReefTheme.muted)
                 }
-                Text("Win Bloom to earn Glow for the Trail. You may find extra supplies too.").multilineTextAlignment(.center)
+                Text("Win Glow to earn Lumes for the Trail. You may find extra supplies too.").multilineTextAlignment(.center)
                 Button("Got it") { showRules = false }.buttonStyle(ReefButtonStyle(filled: true))
               }.padding(28).frame(maxWidth: 460).foregroundStyle(ReefTheme.ink)
             }.presentationDetents([.large]).presentationDragIndicator(.visible).presentationBackground(.clear)
@@ -460,7 +487,11 @@ struct BloomView: View {
 
     private func offerCoralLesson() {
         guard !showCoralLesson, !store.isComplete else { return }
-        if !learnedBurstCoral && !(store.puzzle.burstCorals ?? []).isEmpty { lessonKind = .burst }
+        if !learnedLinkedGroup && store.puzzle.hasExpandedLinkedGroup { lessonKind = .linkedGroup }
+        else if !learnedLinkedCoral && !(store.puzzle.linkedPairs ?? []).isEmpty { lessonKind = .linked }
+        else if !learnedCagedCoral && !(store.puzzle.cagedCorals ?? []).isEmpty { lessonKind = .caged }
+        else if !learnedMiniBoard && store.puzzle.hasMiniBoard { lessonKind = .miniBoard }
+        else if !learnedBurstCoral && !(store.puzzle.burstCorals ?? []).isEmpty { lessonKind = .burst }
         else if !learnedLineCoral && store.puzzle.hasLineCorals { lessonKind = .lines }
         else if !learnedDiagonalCoral && !store.puzzle.stars.isEmpty { lessonKind = .diagonal }
         else if !learnedVerticalCoral && !(store.puzzle.verticals ?? []).isEmpty { lessonKind = .vertical }
@@ -474,6 +505,10 @@ struct BloomView: View {
         case .diagonal: learnedDiagonalCoral = true
         case .lines: learnedLineCoral = true
         case .burst: learnedBurstCoral = true
+        case .linked: learnedLinkedCoral = true
+        case .linkedGroup: learnedLinkedGroup = true
+        case .caged: learnedCagedCoral = true
+        case .miniBoard: learnedMiniBoard = true
         }
     }
 
@@ -506,6 +541,7 @@ struct BloomView: View {
         switch kind {
         case .hint:
             if !store.showHint() { showHintSupply = true }
+            else if store.puzzle.isTutorial || store.puzzle.revealedHint != nil { lighting = false }
         case .futureTeller:
             if store.showFutureTeller() {
                 lighting = false; showHintSupply = false
@@ -630,6 +666,7 @@ private struct CoralBoard: View {
                               hint: store.hint == index,
                               seed: Double(index),
                               species: CoralSpecies(rawValue: (index + index / store.puzzle.size) % 3) ?? .peachSprig,
+                              linkedGroupID: store.puzzle.linkedGroupID(at:index),
                               bloom: phase.color, swell: phase.swell) {
                         withAnimation(reduceMotion ? nil : ReefMotion.response) {
                             if lighting {
@@ -646,12 +683,15 @@ private struct CoralBoard: View {
                                 .allowsHitTesting(false).accessibilityHidden(true)
                         }
                     }
+                    .overlay {
+                        CoralSpecialMarks(caged: store.puzzle.isCaged(index), miniColor: store.puzzle.miniColorID(at: index))
+                    }
                     .disabled(store.isComplete || !store.canPlayBloom || store.puzzle.stones.contains(index)
-                              || (lighting ? store.puzzle.cells[index] : !store.puzzle.canTap(index)))
+                              || (lighting ? (store.puzzle.cells[index] || store.puzzle.isCaged(index)) : !store.puzzle.canTap(index)))
                     .accessibilityLabel("Row \(index / store.puzzle.size + 1), column \(index % store.puzzle.size + 1), \(cellDescription(index))")
                   }
                 }
-            }.padding(12).frame(maxWidth: store.puzzle.size == 1 ? 126 : store.puzzle.size == 2 ? 228 : 320)
+            }.padding(12).frame(maxWidth: store.puzzle.size == 1 ? 126 : store.puzzle.size == 2 ? 228 : store.puzzle.size > 5 ? 360 : 320)
                 .background {
                     if store.puzzle.hasGaps {
                         BloomReefBed(size: store.puzzle.size, gaps: store.puzzle.gaps ?? [], complete: store.isComplete)
@@ -683,9 +723,16 @@ private struct CoralBoard: View {
 
     private func cellDescription(_ index: Int) -> String {
         if store.puzzle.stones.contains(index) { return "resting pebble" }
-        let kind = store.puzzle.isBurst(index) ? "burst coral" : store.puzzle.isRowCoral(index) ? "whole row coral" :
+        let kind: String
+        if store.puzzle.isCaged(index) { kind = "caged coral; cannot be tapped directly, but ripples can flip it" }
+        else if let groupID = store.puzzle.linkedGroupID(at:index) {
+            let group = store.puzzle.linkedGroup(at:index)
+            kind = "\(BloomLinkedPalette.name(groupID)) coral; flips the other \(group.count-1) in its group when tapped"
+        }
+        else if let color = store.puzzle.miniColorID(at: index) { kind = "\(BloomMiniColor.name(color)) mini-board coral" }
+        else { kind = store.puzzle.isBurst(index) ? "burst coral" : store.puzzle.isRowCoral(index) ? "whole row coral" :
             store.puzzle.isColumnCoral(index) ? "whole column coral" : store.puzzle.isVertical(index) ? "up and down coral" :
-            store.puzzle.currents.contains(index) ? "left and right coral" : store.puzzle.stars.contains(index) ? "diagonal coral" : "coral"
+            store.puzzle.currents.contains(index) ? "left and right coral" : store.puzzle.stars.contains(index) ? "diagonal coral" : "coral" }
         return "\(store.isComplete ? "fully bloomed" : store.puzzle.cells[index] ? "glowing" : "sleepy") \(kind)\(store.hint == index ? ", suggested tap" : "")\((store.puzzle.lighterCorals ?? []).contains(index) ? ", stays lit by a lighter" : "")"
     }
 }
@@ -731,6 +778,7 @@ struct CoralCell: View {
     let hint: Bool
     let seed: Double
     let species: CoralSpecies
+    var linkedGroupID: Int? = nil
     let bloom: Double
     let swell: Double
     let action: () -> Void
@@ -738,7 +786,11 @@ struct CoralCell: View {
     @Environment(\.colorScheme) private var colorScheme
     private var isDeepSea: Bool { colorScheme == .dark }
     private var displayedSpecies: CoralSpecies { burst ? .burstAnemone : vertical || wholeColumn ? .tideSpires : current || wholeRow ? .driftShelf : star ? .rosyFan : species }
-    private var tint: Color { CoralArt.blend(displayedSpecies.color, 0xFFD6A0, bloom) }
+    private var linkedFill: UInt32? { linkedGroupID.map(BloomLinkedPalette.color) }
+    private var linkedTip: UInt32? { linkedGroupID.map(BloomLinkedPalette.tip) }
+    private var tint: Color {
+        linkedGroupID.map(BloomLinkedPalette.tint) ?? CoralArt.blend(displayedSpecies.color, 0xFFD6A0, bloom)
+    }
     var body: some View {
         Button(action: action) {
             ZStack {
@@ -752,9 +804,20 @@ struct CoralCell: View {
                         SeaGlassShape(seed: seed, amplitude: 0)
                             .fill(Color.adaptive(light: 0x345F5D, dark: 0x08252E))
                     }
-                    CoralArt(species: displayedSpecies, lit: lit, bloom: bloom, swell: swell, seed: seed).padding(5)
+                    CoralArt(species: displayedSpecies, lit: lit, bloom: bloom, swell: swell, seed: seed,
+                             linkedFill: linkedFill, linkedTip: linkedTip).padding(5)
                         .scaleEffect(lit ? 1.04 : 0.87)
                         .shadow(color: lit ? tint.opacity(0.55 + bloom * 0.2) : .clear, radius: 5 + bloom * 3)
+                    if let linkedGroupID, !stone {
+                        Image(systemName:"link")
+                            .font(.system(size:15,weight:.bold))
+                            .foregroundStyle(BloomLinkedPalette.tint(linkedGroupID))
+                            .padding(3)
+                            .background(Circle().fill(ReefTheme.ink.opacity(0.88)))
+                            .overlay(Circle().strokeBorder(BloomLinkedPalette.tint(linkedGroupID),lineWidth:1.3))
+                            .frame(maxWidth:.infinity,maxHeight:.infinity)
+                            .accessibilityHidden(true)
+                    }
                     if lit {
                         Image(systemName: "sparkle").font(.system(size: 10, weight: .bold))
                             .foregroundStyle(Color(hex: 0xFFF3CE))
@@ -779,6 +842,106 @@ struct CoralCell: View {
                 }
             }.aspectRatio(1, contentMode: .fit)
         }.buttonStyle(ReefButtonStyle(kind: .coral))
+    }
+}
+
+enum BloomMiniColor {
+    static let names = ["Coral", "Mint", "Gold", "Lilac"]
+    static let tints: [Color] = [ReefTheme.coral, ReefTheme.cyan, ReefTheme.honey, Color(hex: 0xA895E8)]
+    static func name(_ id: Int) -> String { names.indices.contains(id) ? names[id] : "Color" }
+    static func tint(_ id: Int) -> Color { tints.indices.contains(id) ? tints[id] : ReefTheme.cyan }
+}
+
+enum BloomLinkedPalette {
+    private static let colors:[UInt32]=[0xF49B87,0x62B9A8,0xE7AD51,0xA895E8]
+    private static let tips:[UInt32]=[0xFFD0AF,0xD8F3BC,0xFFE0A4,0xE1D8FF]
+    private static func paletteIndex(_ id:Int)->Int { ((id % colors.count)+colors.count)%colors.count }
+    static func color(_ id:Int)->UInt32 { colors[paletteIndex(id)] }
+    static func tip(_ id:Int)->UInt32 { tips[paletteIndex(id)] }
+    static func tint(_ id:Int)->Color { Color(hex:color(id)) }
+    static func name(_ id:Int)->String { "\(BloomMiniColor.names[paletteIndex(id)]) link" }
+}
+
+/// Non-interactive symbols that identify the new board mechanics.
+struct CoralSpecialMarks: View {
+    var caged = false
+    var miniColor: Int? = nil
+
+    var body: some View {
+        ZStack {
+            if caged {
+                GeometryReader { proxy in
+                    ZStack {
+                        RoundedRectangle(cornerRadius: 13).stroke(ReefTheme.ink.opacity(0.8), lineWidth: 2)
+                        HStack(spacing: max(7, proxy.size.width * 0.12)) {
+                            ForEach(0..<3, id: \.self) { _ in
+                                Capsule().fill(ReefTheme.ink.opacity(0.78)).frame(width: 2.5)
+                            }
+                        }.padding(.horizontal, 12).padding(.vertical, 7)
+                        Image(systemName: "lock.fill")
+                            .font(.system(size: max(10, proxy.size.width * 0.09), weight: .bold))
+                            .foregroundStyle(ReefTheme.hintCore)
+                            .padding(4).background(Circle().fill(ReefTheme.ink))
+                            .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .center)
+                    }.padding(5)
+                }
+            }
+        }
+        .overlay(alignment: .bottomLeading) {
+            if let miniColor {
+                Circle().fill(BloomMiniColor.tint(miniColor))
+                    .overlay(Circle().strokeBorder(.white.opacity(0.95), lineWidth: 2))
+                    .frame(width: 14, height: 14).padding(8)
+            }
+        }
+        .allowsHitTesting(false)
+        .accessibilityHidden(true)
+    }
+}
+
+struct BloomMiniBoard: View {
+    let puzzle: CoralPuzzle
+    private let columns = Array(repeating: GridItem(.flexible(), spacing: 8), count: 2)
+
+    var body: some View {
+        if let lights = puzzle.miniCells {
+            VStack(spacing: 9) {
+                HStack {
+                    Text("Mini board").reefFont(size: 17, weight: .semibold)
+                    Spacer()
+                    Text("\(lights.filter { $0 }.count) of \(lights.count) · all on")
+                        .reefFont(size: 12).foregroundStyle(ReefTheme.muted)
+                }
+                LazyVGrid(columns: columns, spacing: 8) {
+                    ForEach(lights.indices, id: \.self) { index in
+                        Circle()
+                            .fill(lights[index] ? ReefTheme.hintGold : ReefTheme.sleepyCoral.opacity(0.4))
+                            .overlay(Circle().strokeBorder(lights[index] ? ReefTheme.hintCore : ReefTheme.muted, lineWidth: 2))
+                            .overlay {
+                                Text(lights[index] ? "ON" : "OFF").reefFont(size: 10, weight: .bold)
+                                    .foregroundStyle(lights[index] ? ReefTheme.abyss : ReefTheme.ink)
+                            }
+                            .frame(maxWidth: 54).aspectRatio(1, contentMode: .fit)
+                            .accessibilityLabel("Mini light \(index + 1), \(lights[index] ? "on" : "off")")
+                    }
+                }.frame(maxWidth: 140)
+                if let color = puzzle.nextMiniColor {
+                    HStack(spacing: 7) {
+                        Text("Next color")
+                        Circle().fill(BloomMiniColor.tint(color)).frame(width: 13, height: 13)
+                        Text(BloomMiniColor.name(color))
+                    }
+                    .reefFont(size: 13, weight: .semibold)
+                    .accessibilityElement(children: .combine)
+                } else {
+                    Text("Mini pattern complete").reefFont(size: 12, weight: .semibold)
+                        .foregroundStyle(ReefTheme.muted)
+                }
+            }
+            .padding(12)
+            .frame(maxWidth: .infinity)
+            .background(ReefTheme.glass.opacity(0.72), in: RoundedRectangle(cornerRadius: 20))
+        }
     }
 }
 
@@ -822,15 +985,46 @@ struct CoralRuleMark: Shape {
 }
 
 enum CoralPracticeKind: Hashable {
-    case vertical, diagonal, lines, burst
-    var title: String { switch self { case .vertical: "Up & down"; case .diagonal: "Diagonals"; case .lines: "Whole lines"; case .burst: "Burst coral" } }
+    case vertical, diagonal, lines, burst, linked, linkedGroup, caged, miniBoard
+    var title: String {
+        switch self {
+        case .vertical: "Up & down"
+        case .diagonal: "Diagonals"
+        case .lines: "Whole lines"
+        case .burst: "Burst coral"
+        case .linked: "Linked coral"
+        case .linkedGroup: "Linked coral groups"
+        case .caged: "Caged coral"
+        case .miniBoard: "Mini board"
+        }
+    }
     var instruction: String { switch self {
         case .vertical: "It flips itself, above and below."
         case .diagonal: "It flips itself and its diagonal neighbors."
         case .lines: "One flips its whole row. The other flips its whole column."
         case .burst: "Tap to flip this coral and all eight around it."
+        case .linked: "Tap either linked coral. Its mate flips once, without starting a second ripple."
+        case .linkedGroup: "Tap the linked coral. Every coral in its color group flips once; none of them start a second ripple."
+        case .caged: "You cannot tap caged coral directly, but ripples can flip it. Light it to win."
+        case .miniBoard: "Glow taps still affect the main reef. Tap the colored coral in order to light both boards."
     } }
-    var targets: [Int] { self == .lines ? [11,8] : [4] }
+    var targets: [Int] {
+        switch self {
+        case .lines: [11,8]
+        case .linked: [0]
+        case .linkedGroup: [0]
+        case .caged: [1]
+        case .miniBoard: [8,2,0,6]
+        default: [4]
+        }
+    }
+    func canTap(_ index: Int, alreadyTapped: Set<Int>) -> Bool {
+        guard targets.contains(index), !alreadyTapped.contains(index) else { return false }
+        if self == .miniBoard {
+            return targets.first(where: { !alreadyTapped.contains($0) }) == index
+        }
+        return true
+    }
     func puzzle() -> CoralPuzzle {
         let size = self == .lines ? 5 : 3
         var p = CoralPuzzle(level: 1, size: size, cells: Array(repeating:true,count:size*size))
@@ -839,6 +1033,15 @@ enum CoralPracticeKind: Hashable {
         case .diagonal: p.stars=[4]
         case .lines: p.rowCorals=[11]; p.columnCorals=[8]
         case .burst: p.burstCorals=[4]
+        case .linked: p.linkedPairs=[[0,8]]
+        case .linkedGroup: p.linkedPairs=[[0,4,8]]
+        case .caged: p.cagedCorals=[4]
+        case .miniBoard:
+            p.miniCells=[false,true,false,true]
+            p.miniColorCorals=[0,2,6,8]
+            p.miniPatterns=[[0,3],[1,2],[1],[3]]
+            p.miniOrder=[3,1,0,2]
+            p.miniStep=0
         }
         for target in targets { p.pulse(at:target) }
         return p
@@ -861,16 +1064,20 @@ struct CoralPractice: View {
             VStack(spacing: 20) {
                 Text(kind.title).reefFont(size:28,weight:.semibold,display:true)
                 Text(kind.instruction).reefFont(size:16).multilineTextAlignment(.center)
+                if demo.hasMiniBoard { BloomMiniBoard(puzzle: demo) }
                 LazyVGrid(columns:Array(repeating:GridItem(.flexible(),spacing:8),count:demo.size),spacing:8) {
                     ForEach(demo.cells.indices,id:\.self) { i in
                         if demo.isGap(i) { Color.clear.aspectRatio(1,contentMode:.fit).accessibilityHidden(true) }
                         else {
+                            let canTap = kind.canTap(i, alreadyTapped: tapped)
                             CoralCell(lit:demo.cells[i],stone:false,current:false,vertical:demo.isVertical(i),
                                       star:demo.stars.contains(i),wholeRow:demo.isRowCoral(i),wholeColumn:demo.isColumnCoral(i),burst:demo.isBurst(i),
-                                      hint:kind.targets.contains(i) && !tapped.contains(i),seed:Double(i),species:.peachSprig,bloom:0,swell:0) {
-                                withAnimation(reduceMotion ? nil : ReefMotion.response) { demo.pulse(at:i); tapped.insert(i) }
-                            }.allowsHitTesting(kind.targets.contains(i) && !tapped.contains(i))
+                                      hint:canTap,seed:Double(i),species:.peachSprig,
+                                      linkedGroupID:demo.linkedGroupID(at:i),bloom:0,swell:0) {
+                                withAnimation(reduceMotion ? nil : ReefMotion.response) { _ = demo.playTap(at:i); tapped.insert(i) }
+                            }.allowsHitTesting(canTap).disabled(!canTap)
                                 .accessibilityHidden(!kind.targets.contains(i))
+                                .overlay { CoralSpecialMarks(caged: demo.isCaged(i), miniColor: demo.miniColorID(at:i)) }
                                 .accessibilityLabel(demo.isRowCoral(i) ? "Flip the whole row" : demo.isColumnCoral(i) ? "Flip the whole column" : kind.instruction)
                         }
                     }
@@ -1059,5 +1266,280 @@ private struct BloomGlimpseLabel: View {
                 }
             }
             .shadow(color: ReefTheme.hintGold.opacity(available ? 0.65 * breath : 0), radius: 6)
+    }
+}
+
+private enum GlowPlaygroundMode: String, CaseIterable, Identifiable {
+    case stateGate = "State gate"
+    case nextColor = "Next color"
+
+    var id: String { rawValue }
+    var order: [Int] {
+        return switch self {
+        case .stateGate: [0, 1, 2, 3]
+        case .nextColor: [3, 1, 0, 2]
+        }
+    }
+    var instruction: String {
+        return switch self {
+        case .stateGate: "Every tap follows Glow. A colored circle flips its mini pattern when the lights match."
+        case .nextColor: "Every tap follows Glow. Tap the shown color to flip its mini pattern."
+        }
+    }
+}
+
+private struct GlowPlaygroundColor: Identifiable {
+    let id: Int
+    let name: String
+    let tint: Color
+    let flippedMiniLights: [Int]
+}
+
+/// Two memory-only experiments for a Glow board linked to a mini light board.
+private struct GlowPlaygroundView: View {
+    @Environment(\.dismiss) private var dismiss
+    @State private var mode = GlowPlaygroundMode.stateGate
+    @State private var usedColors = Set<Int>()
+    @State private var mainLights = GlowPlaygroundView.startingMainLights
+    @State private var miniLights = GlowPlaygroundView.startingMiniLights
+    @State private var message: String?
+
+    private static let linkedCells = [0, 2, 6, 8]
+    private static let colors = [
+        GlowPlaygroundColor(id: 0, name: "Coral", tint: ReefTheme.coral, flippedMiniLights: [0, 3]),
+        GlowPlaygroundColor(id: 1, name: "Mint", tint: ReefTheme.cyan, flippedMiniLights: [1, 2]),
+        GlowPlaygroundColor(id: 2, name: "Gold", tint: ReefTheme.honey, flippedMiniLights: [1]),
+        GlowPlaygroundColor(id: 3, name: "Lilac", tint: Color(hex: 0xA895E8), flippedMiniLights: [3])
+    ]
+    private static let startingMiniLights = [false, true, false, true]
+    private static let startingMainLights: [Bool] = {
+        var result = Array(repeating: true, count: 9)
+        for index in GlowPlaygroundView.linkedCells {
+            CoralPuzzle.pulse(&result, size: 3, at: index)
+        }
+        return result
+    }()
+    private static let miniColumns = [GridItem(.flexible()), GridItem(.flexible())]
+    private static let mainColumns = Array(repeating: GridItem(.flexible(), spacing: 8), count: 3)
+
+    private var isSolved: Bool {
+        mainLights.allSatisfy { $0 } && miniLights.allSatisfy { $0 }
+    }
+    private var nextColor: GlowPlaygroundColor? {
+        mode.order.first { !usedColors.contains($0) }.map { Self.colors[$0] }
+    }
+
+    var body: some View {
+        OceanScene {
+            ScrollView {
+                VStack(spacing: 18) {
+                    HStack {
+                        Text("Glow playground").reefFont(size: 25, weight: .semibold, display: true)
+                        Spacer()
+                        Button { dismiss() } label: {
+                            Image(systemName: "xmark").frame(width: 44, height: 44)
+                        }
+                        .buttonStyle(ReefButtonStyle(kind: .orb))
+                        .accessibilityLabel("Close Glow playground")
+                    }
+
+                    Picker("Prototype", selection: $mode) {
+                        ForEach(GlowPlaygroundMode.allCases) { option in
+                            Text(option.rawValue).tag(option)
+                        }
+                    }
+                    .pickerStyle(.segmented)
+                    .onChange(of: mode) { _, _ in reset() }
+
+                    Text(mode.instruction)
+                        .reefFont(size: 14).foregroundStyle(ReefTheme.muted)
+                        .multilineTextAlignment(.center)
+
+                    VStack(spacing: 10) {
+                        HStack {
+                            Text("Mini board").reefFont(size: 19, weight: .semibold)
+                            Spacer()
+                            Text("\(miniLights.filter { $0 }.count) of 4 · all on")
+                                .reefFont(size: 12).foregroundStyle(ReefTheme.muted)
+                        }
+                        LazyVGrid(columns: Self.miniColumns, spacing: 10) {
+                            ForEach(0..<4, id: \.self) { index in
+                                GlowPlaygroundLight(index: index, isLit: miniLights[index])
+                            }
+                        }
+                        .frame(maxWidth: 235)
+                        Text("Each colored corner flips its mini pattern.")
+                            .reefFont(size: 12).foregroundStyle(ReefTheme.muted)
+                    }
+                    .padding(16)
+                    .frame(maxWidth: .infinity)
+                    .background(ReefTheme.glass.opacity(0.72), in: RoundedRectangle(cornerRadius: 26))
+
+                    if mode == .nextColor, let nextColor {
+                        HStack(spacing: 8) {
+                            Text("Next color")
+                            Circle().fill(nextColor.tint).frame(width: 13, height: 13)
+                            Text(nextColor.name)
+                        }
+                        .reefFont(size: 16, weight: .semibold)
+                        .accessibilityElement(children: .combine)
+                    }
+
+                    VStack(spacing: 8) {
+                        HStack {
+                            Text("Main board").reefFont(size: 19, weight: .semibold)
+                            Spacer()
+                            Text("\(mainLights.filter { $0 }.count) of 9 · all on")
+                                .reefFont(size: 12).foregroundStyle(ReefTheme.muted)
+                        }
+                        LazyVGrid(columns: Self.mainColumns, spacing: 8) {
+                            ForEach(0..<9, id: \.self) { index in
+                                mainCell(index)
+                            }
+                        }
+                        .padding(12)
+                        .frame(maxWidth: 320)
+                        .background(MembraneSurface(tint: ReefTheme.coral, intensity: 0.45))
+                        Text("Each tap flips itself and its side neighbors.")
+                            .reefFont(size: 12).foregroundStyle(ReefTheme.muted)
+                            .multilineTextAlignment(.center)
+                    }
+
+                    if isSolved {
+                        Label("Both boards lit", systemImage: "checkmark.circle.fill")
+                            .reefFont(size: 16, weight: .semibold).foregroundStyle(ReefTheme.cyan)
+                    } else if let message {
+                        Text(message).reefFont(size: 14, weight: .medium)
+                            .foregroundStyle(ReefTheme.gold).multilineTextAlignment(.center)
+                    }
+
+                    Button("Reset", action: reset)
+                        .buttonStyle(ReefButtonStyle(kind: .quiet))
+
+                    Text("Practice only · no saved progress or rewards.")
+                        .reefFont(size: 11).foregroundStyle(ReefTheme.muted)
+                }
+                .padding(22)
+                .frame(maxWidth: 480)
+                .foregroundStyle(ReefTheme.ink)
+                .frame(maxWidth: .infinity)
+            }
+            .scrollIndicators(.visible)
+        }
+    }
+
+    private func mainCell(_ index: Int) -> some View {
+        let colorID = Self.linkedCells.firstIndex(of: index)
+        let linkedColor = colorID.map { Self.colors[$0] }
+        let linkDescription = linkedColor.map { ", linked to \($0.name) mini pattern" } ?? ""
+        return CoralCell(lit: mainLights[index], stone: false, current: false, vertical: false,
+                         star: false, wholeRow: false, wholeColumn: false, burst: false,
+                         hint: false, seed: Double(index),
+                         species: CoralSpecies(rawValue: (index + index / 3) % 3) ?? .peachSprig,
+                         bloom: 0, swell: 0) {
+            tapMainCell(index)
+        }
+        .overlay {
+            if let linkedColor {
+                Circle().strokeBorder(linkedColor.tint, lineWidth: 3).padding(3)
+                    .allowsHitTesting(false).accessibilityHidden(true)
+            }
+        }
+        .overlay(alignment: .topTrailing) {
+            if let linkedColor {
+                GlowPlaygroundPattern(flippedLights: linkedColor.flippedMiniLights, tint: linkedColor.tint)
+                    .padding(2)
+                    .background(ReefTheme.glass.opacity(0.9), in: RoundedRectangle(cornerRadius: 6))
+                    .allowsHitTesting(false).accessibilityHidden(true)
+            }
+        }
+        .disabled(isSolved)
+        .accessibilityLabel("Row \(index / 3 + 1), column \(index % 3 + 1), \(mainLights[index] ? "glowing" : "sleepy") coral\(linkDescription)")
+        .accessibilityHint(linkedColor == nil ? "Flips itself and its side neighbors." : "Always flips Glow neighbors; when available, also flips its mini pattern.")
+    }
+
+    private func expectedMiniLights(before colorID: Int) -> [Bool]? {
+        guard let step = mode.order.firstIndex(of: colorID) else { return nil }
+        var lights = Self.startingMiniLights
+        for previousColorID in mode.order.prefix(step) {
+            for index in Self.colors[previousColorID].flippedMiniLights { lights[index].toggle() }
+        }
+        return lights
+    }
+
+    private func tapMainCell(_ index: Int) {
+        guard !isSolved else { return }
+        let colorID = Self.linkedCells.firstIndex(of: index)
+        CoralPuzzle.pulse(&mainLights, size: 3, at: index)
+        guard let colorID else {
+            message = nil
+            return
+        }
+        guard !usedColors.contains(colorID) else {
+            message = "Glow rippled; that mini pattern already fired."
+            return
+        }
+        switch mode {
+        case .stateGate:
+            guard expectedMiniLights(before: colorID) == miniLights else {
+                message = "Glow rippled; the mini pattern is waiting for another state."
+                return
+            }
+        case .nextColor:
+            guard nextColor?.id == colorID else {
+                if let nextColor { message = "\(nextColor.name) is next; Glow still rippled." }
+                return
+            }
+        }
+        for miniIndex in Self.colors[colorID].flippedMiniLights { miniLights[miniIndex].toggle() }
+        usedColors.insert(colorID)
+        message = nil
+    }
+
+    private func reset() {
+        usedColors.removeAll()
+        mainLights = Self.startingMainLights
+        miniLights = Self.startingMiniLights
+        message = nil
+    }
+}
+
+private struct GlowPlaygroundLight: View {
+    let index: Int
+    let isLit: Bool
+
+    var body: some View {
+        VStack(spacing: 3) {
+            Circle()
+                .fill(isLit ? ReefTheme.hintGold : ReefTheme.sleepyCoral.opacity(0.35))
+                .overlay(Circle().strokeBorder(isLit ? ReefTheme.hintCore : ReefTheme.muted, lineWidth: 2))
+                .overlay {
+                    Text(isLit ? "ON" : "OFF").reefFont(size: 9, weight: .bold)
+                        .foregroundStyle(isLit ? ReefTheme.abyss : ReefTheme.ink)
+                }
+                .frame(width: 48, height: 48)
+            Text("Goal ON")
+                .reefFont(size: 10, weight: .medium).foregroundStyle(ReefTheme.muted)
+        }
+        .accessibilityElement(children: .ignore)
+        .accessibilityLabel("Mini light \(index + 1), now \(isLit ? "on" : "off"), goal on")
+    }
+}
+
+private struct GlowPlaygroundPattern: View {
+    let flippedLights: [Int]
+    let tint: Color
+    private let columns = [GridItem(.fixed(7), spacing: 2), GridItem(.fixed(7), spacing: 2)]
+
+    var body: some View {
+        LazyVGrid(columns: columns, spacing: 2) {
+            ForEach(0..<4, id: \.self) { index in
+                Circle()
+                    .fill(flippedLights.contains(index) ? tint : ReefTheme.sleepyCoral.opacity(0.34))
+                    .frame(width: 7, height: 7)
+            }
+        }
+        .frame(width: 16, height: 16)
+        .accessibilityHidden(true)
     }
 }

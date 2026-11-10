@@ -1,5 +1,5 @@
-puffpuff — current Bloom levels (November 6, 2026)
-100 playable levels.
+puffpuff — current Glow levels (November 9, 2026)
+185 playable levels.
 NEW marks the first appearance of a mechanic, board size or shaped footprint.
 Pearl targets are optional: finish within that many taps for +1 Glow.
 Pebbles cannot be tapped; gaps are empty water. All coral taps include the tapped coral.
@@ -122,7 +122,7 @@ APPROVED 71–100 — November 6, 2026
 Burst coral at 85 flips itself plus all eight adjacent coral; gaps/pebbles stay unchanged.
 A free, skippable unnumbered practice comes before the first burst board.
 All ordinary and special taps still respect held-on lighters and same-coral tap refunds.
-No consumables are needed to solve any board. Covers remain after 100.
+No consumables are needed to solve any board. Covers remain after 185.
 
 71 | Small square, 4×4 | ordinary coral | 38 taps; shortest solution 3
 72 | Crescent cove, 5×5 | 1 whole-row, 1 diagonal, 2 pebbles | 38 taps; shortest solution 4
@@ -153,4 +153,114 @@ No consumables are needed to solve any board. Covers remain after 100.
 97 | Square reef, 5×5 | 1 whole-row, 1 whole-column, 2 diagonal, 2 pebbles | 42 taps; shortest solution 7
 98 | Split lagoon, 5×5 | 2 whole-row, 1 up/down, 1 left/right, 1 burst | 42 taps; shortest solution 7
 99 | Small coral fan, 4×4 | ordinary coral | 42 taps; shortest solution 3
-100 | Round reef, 5×5 | 1 whole-row, 1 whole-column, 1 up/down, 1 left/right, 1 diagonal, 1 burst, 2 pebbles | 42 taps; shortest solution 8; pearl target 10
+100 | Century reef, SPECIAL 6×6 | 1 whole-row, 1 whole-column, 1 up/down, 1 left/right, 1 diagonal, 1 burst, 2 pebbles | 42 taps; pearl target 10; extra bonuses TBD
+
+
+APPROVED LEVELS 101–185 — November 9, 2026
+Levels 1–100 and their saved attempts remain unchanged. Levels 101–149 allow 42 taps; 150–154 allow 34; 155–185 allow 42. No pearl targets are added in this extension.
+
+Linked coral: tapping a member applies its normal Glow pulse and flips the other members of its same-color group once. Group members do not start a second ripple. Members share a hue, with a centered chain symbol on each linked coral and no connector line between them; separate groups use separate colors.
+Caged coral cannot be tapped directly. Any ripple that reaches it can flip it, and it counts toward the all-lit win condition.
+Coupled mini-board: the 3×3 or 5×5 main board keeps its normal Glow rule; the four colored coral also operate a separate 2×2 mini board. Only the shown next color flips its mini pattern; an out-of-order color still ripples on the main board. The mini-board starts with an alternating on/off pattern; the four ordered patterns leave every light on. Both boards must be all lit to win.
+The first linked pair, cage, mini-board and expanded linked group each have a skippable, unnumbered practice before their introduction.
+
+101 | Small square, 4×4 | 1 up/down
+102 | Square reef, 5×5 | 1 left/right, 2 pebbles
+103 | Reef with corner gaps, 5×5 | 1 up/down, 1 left/right
+104 | Small square, 4×4 | 1 up/down, 1 diagonal
+105 | Small square, 4×4 | 1 linked pair — FIRST linked pair; unnumbered practice
+106 | Square reef, 5×5 | 1 linked pair, 1 up/down
+107 | Square reef, 5×5 | 1 linked pair, 1 left/right, 2 pebbles
+108 | Small square, 4×4 | 1 linked pair only
+109 | Square reef, 5×5 | 1 linked pair, 1 up/down, 1 left/right
+110 | Small square, 4×4 | 1 linked pair only
+111 | Square reef, 5×5 | 1 linked pair, 1 whole-column, 2 pebbles
+112 | Square reef, 5×5 | 1 linked pair, 1 diagonal, 1 left/right
+113 | Square reef, 5×5 | 1 linked pair, 1 whole-row, 1 up/down
+114 | Small square, 4×4 | 1 burst, 2 pebbles
+115 | Square reef, 5×5 | 1 burst, 1 up/down
+116 | Small square, 4×4 | 1 burst only
+117 | Reef with corner gaps, 5×5 | 1 burst, 1 whole-row
+118 | Square reef, 5×5 | 1 burst, 2 pebbles
+119 | Square reef, 5×5 | 1 burst, 1 linked pair
+120 | Square reef, 5×5 | 1 burst, 1 diagonal, 2 pebbles
+121 | Square reef, 5×5 | 1 burst, 1 whole-row, 1 left/right
+122 | Reef with corner gaps, 5×5 | 1 burst, 1 up/down, 1 whole-column, 2 pebbles
+123 | Small square, 4×4 | 1 left/right, 1 diagonal
+124 | Small square, 4×4 | 1 whole-row, 2 pebbles
+125 | Small square, 4×4 | 1 caged coral — FIRST cage; unnumbered practice
+126 | Square reef, 5×5 | 1 caged coral, 2 pebbles
+127 | Small square, 4×4 | 1 caged coral only
+128 | Square reef, 5×5 | 1 caged coral, 1 burst
+129 | Square reef, 5×5 | 1 caged coral, 1 whole-row, 2 pebbles
+130 | Small square, 4×4 | 1 caged coral only
+131 | Square reef, 5×5 | 1 diagonal, 1 up/down
+132 | Small square, 4×4 | 1 caged coral only
+133 | Square reef, 5×5 | 1 diagonal, 1 up/down
+134 | Small square, 4×4 | 1 caged coral only
+135 | Square reef, 5×5 | 1 diagonal, 1 up/down
+136 | Small square, 4×4 | 1 caged coral only
+137 | Square reef, 5×5 | 1 linked pair, 1 left/right
+138 | Reef with corner gaps, 5×5 | 1 linked pair, 1 diagonal
+139 | Square reef, 5×5 | 1 linked pair, 1 whole-row, 2 pebbles
+140 | Square reef, 5×5 | 1 linked pair, 1 burst
+141 | Square reef, 5×5 | 1 linked pair, 1 up/down
+142 | Square reef, 5×5 | 1 linked pair, 1 whole-column, 1 diagonal
+143 | Square reef, 5×5 | 1 linked pair, 1 caged coral, 2 pebbles
+144 | Square reef, 5×5 | 1 linked pair, 1 whole-row
+145 | Square reef, 5×5 | 1 linked pair, 1 caged coral, 1 diagonal
+146 | Reef with corner gaps, 5×5 | 1 linked pair, 1 left/right, 2 pebbles
+147 | Square reef, 5×5 | 1 linked pair, 1 caged coral, 1 burst
+148 | Square reef, 5×5 | 1 linked pair, 1 up/down
+149 | Square reef, 5×5 | 1 linked pair, 1 caged coral, 1 whole-column
+150 | Main reef, 3×3, plus mini board, 2×2 | Coupled mini-board introduced; no other special tiles; unnumbered practice
+151 | Main reef, 3×3, plus mini board, 2×2 | Coupled mini-board only
+152 | Main reef, 3×3, plus mini board, 2×2 | Coupled mini-board only
+153 | Main reef, 3×3, plus mini board, 2×2 | Coupled mini-board only
+154 | Main reef, 3×3, plus mini board, 2×2 | Coupled mini-board only
+155 | Main reef, 5×5, plus mini board, 2×2 | Coupled mini-board, 2 pebbles, 1 up/down
+156 | Main reef, 5×5, plus mini board, 2×2 | Coupled mini-board, 2 pebbles, 1 left/right
+157 | Main reef, 5×5, plus mini board, 2×2 | Coupled mini-board, 2 pebbles, 1 up/down
+158 | Main reef, 5×5, plus mini board, 2×2 | Coupled mini-board, 2 pebbles, 1 left/right
+159 | Main reef, 5×5, plus mini board, 2×2 | Coupled mini-board, 2 pebbles, 1 up/down
+160 | Main reef, 5×5, plus mini board, 2×2 | Coupled mini-board, 2 pebbles, 1 left/right
+
+Level 100 is the oversized Century Reef and is marked SPECIAL LEVEL. Its extra bonus rewards are intentionally pending the user’s selection.
+
+REVISED LEVELS 161–185 — November 10, 2026
+All levels are 5×5 reefs with 42 taps. Linked groups contain at most three coral. Most boards use one linked pair or trio; some use two separate pairs. Existing special tiles return alongside links. Linked members share a color and carry a centered same-color chain symbol; there are no connector lines. A linked tap flips every other group member once, without a second ripple. Caged coral cannot be tapped directly, but ripples can flip it and it must be lit to win.
+
+161–165 | Linked pairs with familiar ripple tiles; level 165 is link-free.
+161 | 1 linked pair, 2 pebbles
+162 | 1 linked pair, 1 up/down coral
+163 | 2 separate linked pairs, 1 left/right coral
+164 | 1 linked pair, 1 diagonal coral
+165 | 1 burst coral, 2 pebbles — palate cleanser; no linked coral
+
+166–170 | Pair combinations lead into the trio introduction.
+166 | 2 separate linked pairs, 1 caged coral
+167 | 1 linked pair, 1 up/down, 1 left/right
+168 | 1 linked pair, 1 whole-row coral
+169 | 2 separate linked pairs, 1 diagonal coral
+170 | 1 linked trio — FIRST linked group of three; unnumbered practice
+
+171–175 | Pairs and trios mix with existing special tiles.
+171 | 1 linked trio, 2 pebbles
+172 | 1 linked pair, 1 burst coral, 2 pebbles
+173 | 2 separate linked pairs, 1 up/down coral
+174 | 1 linked trio, 1 caged coral
+175 | 1 linked pair, 1 whole-column coral
+
+176–180 | Mix bursts, cages, directions and diagonals; level 180 is link-free.
+176 | 1 linked trio, 1 diagonal coral, 1 pebble
+177 | 1 linked pair, 1 burst coral
+178 | 2 separate linked pairs, 1 caged coral
+179 | 1 linked trio, 1 left/right coral
+180 | 1 whole-row coral, 1 up/down coral — palate cleanser; no linked coral
+
+181–185 | Varied combinations finish with a trio and separate pair.
+181 | 1 linked trio, 2 pebbles, 1 up/down coral
+182 | 2 separate linked pairs, 1 burst coral, 2 pebbles
+183 | 1 linked trio, 1 caged coral, 1 diagonal coral
+184 | 1 linked pair, 1 whole-column coral, 1 left/right coral
+185 | 1 linked trio, 1 separate linked pair, 1 whole-row coral

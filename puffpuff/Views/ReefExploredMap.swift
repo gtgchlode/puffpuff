@@ -97,7 +97,7 @@ struct ReefExploredMap: View {
             let asset = node.chestArt(open: found)
             TrailArt.draw(asset, in: c, at: point, size: 42)
         case .food:
-            TrailArt.draw(.food, in: c, at: point, size: 32)
+            ReefQuestArt.coral(.rosyFan,in:c,at:.init(x:point.x,y:point.y),size:36,time:0,seed:0,moving:false,light:progress.food.contains(node.id) ? 1:0)
         case .clearance:
             if progress.cleared.contains(node.id) {
                 c.fill(circle(point,5),with:.color(ReefTheme.cyan))
@@ -108,7 +108,7 @@ struct ReefExploredMap: View {
                 TrailArt.draw(asset, in: c, at: point, size: 44)
             }
         case .home:
-            CoralHomeArt.draw(in: c, at: CGPoint(x: point.x, y: point.y + 10), scale: 0.19, open: progress.completed)
+            ReefRestorationArt.homeMarker(in:c,at:point,size:30,restored:progress.hasRestoredHome)
         case .path:
             c.fill(circle(point, 4), with: .color(ReefTheme.cyan))
         }
@@ -185,13 +185,13 @@ struct ReefExploredMapSheet: View {
         }
         if selected == progress.location { return "You are here" }
         if node.kind == .clearance {
-            return progress.cleared.contains(selected) ? node.clearanceResult : "\(node.label) · \(node.glowCost) Glow"
+            return progress.cleared.contains(selected) ? node.clearanceResult : "\(node.label) · \(node.glowCost) Lumes"
         }
         switch node.kind {
-        case .food: return progress.food.contains(selected) ? "Snack collected" : "Snack"
-        case .treasure: return progress.treasures.contains(selected) ? "Collected · \(node.treasureReward)" : "\(node.actionLabel) · \(node.glowCost) Glow"
+        case .food: return progress.food.contains(selected) ? "Garden glowing" : "Faded garden"
+        case .treasure: return progress.treasures.contains(selected) ? "Collected · \(node.treasureReward)" : "\(node.actionLabel) · \(node.glowCost) Lumes"
         case .clearance: return node.clearanceResult
-        case .home: return progress.completed ? "Home found" : "Home"
+        case .home: return progress.hasRestoredHome ? "Home restored" : "Find your home"
         case .path: return ReefLight.isLit(selected, in: progress) ? "Corals glowing" : "Still in shadow"
         }
     }
@@ -248,6 +248,6 @@ struct ReefTrailReturnButton: View {
         }
         .buttonStyle(ReefButtonStyle(kind: .navigation))
         .accessibilityLabel("Back to trail")
-        .accessibilityHint("Your Bloom board is saved.")
+        .accessibilityHint("Your Glow board is saved.")
     }
 }

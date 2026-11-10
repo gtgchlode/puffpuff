@@ -111,7 +111,7 @@ import Foundation
         try FileManager.default.createDirectory(at:legacyDir,withIntermediateDirectories:true)
         try JSONSerialization.data(withJSONObject:object).write(to:legacyDir.appendingPathComponent("progress.json"))
         let migrated=ReefStore(defaults:defaults,saveDirectory:legacyDir)
-        precondition(!migrated.isSaveBlocked && migrated.progress.version==28 && migrated.progress.futureTellers==0 && migrated.progress.glow==123 && equal(migrated.puzzle,legacy.puzzle))
+        precondition(!migrated.isSaveBlocked && migrated.progress.version==31 && migrated.progress.futureTellers==0 && migrated.progress.glow==123 && equal(migrated.puzzle,legacy.puzzle))
         var invalid=migrated.progress;invalid.futureTellers = -1
         do {try ReefSaveFile(defaults:defaults,directory:root.appendingPathComponent("invalid")).write(invalid);preconditionFailure()} catch ReefSaveError.invalidData {}
         invalid=migrated.progress;invalid.puzzle.futureTellerFinalTap=99

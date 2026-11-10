@@ -3,8 +3,8 @@ import SwiftUI
 extension ReefDiscovery {
     var title:String {
         switch self {
-        case .glow:"Glow"
-        case .snack:"Snacks"
+        case .glow:"Lumes"
+        case .snack:"Coral gardens"
         case .hint:"Hints"
         case .futureTeller:"Future Teller"
         case .life:"Lives"
@@ -19,16 +19,16 @@ extension ReefDiscovery {
     }
     var explanation:String {
         switch self {
-        case .glow:"Spend Glow to uncover the Trail and collect supplies. Earn more by playing Bloom."
-        case .snack:"Find three snacks and Puff Puff’s home to unlock bonus golf."
-        case .hint:"Reveal one useful coral to tap in Bloom. Uses one hint, with no tap cost."
+        case .glow:"Spend Lumes to uncover the Trail and collect supplies. Earn more by playing Glow."
+        case .snack:"Relight three coral gardens and your home to restore The Faded Garden."
+        case .hint:"Reveal one useful coral to tap in Glow. Uses one hint, with no tap cost."
         case .futureTeller:"Glimpse one possible board just before the winning tap. Work toward that arrangement, then tap the marked coral. Reopen your glimpse freely this attempt."
-        case .life:"Lose one if a Bloom attempt fails or you restart. One refills every five minutes, up to five. Winning costs nothing."
-        case .lighter:"Light one coral and keep it glowing for that Bloom attempt. Uses no taps."
-        case .instantBoost:"Starts immediately: fifteen minutes of unlimited Bloom lives, with your lives refilled."
-        case .storedBoost:"Keep this gold boost until you need it. Activate it for fifteen minutes of unlimited Bloom lives and a refill."
-        case .shot:"Each putt or Trail challenge move uses one shot. Collect more in Bloom and while exploring."
-        case .bouncyBlock:"Place a bouncy coral block to bank Puff Puff or an enemy fish. Uses one block in any golf challenge. It disappears on Retry."
+        case .life:"Lose one if a Glow attempt fails or you restart. One refills every five minutes, up to five. Winning costs nothing."
+        case .lighter:"Light one coral and keep it glowing for that Glow attempt. Uses no taps."
+        case .instantBoost:"Starts immediately: fifteen minutes of unlimited Glow lives, with your lives refilled."
+        case .storedBoost:"Keep this gold boost until you need it. Activate it for fifteen minutes of unlimited Glow lives and a refill."
+        case .shot:"Each putt or Trail challenge move uses one shot. Collect more in Glow and while exploring."
+        case .bouncyBlock:"Place a bouncy coral block to bank PuffPuff or an enemy fish. Uses one block in any golf challenge. It disappears on Retry."
         case .current:"Use one to redirect a current in bonus golf."
         case .currentAdder:"Place an extra current and choose its direction. Uses one adder. Use it in bonus golf, kelp runs or enemy challenges. It disappears on Retry."
         }
@@ -72,7 +72,7 @@ struct ReefDiscoveryArt:View {
     var size:Double=48
     var body:some View {
         if item == .snack {
-            Canvas {c,s in TrailArt.draw(.food,in:c,at:.init(x:s.width/2,y:s.height/2),size:size)}.frame(width:size,height:size)
+            Canvas {c,s in ReefQuestArt.coral(.rosyFan,in:c,at:.init(x:s.width/2,y:s.height/2),size:size,time:0,seed:0,moving:false,light:1)}.frame(width:size,height:size)
         } else {ReefIcon(item.icon,size:size)}
     }
 }
@@ -100,7 +100,7 @@ struct ReefInventoryView:View {
     @Environment(\.dismiss) private var dismiss
     var body:some View {
         OceanScene {
-            ScrollView {
+            ScrollView(.vertical) {
                 VStack(alignment:.leading,spacing:20) {
                     HStack {
                         Text("Your treasure").reefFont(size:27,weight:.semibold,display:true)
@@ -109,10 +109,13 @@ struct ReefInventoryView:View {
                             .buttonStyle(ReefButtonStyle(kind:.quiet)).accessibilityLabel("Close treasure chest")
                     }
                     row(.glow)
-                    section("Bloom",items:[.life,.hint] + (store.progress.futureTellerUnlocked ? [.futureTeller]:[]) + [.lighter,.instantBoost,.storedBoost])
-                    section("Golf",items:[.shot,.current,.currentAdder,.bouncyBlock])
-                }.padding(24).frame(maxWidth:480).frame(maxWidth:.infinity)
-            }.scrollIndicators(.visible)
+                    section("Glow",items:[.life,.hint] + (store.progress.futureTellerUnlocked ? [.futureTeller]:[]) + [.lighter,.instantBoost,.storedBoost])
+                }.padding(24).frame(maxWidth:480,alignment:.leading)
+                    .frame(maxWidth:.infinity,alignment:.topLeading)
+                    .clipped()
+            }
+            .scrollIndicators(.visible)
+            .scrollBounceBehavior(.basedOnSize,axes:.vertical)
         }.foregroundStyle(ReefTheme.ink)
         #if os(macOS)
         .frame(minWidth:400,idealWidth:460,minHeight:650,idealHeight:760)
@@ -130,10 +133,12 @@ struct ReefInventoryView:View {
             ReefDiscoveryArt(item:item)
             VStack(alignment:.leading,spacing:5) {
                 TimelineView(.periodic(from:.now,by:1)) {clock in
-                    HStack(alignment:.firstTextBaseline) {
+                    HStack(alignment:.firstTextBaseline,spacing:8) {
                         Text(item.title).reefFont(size:16,weight:.semibold)
-                        Spacer(minLength:8)
-                        Text(item.balance(store.progress,at:clock.date)).reefFont(size:16,weight:.semibold).monospacedDigit()
+                            .lineLimit(1).minimumScaleFactor(0.8)
+                            .frame(maxWidth:.infinity,alignment:.leading)
+                        Text(item.balance(store.progress,at:clock.date)).reefFont(size:16,weight:.semibold)
+                            .monospacedDigit().lineLimit(1).fixedSize(horizontal:true,vertical:false)
                     }
                 }
                 Text(item.explanation).reefFont(size:13).foregroundStyle(ReefTheme.muted).fixedSize(horizontal:false,vertical:true)
@@ -142,8 +147,8 @@ struct ReefInventoryView:View {
                     Button("Use 15 min") {_ = store.activateUnlimitedLives()}
                         .buttonStyle(ReefButtonStyle(kind:.action)).disabled(store.isSaveBlocked)
                 }
-            }
-        }.accessibilityElement(children:.contain)
+            }.frame(maxWidth:.infinity,alignment:.leading)
+        }.frame(maxWidth:.infinity,alignment:.leading).accessibilityElement(children:.contain)
     }
 }
 

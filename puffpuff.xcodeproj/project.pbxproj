@@ -18,8 +18,6 @@
 		74066EB4DE203A075461D8B2 /* puffpuff/Art/ReefMotion.swift in Sources */ = {isa = PBXBuildFile; fileRef = AEF48C4C3F52608EB522F718 /* puffpuff/Art/ReefMotion.swift */; };
 		A035B64988F1D4B3656DB131 /* puffpuff/Art/CoralPaths.swift in Sources */ = {isa = PBXBuildFile; fileRef = A06F7EB5CB733300F6BE3394 /* puffpuff/Art/CoralPaths.swift */; };
 		AB2026110500000000000002 /* puffpuff/Game/ReefMiniChallenge.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB2026110500000000000001 /* puffpuff/Game/ReefMiniChallenge.swift */; };
-		AB2026110500000000000004 /* puffpuff/Views/ReefMiniChallengeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB2026110500000000000003 /* puffpuff/Views/ReefMiniChallengeView.swift */; };
-		AB2026110500000000000006 /* puffpuff/Art/ReefMiniArt.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB2026110500000000000005 /* puffpuff/Art/ReefMiniArt.swift */; };
 		AB7CE8758EA0B1E42F1E8373 /* puffpuff/Views/ReefTrailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D046C87015A537B568BCF547 /* puffpuff/Views/ReefTrailView.swift */; };
 		BA0600000000000000000001 /* puffpuff/Views/BloomReplay.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA0600000000000000000002 /* puffpuff/Views/BloomReplay.swift */; };
 		BA07913B961AD761ED1C1BE5 /* puffpuff/Game/CoralPuzzle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40C466D834D3BDE873D7163E /* puffpuff/Game/CoralPuzzle.swift */; };
@@ -35,22 +33,17 @@
 		EAF1383574FC9A10EC887116 /* puffpuff/Art/ReefIcons.swift in Sources */ = {isa = PBXBuildFile; fileRef = EAF1383574FC9A10EC887115 /* puffpuff/Art/ReefIcons.swift */; };
 		F3585E911F4BA53886BB55E4 /* puffpuff/Views/ReefTheme.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1EF9E6DC1572272A81470EBE /* puffpuff/Views/ReefTheme.swift */; };
 		F89540D654D3E478CAE88499 /* puffpuff/Views/ReefSaveView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C6BA1CF29D873260855D4C76 /* puffpuff/Views/ReefSaveView.swift */; };
-		FA2026103000000000000002 /* puffpuff/Game/ReefLabModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA2026103000000000000001 /* puffpuff/Game/ReefLabModels.swift */; };
-		FA2026103000000000000004 /* puffpuff/Views/ReefDesignLab.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA2026103000000000000003 /* puffpuff/Views/ReefDesignLab.swift */; };
-		FA2026103000000000000006 /* puffpuff/Game/ReefSlingLab.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA2026103000000000000005 /* puffpuff/Game/ReefSlingLab.swift */; };
-		FA2026103000000000000008 /* puffpuff/Views/ReefSlingLabView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA2026103000000000000007 /* puffpuff/Views/ReefSlingLabView.swift */; };
-		FA202610300000000000000A /* puffpuff/Game/ReefSearchLab.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA2026103000000000000009 /* puffpuff/Game/ReefSearchLab.swift */; };
-		FA202610300000000000000C /* puffpuff/Views/ReefSearchLabView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA202610300000000000000B /* puffpuff/Views/ReefSearchLabView.swift */; };
 		FA2026110100000000000002 /* puffpuff/Game/ReefCove.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA2026110100000000000001 /* puffpuff/Game/ReefCove.swift */; };
 		FA2026110100000000000004 /* puffpuff/Views/ReefCoveView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA2026110100000000000003 /* puffpuff/Views/ReefCoveView.swift */; };
-		FA2026110100000000000006 /* puffpuff/Views/ReefCurrentPicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA2026110100000000000005 /* puffpuff/Views/ReefCurrentPicker.swift */; };
-		FA2026110100000000000008 /* puffpuff/Art/ReefCurrentArt.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA2026110100000000000007 /* puffpuff/Art/ReefCurrentArt.swift */; };
+		FA2026110100000000000008 /* Archive/Golf/Art/ReefCurrentArt.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA2026110100000000000007 /* Archive/Golf/Art/ReefCurrentArt.swift */; };
 		FA2026110300000000000002 /* puffpuff/Views/ReefIntroView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA2026110300000000000001 /* puffpuff/Views/ReefIntroView.swift */; };
 		FB2026110100000000000002 /* puffpuff/Art/GlowLightArt.swift in Sources */ = {isa = PBXBuildFile; fileRef = FB2026110100000000000001 /* puffpuff/Art/GlowLightArt.swift */; };
 		FB2026110100000000000004 /* puffpuff/Art/GlowTwinkles.swift in Sources */ = {isa = PBXBuildFile; fileRef = FB2026110100000000000003 /* puffpuff/Art/GlowTwinkles.swift */; };
 		FBF091B52F78848D7FC70137 /* puffpuff/Views/ReefStopView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF6959FCF56D90F112D76C79 /* puffpuff/Views/ReefStopView.swift */; };
 		FC2026110100000000000002 /* puffpuff/Views/ReefInventoryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC2026110100000000000001 /* puffpuff/Views/ReefInventoryView.swift */; };
 		FD2026110100000000000002 /* puffpuff/Art/ReefClearArt.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD2026110100000000000001 /* puffpuff/Art/ReefClearArt.swift */; };
+		FE2026110700000000000011 /* puffpuff/Art/RescueArt.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE2026110700000000000001 /* puffpuff/Art/RescueArt.swift */; };
+		FE2026110700000000000012 /* puffpuff/Views/ReefHouseView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE2026110700000000000002 /* puffpuff/Views/ReefHouseView.swift */; };
 		FE2B6389905B7B86F866007F /* puffpuff/Art/PipPaths.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC9911B54A7052231922D989 /* puffpuff/Art/PipPaths.swift */; };
 /* End PBXBuildFile section */
 
@@ -67,8 +60,6 @@
 		A06F7EB5CB733300F6BE3394 /* puffpuff/Art/CoralPaths.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = puffpuff/Art/CoralPaths.swift; sourceTree = "<group>"; };
 		A486692BB5AC3B772DBB9823 /* puffpuff/Game/ReefPurchases.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = puffpuff/Game/ReefPurchases.swift; sourceTree = "<group>"; };
 		AB2026110500000000000001 /* puffpuff/Game/ReefMiniChallenge.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = puffpuff/Game/ReefMiniChallenge.swift; sourceTree = "<group>"; };
-		AB2026110500000000000003 /* puffpuff/Views/ReefMiniChallengeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = puffpuff/Views/ReefMiniChallengeView.swift; sourceTree = "<group>"; };
-		AB2026110500000000000005 /* puffpuff/Art/ReefMiniArt.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = puffpuff/Art/ReefMiniArt.swift; sourceTree = "<group>"; };
 		AEF48C4C3F52608EB522F718 /* puffpuff/Art/ReefMotion.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = puffpuff/Art/ReefMotion.swift; sourceTree = "<group>"; };
 		AF6959FCF56D90F112D76C79 /* puffpuff/Views/ReefStopView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = puffpuff/Views/ReefStopView.swift; sourceTree = "<group>"; };
 		B72EFF089EA971495DD27781 /* THIRD_PARTY_NOTICES.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = THIRD_PARTY_NOTICES.txt; sourceTree = "<group>"; };
@@ -85,22 +76,17 @@
 		EAF1383574FC9A10EC887113 /* puffpuff/Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = puffpuff/Assets.xcassets; sourceTree = "<group>"; };
 		EAF1383574FC9A10EC887115 /* puffpuff/Art/ReefIcons.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = puffpuff/Art/ReefIcons.swift; sourceTree = "<group>"; };
 		EC9911B54A7052231922D989 /* puffpuff/Art/PipPaths.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = puffpuff/Art/PipPaths.swift; sourceTree = "<group>"; };
-		FA2026103000000000000001 /* puffpuff/Game/ReefLabModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = puffpuff/Game/ReefLabModels.swift; sourceTree = "<group>"; };
-		FA2026103000000000000003 /* puffpuff/Views/ReefDesignLab.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = puffpuff/Views/ReefDesignLab.swift; sourceTree = "<group>"; };
-		FA2026103000000000000005 /* puffpuff/Game/ReefSlingLab.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = puffpuff/Game/ReefSlingLab.swift; sourceTree = "<group>"; };
-		FA2026103000000000000007 /* puffpuff/Views/ReefSlingLabView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = puffpuff/Views/ReefSlingLabView.swift; sourceTree = "<group>"; };
-		FA2026103000000000000009 /* puffpuff/Game/ReefSearchLab.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = puffpuff/Game/ReefSearchLab.swift; sourceTree = "<group>"; };
-		FA202610300000000000000B /* puffpuff/Views/ReefSearchLabView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = puffpuff/Views/ReefSearchLabView.swift; sourceTree = "<group>"; };
 		FA2026110100000000000001 /* puffpuff/Game/ReefCove.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = puffpuff/Game/ReefCove.swift; sourceTree = "<group>"; };
 		FA2026110100000000000003 /* puffpuff/Views/ReefCoveView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = puffpuff/Views/ReefCoveView.swift; sourceTree = "<group>"; };
-		FA2026110100000000000005 /* puffpuff/Views/ReefCurrentPicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = puffpuff/Views/ReefCurrentPicker.swift; sourceTree = "<group>"; };
-		FA2026110100000000000007 /* puffpuff/Art/ReefCurrentArt.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = puffpuff/Art/ReefCurrentArt.swift; sourceTree = "<group>"; };
+		FA2026110100000000000007 /* Archive/Golf/Art/ReefCurrentArt.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Archive/Golf/Art/ReefCurrentArt.swift; sourceTree = "<group>"; };
 		FA2026110300000000000001 /* puffpuff/Views/ReefIntroView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = puffpuff/Views/ReefIntroView.swift; sourceTree = "<group>"; };
 		FB2026110100000000000001 /* puffpuff/Art/GlowLightArt.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = puffpuff/Art/GlowLightArt.swift; sourceTree = "<group>"; };
 		FB2026110100000000000003 /* puffpuff/Art/GlowTwinkles.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = puffpuff/Art/GlowTwinkles.swift; sourceTree = "<group>"; };
 		FB4FA326A7561E735868E585 /* puffpuff/Resources/BloomLevels.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = puffpuff/Resources/BloomLevels.json; sourceTree = "<group>"; };
 		FC2026110100000000000001 /* puffpuff/Views/ReefInventoryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = puffpuff/Views/ReefInventoryView.swift; sourceTree = "<group>"; };
 		FD2026110100000000000001 /* puffpuff/Art/ReefClearArt.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = puffpuff/Art/ReefClearArt.swift; sourceTree = "<group>"; };
+		FE2026110700000000000001 /* puffpuff/Art/RescueArt.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = puffpuff/Art/RescueArt.swift; sourceTree = "<group>"; };
+		FE2026110700000000000002 /* puffpuff/Views/ReefHouseView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = puffpuff/Views/ReefHouseView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -117,24 +103,17 @@
 		B28B7AF69320201D1CF206EB = {
 			isa = PBXGroup;
 			children = (
-				AB2026110500000000000005 /* puffpuff/Art/ReefMiniArt.swift */,
-				AB2026110500000000000003 /* puffpuff/Views/ReefMiniChallengeView.swift */,
+				FE2026110700000000000002 /* puffpuff/Views/ReefHouseView.swift */,
+				FE2026110700000000000001 /* puffpuff/Art/RescueArt.swift */,
+				FA2026110100000000000007 /* Archive/Golf/Art/ReefCurrentArt.swift */,
 				AB2026110500000000000001 /* puffpuff/Game/ReefMiniChallenge.swift */,
 				FA2026110300000000000001 /* puffpuff/Views/ReefIntroView.swift */,
 				FD2026110100000000000001 /* puffpuff/Art/ReefClearArt.swift */,
 				FC2026110100000000000001 /* puffpuff/Views/ReefInventoryView.swift */,
 				FB2026110100000000000003 /* puffpuff/Art/GlowTwinkles.swift */,
 				FB2026110100000000000001 /* puffpuff/Art/GlowLightArt.swift */,
-				FA2026110100000000000007 /* puffpuff/Art/ReefCurrentArt.swift */,
-				FA2026110100000000000005 /* puffpuff/Views/ReefCurrentPicker.swift */,
 				FA2026110100000000000003 /* puffpuff/Views/ReefCoveView.swift */,
 				FA2026110100000000000001 /* puffpuff/Game/ReefCove.swift */,
-				FA202610300000000000000B /* puffpuff/Views/ReefSearchLabView.swift */,
-				FA2026103000000000000009 /* puffpuff/Game/ReefSearchLab.swift */,
-				FA2026103000000000000007 /* puffpuff/Views/ReefSlingLabView.swift */,
-				FA2026103000000000000005 /* puffpuff/Game/ReefSlingLab.swift */,
-				FA2026103000000000000003 /* puffpuff/Views/ReefDesignLab.swift */,
-				FA2026103000000000000001 /* puffpuff/Game/ReefLabModels.swift */,
 				EAF1383574FC9A10EC887115 /* puffpuff/Art/ReefIcons.swift */,
 				EAF1383574FC9A10EC887113 /* puffpuff/Assets.xcassets */,
 				EAF1383574FC9A10EC887111 /* puffpuff/Views/ReefExploredMap.swift */,
@@ -239,24 +218,17 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				AB2026110500000000000006 /* puffpuff/Art/ReefMiniArt.swift in Sources */,
-				AB2026110500000000000004 /* puffpuff/Views/ReefMiniChallengeView.swift in Sources */,
+				FE2026110700000000000012 /* puffpuff/Views/ReefHouseView.swift in Sources */,
+				FE2026110700000000000011 /* puffpuff/Art/RescueArt.swift in Sources */,
+				FA2026110100000000000008 /* Archive/Golf/Art/ReefCurrentArt.swift in Sources */,
 				AB2026110500000000000002 /* puffpuff/Game/ReefMiniChallenge.swift in Sources */,
 				FA2026110300000000000002 /* puffpuff/Views/ReefIntroView.swift in Sources */,
 				FD2026110100000000000002 /* puffpuff/Art/ReefClearArt.swift in Sources */,
 				FC2026110100000000000002 /* puffpuff/Views/ReefInventoryView.swift in Sources */,
 				FB2026110100000000000004 /* puffpuff/Art/GlowTwinkles.swift in Sources */,
 				FB2026110100000000000002 /* puffpuff/Art/GlowLightArt.swift in Sources */,
-				FA2026110100000000000008 /* puffpuff/Art/ReefCurrentArt.swift in Sources */,
-				FA2026110100000000000006 /* puffpuff/Views/ReefCurrentPicker.swift in Sources */,
 				FA2026110100000000000004 /* puffpuff/Views/ReefCoveView.swift in Sources */,
 				FA2026110100000000000002 /* puffpuff/Game/ReefCove.swift in Sources */,
-				FA202610300000000000000C /* puffpuff/Views/ReefSearchLabView.swift in Sources */,
-				FA202610300000000000000A /* puffpuff/Game/ReefSearchLab.swift in Sources */,
-				FA2026103000000000000008 /* puffpuff/Views/ReefSlingLabView.swift in Sources */,
-				FA2026103000000000000006 /* puffpuff/Game/ReefSlingLab.swift in Sources */,
-				FA2026103000000000000004 /* puffpuff/Views/ReefDesignLab.swift in Sources */,
-				FA2026103000000000000002 /* puffpuff/Game/ReefLabModels.swift in Sources */,
 				EAF1383574FC9A10EC887116 /* puffpuff/Art/ReefIcons.swift in Sources */,
 				EAF1383574FC9A10EC887112 /* puffpuff/Views/ReefExploredMap.swift in Sources */,
 				EAF1383574FC9A10EC887110 /* puffpuff/Views/ReefQuestView.swift in Sources */,
@@ -293,13 +265,14 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 2026110502;
+				CURRENT_PROJECT_VERSION = 2026110903;
 				DEVELOPMENT_TEAM = GG4T8PC2A5;
 				ENABLE_APP_SANDBOX = YES;
 				ENABLE_HARDENED_RUNTIME = YES;
 				ENABLE_USER_SCRIPT_SANDBOXING = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_CFBundleDisplayName = puffpuff;
+				INFOPLIST_KEY_ITSAppUsesNonExemptEncryption = NO;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.puzzle-games";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -312,6 +285,7 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = iphoneos;
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator macosx";
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "$(inherited) PUFFPUFF_BETA_TOOLS";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_OPTIMIZATION_LEVEL = "-O";
 				SWIFT_STRICT_CONCURRENCY = targeted;
@@ -326,7 +300,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 2026110502;
+				CURRENT_PROJECT_VERSION = 2026110903;
 				DEVELOPMENT_TEAM = GG4T8PC2A5;
 				ENABLE_APP_SANDBOX = YES;
 				ENABLE_HARDENED_RUNTIME = YES;
@@ -334,6 +308,7 @@
 				ENABLE_USER_SCRIPT_SANDBOXING = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_CFBundleDisplayName = puffpuff;
+				INFOPLIST_KEY_ITSAppUsesNonExemptEncryption = NO;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.puzzle-games";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -346,7 +321,7 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = iphoneos;
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator macosx";
-				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "$(inherited) DEBUG PUFFPUFF_BETA_TOOLS";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_STRICT_CONCURRENCY = targeted;

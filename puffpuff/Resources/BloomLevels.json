@@ -4286,6 +4286,1613 @@
   },
   {
     "level": 100,
+    "size": 6,
+    "cells": [
+      true,
+      false,
+      true,
+      true,
+      false,
+      true,
+      false,
+      true,
+      false,
+      false,
+      true,
+      true,
+      true,
+      false,
+      false,
+      true,
+      true,
+      true,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      true,
+      true,
+      true,
+      true,
+      true,
+      false,
+      true,
+      true,
+      false,
+      true,
+      false,
+      true
+    ],
+    "moves": 0,
+    "history": [],
+    "rewarded": false,
+    "stones": [
+      2,
+      33
+    ],
+    "currents": [
+      8
+    ],
+    "stars": [
+      9
+    ],
+    "pearlTarget": 10,
+    "feature": "mixed",
+    "tapLimit": 42,
+    "contentRevision": 12,
+    "gaps": [
+      0,
+      5,
+      30,
+      35
+    ],
+    "rowCorals": [
+      20
+    ],
+    "columnCorals": [
+      14
+    ],
+    "verticals": [
+      15
+    ],
+    "burstCorals": [
+      21
+    ],
+    "specialLevel": true
+  },
+  {
+    "level": 101,
+    "size": 4,
+    "cells": [
+      false,
+      false,
+      false,
+      true,
+      true,
+      true,
+      true,
+      false,
+      false,
+      true,
+      false,
+      true,
+      true,
+      true,
+      false,
+      true
+    ],
+    "moves": 0,
+    "history": [],
+    "rewarded": false,
+    "stones": [],
+    "currents": [],
+    "stars": [],
+    "verticals": [
+      10
+    ],
+    "rowCorals": [],
+    "columnCorals": [],
+    "burstCorals": [],
+    "pearlTarget": null,
+    "feature": "vertical",
+    "tapLimit": 42,
+    "contentRevision": 12
+  },
+  {
+    "level": 102,
+    "size": 5,
+    "cells": [
+      true,
+      false,
+      true,
+      false,
+      true,
+      false,
+      true,
+      false,
+      true,
+      true,
+      true,
+      false,
+      false,
+      false,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true
+    ],
+    "moves": 0,
+    "history": [],
+    "rewarded": false,
+    "stones": [
+      6,
+      18
+    ],
+    "currents": [
+      12
+    ],
+    "stars": [],
+    "verticals": [],
+    "rowCorals": [],
+    "columnCorals": [],
+    "burstCorals": [],
+    "pearlTarget": null,
+    "feature": "current",
+    "tapLimit": 42,
+    "contentRevision": 12
+  },
+  {
+    "level": 103,
+    "size": 5,
+    "cells": [
+      true,
+      true,
+      false,
+      true,
+      true,
+      false,
+      true,
+      false,
+      false,
+      true,
+      true,
+      true,
+      false,
+      true,
+      true,
+      true,
+      true,
+      false,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true
+    ],
+    "moves": 0,
+    "history": [],
+    "rewarded": false,
+    "stones": [],
+    "currents": [
+      6
+    ],
+    "stars": [],
+    "verticals": [
+      12
+    ],
+    "rowCorals": [],
+    "columnCorals": [],
+    "burstCorals": [],
+    "pearlTarget": null,
+    "feature": "mixed",
+    "tapLimit": 42,
+    "contentRevision": 12,
+    "gaps": [
+      0,
+      4,
+      20,
+      24
+    ]
+  },
+  {
+    "level": 104,
+    "size": 4,
+    "cells": [
+      false,
+      false,
+      true,
+      true,
+      false,
+      true,
+      true,
+      false,
+      false,
+      true,
+      true,
+      true,
+      true,
+      true,
+      false,
+      true
+    ],
+    "moves": 0,
+    "history": [],
+    "rewarded": false,
+    "stones": [],
+    "currents": [],
+    "stars": [
+      5
+    ],
+    "verticals": [
+      10
+    ],
+    "rowCorals": [],
+    "columnCorals": [],
+    "burstCorals": [],
+    "pearlTarget": null,
+    "feature": "mixed",
+    "tapLimit": 42,
+    "contentRevision": 12
+  },
+  {
+    "level": 105,
+    "size": 4,
+    "cells": [
+      true,
+      false,
+      false,
+      true,
+      false,
+      false,
+      false,
+      false,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      false
+    ],
+    "moves": 0,
+    "history": [],
+    "rewarded": false,
+    "stones": [],
+    "currents": [],
+    "stars": [],
+    "verticals": [],
+    "rowCorals": [],
+    "columnCorals": [],
+    "burstCorals": [],
+    "pearlTarget": null,
+    "feature": "linked",
+    "tapLimit": 42,
+    "contentRevision": 12,
+    "linkedPairs": [
+      [
+        0,
+        15
+      ]
+    ]
+  },
+  {
+    "level": 106,
+    "size": 5,
+    "cells": [
+      true,
+      false,
+      false,
+      true,
+      false,
+      false,
+      false,
+      true,
+      false,
+      true,
+      true,
+      true,
+      false,
+      true,
+      true,
+      true,
+      true,
+      false,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      false
+    ],
+    "moves": 0,
+    "history": [],
+    "rewarded": false,
+    "stones": [],
+    "currents": [],
+    "stars": [],
+    "verticals": [
+      12
+    ],
+    "rowCorals": [],
+    "columnCorals": [],
+    "burstCorals": [],
+    "pearlTarget": null,
+    "feature": "mixed",
+    "tapLimit": 42,
+    "contentRevision": 12,
+    "linkedPairs": [
+      [
+        0,
+        24
+      ]
+    ]
+  },
+  {
+    "level": 107,
+    "size": 5,
+    "cells": [
+      true,
+      false,
+      false,
+      false,
+      true,
+      false,
+      true,
+      false,
+      false,
+      false,
+      true,
+      false,
+      false,
+      false,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      false
+    ],
+    "moves": 0,
+    "history": [],
+    "rewarded": false,
+    "stones": [
+      6,
+      18
+    ],
+    "currents": [
+      12
+    ],
+    "stars": [],
+    "verticals": [],
+    "rowCorals": [],
+    "columnCorals": [],
+    "burstCorals": [],
+    "pearlTarget": null,
+    "feature": "mixed",
+    "tapLimit": 42,
+    "contentRevision": 12,
+    "linkedPairs": [
+      [
+        0,
+        24
+      ]
+    ]
+  },
+  {
+    "level": 108,
+    "size": 4,
+    "cells": [
+      true,
+      false,
+      false,
+      true,
+      false,
+      false,
+      false,
+      false,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      false
+    ],
+    "moves": 0,
+    "history": [],
+    "rewarded": false,
+    "stones": [],
+    "currents": [],
+    "stars": [],
+    "verticals": [],
+    "rowCorals": [],
+    "columnCorals": [],
+    "burstCorals": [],
+    "pearlTarget": null,
+    "feature": "linked",
+    "tapLimit": 42,
+    "contentRevision": 12,
+    "linkedPairs": [
+      [
+        0,
+        15
+      ]
+    ]
+  },
+  {
+    "level": 109,
+    "size": 5,
+    "cells": [
+      true,
+      false,
+      true,
+      false,
+      true,
+      true,
+      true,
+      false,
+      true,
+      true,
+      true,
+      true,
+      false,
+      true,
+      true,
+      true,
+      true,
+      false,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      false
+    ],
+    "moves": 0,
+    "history": [],
+    "rewarded": false,
+    "stones": [],
+    "currents": [
+      6
+    ],
+    "stars": [],
+    "verticals": [
+      12
+    ],
+    "rowCorals": [],
+    "columnCorals": [],
+    "burstCorals": [],
+    "pearlTarget": null,
+    "feature": "mixed",
+    "tapLimit": 42,
+    "contentRevision": 12,
+    "linkedPairs": [
+      [
+        0,
+        24
+      ]
+    ]
+  },
+  {
+    "level": 110,
+    "size": 4,
+    "cells": [
+      false,
+      true,
+      false,
+      true,
+      false,
+      false,
+      true,
+      false,
+      false,
+      false,
+      true,
+      true,
+      true,
+      true,
+      true,
+      false
+    ],
+    "moves": 0,
+    "history": [],
+    "rewarded": false,
+    "stones": [],
+    "currents": [],
+    "stars": [],
+    "verticals": [],
+    "rowCorals": [],
+    "columnCorals": [],
+    "burstCorals": [],
+    "pearlTarget": null,
+    "feature": "linked",
+    "tapLimit": 42,
+    "contentRevision": 12,
+    "linkedPairs": [
+      [
+        0,
+        15
+      ]
+    ]
+  },
+  {
+    "level": 111,
+    "size": 5,
+    "cells": [
+      true,
+      false,
+      false,
+      false,
+      true,
+      false,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      false,
+      true,
+      true,
+      true,
+      true,
+      false,
+      true,
+      true,
+      true,
+      true,
+      false,
+      true,
+      false
+    ],
+    "moves": 0,
+    "history": [],
+    "rewarded": false,
+    "stones": [
+      6,
+      18
+    ],
+    "currents": [],
+    "stars": [],
+    "verticals": [],
+    "rowCorals": [],
+    "columnCorals": [
+      12
+    ],
+    "burstCorals": [],
+    "pearlTarget": null,
+    "feature": "mixed",
+    "tapLimit": 42,
+    "contentRevision": 12,
+    "linkedPairs": [
+      [
+        0,
+        24
+      ]
+    ]
+  },
+  {
+    "level": 112,
+    "size": 5,
+    "cells": [
+      true,
+      false,
+      true,
+      false,
+      true,
+      true,
+      false,
+      true,
+      false,
+      true,
+      true,
+      true,
+      false,
+      true,
+      true,
+      true,
+      false,
+      true,
+      false,
+      true,
+      true,
+      true,
+      true,
+      true,
+      false
+    ],
+    "moves": 0,
+    "history": [],
+    "rewarded": false,
+    "stones": [],
+    "currents": [
+      6
+    ],
+    "stars": [
+      12
+    ],
+    "verticals": [],
+    "rowCorals": [],
+    "columnCorals": [],
+    "burstCorals": [],
+    "pearlTarget": null,
+    "feature": "mixed",
+    "tapLimit": 42,
+    "contentRevision": 12,
+    "linkedPairs": [
+      [
+        0,
+        24
+      ]
+    ]
+  },
+  {
+    "level": 113,
+    "size": 5,
+    "cells": [
+      true,
+      true,
+      false,
+      true,
+      false,
+      false,
+      true,
+      false,
+      false,
+      true,
+      false,
+      true,
+      false,
+      false,
+      false,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      false
+    ],
+    "moves": 0,
+    "history": [],
+    "rewarded": false,
+    "stones": [],
+    "currents": [],
+    "stars": [],
+    "verticals": [
+      6
+    ],
+    "rowCorals": [
+      12
+    ],
+    "columnCorals": [],
+    "burstCorals": [],
+    "pearlTarget": null,
+    "feature": "mixed",
+    "tapLimit": 42,
+    "contentRevision": 12,
+    "linkedPairs": [
+      [
+        0,
+        24
+      ]
+    ]
+  },
+  {
+    "level": 114,
+    "size": 4,
+    "cells": [
+      true,
+      false,
+      true,
+      false,
+      false,
+      true,
+      true,
+      false,
+      true,
+      false,
+      false,
+      false,
+      true,
+      false,
+      false,
+      false
+    ],
+    "moves": 0,
+    "history": [],
+    "rewarded": false,
+    "stones": [
+      5,
+      6
+    ],
+    "currents": [],
+    "stars": [],
+    "verticals": [],
+    "rowCorals": [],
+    "columnCorals": [],
+    "burstCorals": [
+      10
+    ],
+    "pearlTarget": null,
+    "feature": "burst",
+    "tapLimit": 42,
+    "contentRevision": 12
+  },
+  {
+    "level": 115,
+    "size": 5,
+    "cells": [
+      true,
+      true,
+      true,
+      false,
+      true,
+      false,
+      false,
+      true,
+      false,
+      true,
+      true,
+      true,
+      false,
+      false,
+      true,
+      true,
+      false,
+      false,
+      false,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true
+    ],
+    "moves": 0,
+    "history": [],
+    "rewarded": false,
+    "stones": [],
+    "currents": [],
+    "stars": [],
+    "verticals": [
+      6
+    ],
+    "rowCorals": [],
+    "columnCorals": [],
+    "burstCorals": [
+      12
+    ],
+    "pearlTarget": null,
+    "feature": "mixed",
+    "tapLimit": 42,
+    "contentRevision": 12
+  },
+  {
+    "level": 116,
+    "size": 4,
+    "cells": [
+      false,
+      false,
+      false,
+      true,
+      true,
+      false,
+      true,
+      true,
+      false,
+      false,
+      false,
+      false,
+      true,
+      false,
+      false,
+      false
+    ],
+    "moves": 0,
+    "history": [],
+    "rewarded": false,
+    "stones": [],
+    "currents": [],
+    "stars": [],
+    "verticals": [],
+    "rowCorals": [],
+    "columnCorals": [],
+    "burstCorals": [
+      10
+    ],
+    "pearlTarget": null,
+    "feature": "burst",
+    "tapLimit": 42,
+    "contentRevision": 12
+  },
+  {
+    "level": 117,
+    "size": 5,
+    "cells": [
+      true,
+      true,
+      false,
+      true,
+      true,
+      true,
+      false,
+      false,
+      true,
+      false,
+      false,
+      false,
+      false,
+      false,
+      true,
+      true,
+      false,
+      false,
+      false,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true
+    ],
+    "moves": 0,
+    "history": [],
+    "rewarded": false,
+    "stones": [],
+    "currents": [],
+    "stars": [],
+    "verticals": [],
+    "rowCorals": [
+      6
+    ],
+    "columnCorals": [],
+    "burstCorals": [
+      12
+    ],
+    "pearlTarget": null,
+    "feature": "mixed",
+    "tapLimit": 42,
+    "contentRevision": 12,
+    "gaps": [
+      0,
+      1,
+      3,
+      4,
+      20,
+      21,
+      23,
+      24
+    ]
+  },
+  {
+    "level": 118,
+    "size": 5,
+    "cells": [
+      true,
+      false,
+      false,
+      true,
+      false,
+      false,
+      true,
+      true,
+      true,
+      true,
+      true,
+      false,
+      false,
+      false,
+      true,
+      true,
+      false,
+      false,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true
+    ],
+    "moves": 0,
+    "history": [],
+    "rewarded": false,
+    "stones": [
+      6,
+      18
+    ],
+    "currents": [],
+    "stars": [],
+    "verticals": [],
+    "rowCorals": [],
+    "columnCorals": [],
+    "burstCorals": [
+      12
+    ],
+    "pearlTarget": null,
+    "feature": "burst",
+    "tapLimit": 42,
+    "contentRevision": 12
+  },
+  {
+    "level": 119,
+    "size": 5,
+    "cells": [
+      true,
+      false,
+      false,
+      false,
+      true,
+      false,
+      true,
+      true,
+      true,
+      false,
+      true,
+      false,
+      false,
+      false,
+      true,
+      true,
+      false,
+      false,
+      false,
+      true,
+      true,
+      true,
+      true,
+      true,
+      false
+    ],
+    "moves": 0,
+    "history": [],
+    "rewarded": false,
+    "stones": [],
+    "currents": [],
+    "stars": [],
+    "verticals": [],
+    "rowCorals": [],
+    "columnCorals": [],
+    "burstCorals": [
+      12
+    ],
+    "pearlTarget": null,
+    "feature": "mixed",
+    "tapLimit": 42,
+    "contentRevision": 12,
+    "linkedPairs": [
+      [
+        0,
+        24
+      ]
+    ]
+  },
+  {
+    "level": 120,
+    "size": 5,
+    "cells": [
+      false,
+      true,
+      true,
+      true,
+      true,
+      false,
+      false,
+      false,
+      true,
+      true,
+      false,
+      false,
+      true,
+      false,
+      true,
+      true,
+      false,
+      false,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true
+    ],
+    "moves": 0,
+    "history": [],
+    "rewarded": false,
+    "stones": [
+      18,
+      8
+    ],
+    "currents": [],
+    "stars": [
+      6
+    ],
+    "verticals": [],
+    "rowCorals": [],
+    "columnCorals": [],
+    "burstCorals": [
+      12
+    ],
+    "pearlTarget": null,
+    "feature": "mixed",
+    "tapLimit": 42,
+    "contentRevision": 12
+  },
+  {
+    "level": 121,
+    "size": 5,
+    "cells": [
+      true,
+      true,
+      false,
+      true,
+      true,
+      true,
+      false,
+      false,
+      false,
+      true,
+      true,
+      false,
+      false,
+      false,
+      true,
+      true,
+      false,
+      false,
+      false,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true
+    ],
+    "moves": 0,
+    "history": [],
+    "rewarded": false,
+    "stones": [],
+    "currents": [
+      8
+    ],
+    "stars": [],
+    "verticals": [],
+    "rowCorals": [
+      6
+    ],
+    "columnCorals": [],
+    "burstCorals": [
+      12
+    ],
+    "pearlTarget": null,
+    "feature": "mixed",
+    "tapLimit": 42,
+    "contentRevision": 12
+  },
+  {
+    "level": 122,
+    "size": 5,
+    "cells": [
+      true,
+      false,
+      false,
+      false,
+      true,
+      true,
+      false,
+      true,
+      false,
+      true,
+      true,
+      true,
+      false,
+      true,
+      true,
+      true,
+      false,
+      false,
+      true,
+      true,
+      true,
+      true,
+      true,
+      false,
+      true
+    ],
+    "moves": 0,
+    "history": [],
+    "rewarded": false,
+    "stones": [],
+    "currents": [],
+    "stars": [],
+    "verticals": [
+      6
+    ],
+    "rowCorals": [],
+    "columnCorals": [
+      8
+    ],
+    "burstCorals": [
+      12
+    ],
+    "pearlTarget": null,
+    "feature": "mixed",
+    "tapLimit": 42,
+    "contentRevision": 12,
+    "gaps": [
+      0,
+      4,
+      20,
+      24
+    ]
+  },
+  {
+    "level": 123,
+    "size": 4,
+    "cells": [
+      false,
+      true,
+      true,
+      true,
+      false,
+      true,
+      true,
+      true,
+      false,
+      false,
+      true,
+      false,
+      true,
+      true,
+      true,
+      true
+    ],
+    "moves": 0,
+    "history": [],
+    "rewarded": false,
+    "stones": [],
+    "currents": [
+      10
+    ],
+    "stars": [
+      5
+    ],
+    "verticals": [],
+    "rowCorals": [],
+    "columnCorals": [],
+    "burstCorals": [],
+    "pearlTarget": null,
+    "feature": "mixed",
+    "tapLimit": 42,
+    "contentRevision": 12
+  },
+  {
+    "level": 124,
+    "size": 4,
+    "cells": [
+      true,
+      false,
+      false,
+      true,
+      false,
+      true,
+      true,
+      false,
+      false,
+      false,
+      false,
+      false,
+      true,
+      true,
+      true,
+      true
+    ],
+    "moves": 0,
+    "history": [],
+    "rewarded": false,
+    "stones": [
+      5,
+      6
+    ],
+    "currents": [],
+    "stars": [],
+    "verticals": [],
+    "rowCorals": [
+      10
+    ],
+    "columnCorals": [],
+    "burstCorals": [],
+    "pearlTarget": null,
+    "feature": "line",
+    "tapLimit": 42,
+    "contentRevision": 12
+  },
+  {
+    "level": 125,
+    "size": 4,
+    "cells": [
+      false,
+      true,
+      true,
+      true,
+      false,
+      true,
+      false,
+      true,
+      false,
+      false,
+      false,
+      true,
+      true,
+      true,
+      true,
+      true
+    ],
+    "moves": 0,
+    "history": [],
+    "rewarded": false,
+    "stones": [],
+    "currents": [],
+    "stars": [],
+    "verticals": [],
+    "rowCorals": [],
+    "columnCorals": [],
+    "burstCorals": [],
+    "pearlTarget": null,
+    "feature": "cage",
+    "tapLimit": 42,
+    "contentRevision": 14,
+    "cagedCorals": [
+      10
+    ]
+  },
+  {
+    "level": 126,
+    "size": 5,
+    "cells": [
+      true,
+      false,
+      true,
+      true,
+      false,
+      false,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      false,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true
+    ],
+    "moves": 0,
+    "history": [],
+    "rewarded": false,
+    "stones": [
+      6,
+      18
+    ],
+    "currents": [],
+    "stars": [],
+    "verticals": [],
+    "rowCorals": [],
+    "columnCorals": [],
+    "burstCorals": [],
+    "pearlTarget": null,
+    "feature": "cage",
+    "tapLimit": 42,
+    "contentRevision": 14,
+    "cagedCorals": [
+      12
+    ]
+  },
+  {
+    "level": 127,
+    "size": 4,
+    "cells": [
+      false,
+      true,
+      true,
+      true,
+      false,
+      true,
+      false,
+      true,
+      false,
+      false,
+      false,
+      true,
+      true,
+      true,
+      true,
+      true
+    ],
+    "moves": 0,
+    "history": [],
+    "rewarded": false,
+    "stones": [],
+    "currents": [],
+    "stars": [],
+    "verticals": [],
+    "rowCorals": [],
+    "columnCorals": [],
+    "burstCorals": [],
+    "pearlTarget": null,
+    "feature": "cage",
+    "tapLimit": 42,
+    "contentRevision": 14,
+    "cagedCorals": [
+      10
+    ]
+  },
+  {
+    "level": 128,
+    "size": 5,
+    "cells": [
+      false,
+      true,
+      true,
+      true,
+      false,
+      false,
+      false,
+      true,
+      true,
+      false,
+      false,
+      false,
+      false,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true
+    ],
+    "moves": 0,
+    "history": [],
+    "rewarded": false,
+    "stones": [],
+    "currents": [],
+    "stars": [],
+    "verticals": [],
+    "rowCorals": [],
+    "columnCorals": [],
+    "burstCorals": [
+      6
+    ],
+    "pearlTarget": null,
+    "feature": "mixed",
+    "tapLimit": 42,
+    "contentRevision": 14,
+    "cagedCorals": [
+      12
+    ]
+  },
+  {
+    "level": 129,
+    "size": 5,
+    "cells": [
+      true,
+      false,
+      false,
+      false,
+      true,
+      true,
+      false,
+      false,
+      true,
+      false,
+      true,
+      true,
+      false,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true
+    ],
+    "moves": 0,
+    "history": [],
+    "rewarded": false,
+    "stones": [
+      18,
+      8
+    ],
+    "currents": [],
+    "stars": [],
+    "verticals": [],
+    "rowCorals": [
+      6
+    ],
+    "columnCorals": [],
+    "burstCorals": [],
+    "pearlTarget": null,
+    "feature": "mixed",
+    "tapLimit": 42,
+    "contentRevision": 14,
+    "cagedCorals": [
+      12
+    ]
+  },
+  {
+    "level": 130,
+    "size": 4,
+    "cells": [
+      false,
+      true,
+      true,
+      true,
+      false,
+      true,
+      false,
+      true,
+      false,
+      false,
+      false,
+      true,
+      true,
+      true,
+      true,
+      true
+    ],
+    "moves": 0,
+    "history": [],
+    "rewarded": false,
+    "stones": [],
+    "currents": [],
+    "stars": [],
+    "verticals": [],
+    "rowCorals": [],
+    "columnCorals": [],
+    "burstCorals": [],
+    "pearlTarget": null,
+    "feature": "cage",
+    "tapLimit": 42,
+    "contentRevision": 14,
+    "cagedCorals": [
+      10
+    ]
+  },
+  {
+    "level": 131,
+    "size": 5,
+    "cells": [
+      true,
+      true,
+      false,
+      true,
+      false,
+      false,
+      false,
+      false,
+      true,
+      true,
+      true,
+      false,
+      false,
+      true,
+      true,
+      true,
+      false,
+      true,
+      false,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true
+    ],
+    "moves": 0,
+    "history": [],
+    "rewarded": false,
+    "stones": [],
+    "currents": [],
+    "stars": [
+      12
+    ],
+    "verticals": [
+      6
+    ],
+    "rowCorals": [],
+    "columnCorals": [],
+    "burstCorals": [],
+    "pearlTarget": null,
+    "feature": "mixed",
+    "tapLimit": 42,
+    "contentRevision": 12
+  },
+  {
+    "level": 132,
+    "size": 4,
+    "cells": [
+      true,
+      false,
+      true,
+      true,
+      false,
+      true,
+      true,
+      true,
+      true,
+      true,
+      false,
+      true,
+      true,
+      true,
+      true,
+      true
+    ],
+    "moves": 0,
+    "history": [],
+    "rewarded": false,
+    "stones": [],
+    "currents": [],
+    "stars": [],
+    "verticals": [],
+    "rowCorals": [],
+    "columnCorals": [],
+    "burstCorals": [],
+    "pearlTarget": null,
+    "feature": "cage",
+    "tapLimit": 42,
+    "contentRevision": 14,
+    "cagedCorals": [
+      10
+    ]
+  },
+  {
+    "level": 133,
     "size": 5,
     "cells": [
       true,
@@ -4298,6 +5905,402 @@
       false,
       false,
       true,
+      true,
+      false,
+      false,
+      true,
+      true,
+      true,
+      false,
+      true,
+      false,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true
+    ],
+    "moves": 0,
+    "history": [],
+    "rewarded": false,
+    "stones": [],
+    "currents": [],
+    "stars": [
+      12
+    ],
+    "verticals": [
+      6
+    ],
+    "rowCorals": [],
+    "columnCorals": [],
+    "burstCorals": [],
+    "pearlTarget": null,
+    "feature": "mixed",
+    "tapLimit": 42,
+    "contentRevision": 12
+  },
+  {
+    "level": 134,
+    "size": 4,
+    "cells": [
+      false,
+      true,
+      true,
+      true,
+      false,
+      true,
+      false,
+      true,
+      false,
+      false,
+      false,
+      true,
+      true,
+      true,
+      true,
+      true
+    ],
+    "moves": 0,
+    "history": [],
+    "rewarded": false,
+    "stones": [],
+    "currents": [],
+    "stars": [],
+    "verticals": [],
+    "rowCorals": [],
+    "columnCorals": [],
+    "burstCorals": [],
+    "pearlTarget": null,
+    "feature": "cage",
+    "tapLimit": 42,
+    "contentRevision": 14,
+    "cagedCorals": [
+      10
+    ]
+  },
+  {
+    "level": 135,
+    "size": 5,
+    "cells": [
+      true,
+      false,
+      false,
+      true,
+      true,
+      false,
+      false,
+      true,
+      false,
+      true,
+      true,
+      false,
+      false,
+      true,
+      true,
+      true,
+      false,
+      true,
+      false,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true
+    ],
+    "moves": 0,
+    "history": [],
+    "rewarded": false,
+    "stones": [],
+    "currents": [],
+    "stars": [
+      12
+    ],
+    "verticals": [
+      6
+    ],
+    "rowCorals": [],
+    "columnCorals": [],
+    "burstCorals": [],
+    "pearlTarget": null,
+    "feature": "mixed",
+    "tapLimit": 42,
+    "contentRevision": 12
+  },
+  {
+    "level": 136,
+    "size": 4,
+    "cells": [
+      false,
+      true,
+      true,
+      true,
+      false,
+      true,
+      false,
+      true,
+      false,
+      false,
+      false,
+      true,
+      true,
+      true,
+      true,
+      true
+    ],
+    "moves": 0,
+    "history": [],
+    "rewarded": false,
+    "stones": [],
+    "currents": [],
+    "stars": [],
+    "verticals": [],
+    "rowCorals": [],
+    "columnCorals": [],
+    "burstCorals": [],
+    "pearlTarget": null,
+    "feature": "cage",
+    "tapLimit": 42,
+    "contentRevision": 14,
+    "cagedCorals": [
+      10
+    ]
+  },
+  {
+    "level": 137,
+    "size": 5,
+    "cells": [
+      true,
+      false,
+      false,
+      false,
+      true,
+      false,
+      false,
+      false,
+      false,
+      false,
+      true,
+      false,
+      false,
+      false,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      false
+    ],
+    "moves": 0,
+    "history": [],
+    "rewarded": false,
+    "stones": [],
+    "currents": [
+      12
+    ],
+    "stars": [],
+    "verticals": [],
+    "rowCorals": [],
+    "columnCorals": [],
+    "burstCorals": [],
+    "pearlTarget": null,
+    "feature": "mixed",
+    "tapLimit": 42,
+    "contentRevision": 12,
+    "linkedPairs": [
+      [
+        0,
+        24
+      ]
+    ]
+  },
+  {
+    "level": 138,
+    "size": 5,
+    "cells": [
+      true,
+      true,
+      true,
+      true,
+      true,
+      false,
+      false,
+      true,
+      false,
+      true,
+      false,
+      false,
+      false,
+      true,
+      true,
+      true,
+      false,
+      true,
+      false,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true
+    ],
+    "moves": 0,
+    "history": [],
+    "rewarded": false,
+    "stones": [],
+    "currents": [],
+    "stars": [
+      12
+    ],
+    "verticals": [],
+    "rowCorals": [],
+    "columnCorals": [],
+    "burstCorals": [],
+    "pearlTarget": null,
+    "feature": "mixed",
+    "tapLimit": 42,
+    "contentRevision": 12,
+    "linkedPairs": [
+      [
+        2,
+        5
+      ]
+    ],
+    "gaps": [
+      0,
+      1,
+      3,
+      4,
+      20,
+      21,
+      23,
+      24
+    ]
+  },
+  {
+    "level": 139,
+    "size": 5,
+    "cells": [
+      true,
+      false,
+      false,
+      true,
+      false,
+      false,
+      true,
+      false,
+      false,
+      true,
+      false,
+      false,
+      false,
+      false,
+      false,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      false
+    ],
+    "moves": 0,
+    "history": [],
+    "rewarded": false,
+    "stones": [
+      6,
+      18
+    ],
+    "currents": [],
+    "stars": [],
+    "verticals": [],
+    "rowCorals": [
+      12
+    ],
+    "columnCorals": [],
+    "burstCorals": [],
+    "pearlTarget": null,
+    "feature": "mixed",
+    "tapLimit": 42,
+    "contentRevision": 12,
+    "linkedPairs": [
+      [
+        0,
+        24
+      ]
+    ]
+  },
+  {
+    "level": 140,
+    "size": 5,
+    "cells": [
+      true,
+      false,
+      false,
+      false,
+      true,
+      false,
+      true,
+      true,
+      true,
+      false,
+      true,
+      false,
+      false,
+      false,
+      true,
+      true,
+      false,
+      false,
+      false,
+      true,
+      true,
+      true,
+      true,
+      true,
+      false
+    ],
+    "moves": 0,
+    "history": [],
+    "rewarded": false,
+    "stones": [],
+    "currents": [],
+    "stars": [],
+    "verticals": [],
+    "rowCorals": [],
+    "columnCorals": [],
+    "burstCorals": [
+      12
+    ],
+    "pearlTarget": null,
+    "feature": "mixed",
+    "tapLimit": 42,
+    "contentRevision": 12,
+    "linkedPairs": [
+      [
+        0,
+        24
+      ]
+    ]
+  },
+  {
+    "level": 141,
+    "size": 5,
+    "cells": [
+      true,
+      false,
+      true,
+      false,
+      true,
       false,
       false,
       true,
@@ -4309,6 +6312,1563 @@
       true,
       true,
       true,
+      true,
+      false,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      false
+    ],
+    "moves": 0,
+    "history": [],
+    "rewarded": false,
+    "stones": [],
+    "currents": [],
+    "stars": [],
+    "verticals": [
+      12
+    ],
+    "rowCorals": [],
+    "columnCorals": [],
+    "burstCorals": [],
+    "pearlTarget": null,
+    "feature": "mixed",
+    "tapLimit": 42,
+    "contentRevision": 12,
+    "linkedPairs": [
+      [
+        0,
+        24
+      ]
+    ]
+  },
+  {
+    "level": 142,
+    "size": 5,
+    "cells": [
+      false,
+      false,
+      true,
+      false,
+      true,
+      false,
+      true,
+      true,
+      true,
+      true,
+      false,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      false,
+      true,
+      true,
+      true,
+      true,
+      false,
+      true,
+      false
+    ],
+    "moves": 0,
+    "history": [],
+    "rewarded": false,
+    "stones": [],
+    "currents": [],
+    "stars": [
+      6
+    ],
+    "verticals": [],
+    "rowCorals": [],
+    "columnCorals": [
+      12
+    ],
+    "burstCorals": [],
+    "pearlTarget": null,
+    "feature": "mixed",
+    "tapLimit": 42,
+    "contentRevision": 12,
+    "linkedPairs": [
+      [
+        0,
+        24
+      ]
+    ]
+  },
+  {
+    "level": 143,
+    "size": 5,
+    "cells": [
+      false,
+      false,
+      true,
+      false,
+      true,
+      true,
+      true,
+      true,
+      true,
+      false,
+      false,
+      true,
+      false,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      false
+    ],
+    "moves": 0,
+    "history": [],
+    "rewarded": false,
+    "stones": [
+      6,
+      18
+    ],
+    "currents": [],
+    "stars": [],
+    "verticals": [],
+    "rowCorals": [],
+    "columnCorals": [],
+    "burstCorals": [],
+    "pearlTarget": null,
+    "feature": "mixed",
+    "tapLimit": 42,
+    "contentRevision": 14,
+    "linkedPairs": [
+      [
+        0,
+        24
+      ]
+    ],
+    "cagedCorals": [
+      12
+    ]
+  },
+  {
+    "level": 144,
+    "size": 5,
+    "cells": [
+      true,
+      false,
+      true,
+      false,
+      true,
+      false,
+      false,
+      false,
+      true,
+      true,
+      false,
+      false,
+      false,
+      false,
+      false,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      false
+    ],
+    "moves": 0,
+    "history": [],
+    "rewarded": false,
+    "stones": [],
+    "currents": [],
+    "stars": [],
+    "verticals": [],
+    "rowCorals": [
+      12
+    ],
+    "columnCorals": [],
+    "burstCorals": [],
+    "pearlTarget": null,
+    "feature": "mixed",
+    "tapLimit": 42,
+    "contentRevision": 12,
+    "linkedPairs": [
+      [
+        0,
+        24
+      ]
+    ]
+  },
+  {
+    "level": 145,
+    "size": 5,
+    "cells": [
+      true,
+      false,
+      true,
+      false,
+      false,
+      true,
+      false,
+      true,
+      false,
+      true,
+      true,
+      true,
+      false,
+      true,
+      true,
+      true,
+      false,
+      false,
+      true,
+      true,
+      true,
+      false,
+      true,
+      true,
+      false
+    ],
+    "moves": 0,
+    "history": [],
+    "rewarded": false,
+    "stones": [],
+    "currents": [],
+    "stars": [
+      6
+    ],
+    "verticals": [],
+    "rowCorals": [],
+    "columnCorals": [],
+    "burstCorals": [],
+    "pearlTarget": null,
+    "feature": "mixed",
+    "tapLimit": 42,
+    "contentRevision": 14,
+    "linkedPairs": [
+      [
+        0,
+        24
+      ]
+    ],
+    "cagedCorals": [
+      12
+    ]
+  },
+  {
+    "level": 146,
+    "size": 5,
+    "cells": [
+      true,
+      true,
+      true,
+      true,
+      true,
+      false,
+      true,
+      true,
+      true,
+      true,
+      false,
+      false,
+      true,
+      false,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      false,
+      true
+    ],
+    "moves": 0,
+    "history": [],
+    "rewarded": false,
+    "stones": [
+      6,
+      18
+    ],
+    "currents": [
+      12
+    ],
+    "stars": [],
+    "verticals": [],
+    "rowCorals": [],
+    "columnCorals": [],
+    "burstCorals": [],
+    "pearlTarget": null,
+    "feature": "mixed",
+    "tapLimit": 42,
+    "contentRevision": 12,
+    "linkedPairs": [
+      [
+        1,
+        23
+      ]
+    ],
+    "gaps": [
+      0,
+      4,
+      20,
+      24
+    ]
+  },
+  {
+    "level": 147,
+    "size": 5,
+    "cells": [
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      false
+    ],
+    "moves": 0,
+    "history": [],
+    "rewarded": false,
+    "stones": [],
+    "currents": [],
+    "stars": [],
+    "verticals": [],
+    "rowCorals": [],
+    "columnCorals": [],
+    "burstCorals": [
+      6
+    ],
+    "pearlTarget": null,
+    "feature": "mixed",
+    "tapLimit": 42,
+    "contentRevision": 14,
+    "linkedPairs": [
+      [
+        0,
+        24
+      ]
+    ],
+    "cagedCorals": [
+      12
+    ]
+  },
+  {
+    "level": 148,
+    "size": 5,
+    "cells": [
+      true,
+      false,
+      false,
+      true,
+      false,
+      false,
+      false,
+      true,
+      false,
+      true,
+      true,
+      true,
+      false,
+      true,
+      true,
+      true,
+      true,
+      false,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      false
+    ],
+    "moves": 0,
+    "history": [],
+    "rewarded": false,
+    "stones": [],
+    "currents": [],
+    "stars": [],
+    "verticals": [
+      12
+    ],
+    "rowCorals": [],
+    "columnCorals": [],
+    "burstCorals": [],
+    "pearlTarget": null,
+    "feature": "mixed",
+    "tapLimit": 42,
+    "contentRevision": 12,
+    "linkedPairs": [
+      [
+        0,
+        24
+      ]
+    ]
+  },
+  {
+    "level": 149,
+    "size": 5,
+    "cells": [
+      true,
+      true,
+      true,
+      false,
+      true,
+      false,
+      false,
+      true,
+      true,
+      false,
+      true,
+      false,
+      false,
+      true,
+      true,
+      true,
+      false,
+      true,
+      true,
+      true,
+      true,
+      false,
+      true,
+      true,
+      false
+    ],
+    "moves": 0,
+    "history": [],
+    "rewarded": false,
+    "stones": [],
+    "currents": [],
+    "stars": [],
+    "verticals": [],
+    "rowCorals": [],
+    "columnCorals": [
+      6
+    ],
+    "burstCorals": [],
+    "pearlTarget": null,
+    "feature": "mixed",
+    "tapLimit": 42,
+    "contentRevision": 14,
+    "linkedPairs": [
+      [
+        0,
+        24
+      ]
+    ],
+    "cagedCorals": [
+      12
+    ]
+  },
+  {
+    "level": 150,
+    "size": 3,
+    "cells": [
+      false,
+      true,
+      false,
+      true,
+      true,
+      true,
+      false,
+      true,
+      false
+    ],
+    "moves": 0,
+    "history": [],
+    "rewarded": false,
+    "stones": [],
+    "currents": [],
+    "stars": [],
+    "verticals": [],
+    "rowCorals": [],
+    "columnCorals": [],
+    "burstCorals": [],
+    "pearlTarget": null,
+    "feature": "mini",
+    "tapLimit": 34,
+    "contentRevision": 12,
+    "miniCells": [
+      false,
+      true,
+      false,
+      true
+    ],
+    "miniColorCorals": [
+      0,
+      2,
+      6,
+      8
+    ],
+    "miniPatterns": [
+      [
+        0,
+        3
+      ],
+      [
+        1,
+        2
+      ],
+      [
+        1
+      ],
+      [
+        3
+      ]
+    ],
+    "miniOrder": [
+      3,
+      1,
+      0,
+      2
+    ],
+    "miniStep": 0
+  },
+  {
+    "level": 151,
+    "size": 3,
+    "cells": [
+      true,
+      false,
+      true,
+      true,
+      false,
+      true,
+      false,
+      true,
+      false
+    ],
+    "moves": 0,
+    "history": [],
+    "rewarded": false,
+    "stones": [],
+    "currents": [],
+    "stars": [],
+    "verticals": [],
+    "rowCorals": [],
+    "columnCorals": [],
+    "burstCorals": [],
+    "pearlTarget": null,
+    "feature": "mini",
+    "tapLimit": 34,
+    "contentRevision": 12,
+    "miniCells": [
+      false,
+      true,
+      false,
+      true
+    ],
+    "miniColorCorals": [
+      0,
+      2,
+      6,
+      8
+    ],
+    "miniPatterns": [
+      [
+        0,
+        3
+      ],
+      [
+        1,
+        2
+      ],
+      [
+        1
+      ],
+      [
+        3
+      ]
+    ],
+    "miniOrder": [
+      0,
+      1,
+      2,
+      3
+    ],
+    "miniStep": 0
+  },
+  {
+    "level": 152,
+    "size": 3,
+    "cells": [
+      false,
+      false,
+      true,
+      false,
+      true,
+      true,
+      true,
+      true,
+      false
+    ],
+    "moves": 0,
+    "history": [],
+    "rewarded": false,
+    "stones": [],
+    "currents": [],
+    "stars": [],
+    "verticals": [],
+    "rowCorals": [],
+    "columnCorals": [],
+    "burstCorals": [],
+    "pearlTarget": null,
+    "feature": "mini",
+    "tapLimit": 34,
+    "contentRevision": 12,
+    "miniCells": [
+      false,
+      true,
+      false,
+      true
+    ],
+    "miniColorCorals": [
+      0,
+      2,
+      6,
+      8
+    ],
+    "miniPatterns": [
+      [
+        0,
+        3
+      ],
+      [
+        1,
+        2
+      ],
+      [
+        1
+      ],
+      [
+        3
+      ]
+    ],
+    "miniOrder": [
+      2,
+      0,
+      3,
+      1
+    ],
+    "miniStep": 0
+  },
+  {
+    "level": 153,
+    "size": 3,
+    "cells": [
+      false,
+      true,
+      false,
+      true,
+      true,
+      true,
+      false,
+      true,
+      false
+    ],
+    "moves": 0,
+    "history": [],
+    "rewarded": false,
+    "stones": [],
+    "currents": [],
+    "stars": [],
+    "verticals": [],
+    "rowCorals": [],
+    "columnCorals": [],
+    "burstCorals": [],
+    "pearlTarget": null,
+    "feature": "mini",
+    "tapLimit": 34,
+    "contentRevision": 12,
+    "miniCells": [
+      false,
+      true,
+      false,
+      true
+    ],
+    "miniColorCorals": [
+      0,
+      2,
+      6,
+      8
+    ],
+    "miniPatterns": [
+      [
+        0,
+        3
+      ],
+      [
+        1,
+        2
+      ],
+      [
+        1
+      ],
+      [
+        3
+      ]
+    ],
+    "miniOrder": [
+      1,
+      3,
+      2,
+      0
+    ],
+    "miniStep": 0
+  },
+  {
+    "level": 154,
+    "size": 3,
+    "cells": [
+      true,
+      false,
+      true,
+      true,
+      false,
+      true,
+      false,
+      true,
+      false
+    ],
+    "moves": 0,
+    "history": [],
+    "rewarded": false,
+    "stones": [],
+    "currents": [],
+    "stars": [],
+    "verticals": [],
+    "rowCorals": [],
+    "columnCorals": [],
+    "burstCorals": [],
+    "pearlTarget": null,
+    "feature": "mini",
+    "tapLimit": 34,
+    "contentRevision": 12,
+    "miniCells": [
+      false,
+      true,
+      false,
+      true
+    ],
+    "miniColorCorals": [
+      0,
+      2,
+      6,
+      8
+    ],
+    "miniPatterns": [
+      [
+        0,
+        3
+      ],
+      [
+        1,
+        2
+      ],
+      [
+        1
+      ],
+      [
+        3
+      ]
+    ],
+    "miniOrder": [
+      3,
+      2,
+      1,
+      0
+    ],
+    "miniStep": 0
+  },
+  {
+    "level": 155,
+    "size": 5,
+    "cells": [
+      true,
+      true,
+      false,
+      true,
+      false,
+      false,
+      true,
+      true,
+      false,
+      false,
+      true,
+      true,
+      true,
+      false,
+      true,
+      false,
+      true,
+      true,
+      true,
+      false,
+      false,
+      false,
+      true,
+      false,
+      false
+    ],
+    "moves": 0,
+    "history": [],
+    "rewarded": false,
+    "stones": [
+      6,
+      18
+    ],
+    "currents": [],
+    "stars": [],
+    "verticals": [
+      8
+    ],
+    "rowCorals": [],
+    "columnCorals": [],
+    "burstCorals": [],
+    "pearlTarget": null,
+    "feature": "mixed",
+    "tapLimit": 42,
+    "contentRevision": 12,
+    "miniCells": [
+      false,
+      true,
+      false,
+      true
+    ],
+    "miniColorCorals": [
+      0,
+      4,
+      20,
+      24
+    ],
+    "miniPatterns": [
+      [
+        0,
+        3
+      ],
+      [
+        1,
+        2
+      ],
+      [
+        1
+      ],
+      [
+        3
+      ]
+    ],
+    "miniOrder": [
+      0,
+      2,
+      1,
+      3
+    ],
+    "miniStep": 0
+  },
+  {
+    "level": 156,
+    "size": 5,
+    "cells": [
+      false,
+      false,
+      true,
+      false,
+      false,
+      false,
+      true,
+      false,
+      false,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      false,
+      true,
+      true,
+      true,
+      false,
+      false,
+      false,
+      true,
+      false,
+      false
+    ],
+    "moves": 0,
+    "history": [],
+    "rewarded": false,
+    "stones": [
+      6,
+      18
+    ],
+    "currents": [
+      8
+    ],
+    "stars": [],
+    "verticals": [],
+    "rowCorals": [],
+    "columnCorals": [],
+    "burstCorals": [],
+    "pearlTarget": null,
+    "feature": "mixed",
+    "tapLimit": 42,
+    "contentRevision": 12,
+    "miniCells": [
+      false,
+      true,
+      false,
+      true
+    ],
+    "miniColorCorals": [
+      0,
+      4,
+      20,
+      24
+    ],
+    "miniPatterns": [
+      [
+        0,
+        3
+      ],
+      [
+        1,
+        2
+      ],
+      [
+        1
+      ],
+      [
+        3
+      ]
+    ],
+    "miniOrder": [
+      3,
+      1,
+      0,
+      2
+    ],
+    "miniStep": 0
+  },
+  {
+    "level": 157,
+    "size": 5,
+    "cells": [
+      false,
+      false,
+      true,
+      true,
+      false,
+      false,
+      true,
+      true,
+      false,
+      false,
+      true,
+      true,
+      true,
+      false,
+      true,
+      false,
+      true,
+      true,
+      true,
+      false,
+      false,
+      false,
+      true,
+      false,
+      false
+    ],
+    "moves": 0,
+    "history": [],
+    "rewarded": false,
+    "stones": [
+      6,
+      18
+    ],
+    "currents": [],
+    "stars": [],
+    "verticals": [
+      8
+    ],
+    "rowCorals": [],
+    "columnCorals": [],
+    "burstCorals": [],
+    "pearlTarget": null,
+    "feature": "mixed",
+    "tapLimit": 42,
+    "contentRevision": 12,
+    "miniCells": [
+      false,
+      true,
+      false,
+      true
+    ],
+    "miniColorCorals": [
+      0,
+      4,
+      20,
+      24
+    ],
+    "miniPatterns": [
+      [
+        0,
+        3
+      ],
+      [
+        1,
+        2
+      ],
+      [
+        1
+      ],
+      [
+        3
+      ]
+    ],
+    "miniOrder": [
+      2,
+      1,
+      3,
+      0
+    ],
+    "miniStep": 0
+  },
+  {
+    "level": 158,
+    "size": 5,
+    "cells": [
+      true,
+      true,
+      false,
+      false,
+      false,
+      false,
+      true,
+      false,
+      false,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      false,
+      true,
+      true,
+      true,
+      false,
+      false,
+      false,
+      true,
+      false,
+      false
+    ],
+    "moves": 0,
+    "history": [],
+    "rewarded": false,
+    "stones": [
+      6,
+      18
+    ],
+    "currents": [
+      8
+    ],
+    "stars": [],
+    "verticals": [],
+    "rowCorals": [],
+    "columnCorals": [],
+    "burstCorals": [],
+    "pearlTarget": null,
+    "feature": "mixed",
+    "tapLimit": 42,
+    "contentRevision": 12,
+    "miniCells": [
+      false,
+      true,
+      false,
+      true
+    ],
+    "miniColorCorals": [
+      0,
+      4,
+      20,
+      24
+    ],
+    "miniPatterns": [
+      [
+        0,
+        3
+      ],
+      [
+        1,
+        2
+      ],
+      [
+        1
+      ],
+      [
+        3
+      ]
+    ],
+    "miniOrder": [
+      1,
+      0,
+      3,
+      2
+    ],
+    "miniStep": 0
+  },
+  {
+    "level": 159,
+    "size": 5,
+    "cells": [
+      false,
+      false,
+      true,
+      true,
+      false,
+      false,
+      true,
+      true,
+      false,
+      false,
+      true,
+      true,
+      true,
+      false,
+      true,
+      false,
+      true,
+      true,
+      true,
+      false,
+      false,
+      false,
+      true,
+      false,
+      false
+    ],
+    "moves": 0,
+    "history": [],
+    "rewarded": false,
+    "stones": [
+      6,
+      18
+    ],
+    "currents": [],
+    "stars": [],
+    "verticals": [
+      8
+    ],
+    "rowCorals": [],
+    "columnCorals": [],
+    "burstCorals": [],
+    "pearlTarget": null,
+    "feature": "mixed",
+    "tapLimit": 42,
+    "contentRevision": 12,
+    "miniCells": [
+      false,
+      true,
+      false,
+      true
+    ],
+    "miniColorCorals": [
+      0,
+      4,
+      20,
+      24
+    ],
+    "miniPatterns": [
+      [
+        0,
+        3
+      ],
+      [
+        1,
+        2
+      ],
+      [
+        1
+      ],
+      [
+        3
+      ]
+    ],
+    "miniOrder": [
+      3,
+      0,
+      2,
+      1
+    ],
+    "miniStep": 0
+  },
+  {
+    "level": 160,
+    "size": 5,
+    "cells": [
+      false,
+      false,
+      true,
+      false,
+      false,
+      false,
+      true,
+      false,
+      false,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      false,
+      true,
+      true,
+      true,
+      false,
+      false,
+      false,
+      true,
+      false,
+      false
+    ],
+    "moves": 0,
+    "history": [],
+    "rewarded": false,
+    "stones": [
+      6,
+      18
+    ],
+    "currents": [
+      8
+    ],
+    "stars": [],
+    "verticals": [],
+    "rowCorals": [],
+    "columnCorals": [],
+    "burstCorals": [],
+    "pearlTarget": null,
+    "feature": "mixed",
+    "tapLimit": 42,
+    "contentRevision": 12,
+    "miniCells": [
+      false,
+      true,
+      false,
+      true
+    ],
+    "miniColorCorals": [
+      0,
+      4,
+      20,
+      24
+    ],
+    "miniPatterns": [
+      [
+        0,
+        3
+      ],
+      [
+        1,
+        2
+      ],
+      [
+        1
+      ],
+      [
+        3
+      ]
+    ],
+    "miniOrder": [
+      0,
+      3,
+      1,
+      2
+    ],
+    "miniStep": 0
+  },
+  {
+    "level": 161,
+    "size": 5,
+    "cells": [
+      false,
+      false,
+      true,
+      true,
+      true,
+      false,
+      true,
+      true,
+      false,
+      true,
+      true,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      true,
+      true,
+      true,
+      true,
+      true,
+      false,
+      false,
+      false
+    ],
+    "moves": 0,
+    "history": [],
+    "rewarded": false,
+    "stones": [
+      6,
+      18
+    ],
+    "currents": [],
+    "stars": [],
+    "verticals": [],
+    "rowCorals": [],
+    "columnCorals": [],
+    "burstCorals": [],
+    "linkedPairs": [
+      [
+        0,
+        24
+      ]
+    ],
+    "cagedCorals": [],
+    "pearlTarget": null,
+    "feature": "mixed",
+    "tapLimit": 42,
+    "contentRevision": 15
+  },
+  {
+    "level": 162,
+    "size": 5,
+    "cells": [
+      false,
+      true,
+      true,
+      true,
+      true,
+      true,
+      false,
+      true,
+      true,
+      false,
+      true,
+      true,
+      false,
+      true,
+      true,
+      false,
+      true,
+      false,
+      true,
+      true,
+      true,
+      false,
+      true,
+      true,
+      true
+    ],
+    "moves": 0,
+    "history": [],
+    "rewarded": false,
+    "stones": [],
+    "currents": [],
+    "stars": [],
+    "verticals": [
+      12
+    ],
+    "rowCorals": [],
+    "columnCorals": [],
+    "burstCorals": [],
+    "linkedPairs": [
+      [
+        4,
+        20
+      ]
+    ],
+    "cagedCorals": [],
+    "pearlTarget": null,
+    "feature": "mixed",
+    "tapLimit": 42,
+    "contentRevision": 15
+  },
+  {
+    "level": 163,
+    "size": 5,
+    "cells": [
+      false,
+      false,
+      true,
+      false,
+      true,
+      false,
+      true,
+      true,
+      false,
+      true,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      false
+    ],
+    "moves": 0,
+    "history": [],
+    "rewarded": false,
+    "stones": [],
+    "currents": [
+      12
+    ],
+    "stars": [],
+    "verticals": [],
+    "rowCorals": [],
+    "columnCorals": [],
+    "burstCorals": [],
+    "linkedPairs": [
+      [
+        0,
+        24
+      ],
+      [
+        4,
+        20
+      ]
+    ],
+    "cagedCorals": [],
+    "pearlTarget": null,
+    "feature": "mixed",
+    "tapLimit": 42,
+    "contentRevision": 15
+  },
+  {
+    "level": 164,
+    "size": 5,
+    "cells": [
+      true,
+      false,
+      false,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      false,
+      false,
+      false,
+      true,
+      false,
+      true,
+      true,
+      true,
+      true,
+      false,
+      true,
+      true,
+      true,
+      false,
+      true,
+      true
+    ],
+    "moves": 0,
+    "history": [],
+    "rewarded": false,
+    "stones": [],
+    "currents": [],
+    "stars": [
+      12
+    ],
+    "verticals": [],
+    "rowCorals": [],
+    "columnCorals": [],
+    "burstCorals": [],
+    "linkedPairs": [
+      [
+        2,
+        22
+      ]
+    ],
+    "cagedCorals": [],
+    "pearlTarget": null,
+    "feature": "mixed",
+    "tapLimit": 42,
+    "contentRevision": 15
+  },
+  {
+    "level": 165,
+    "size": 5,
+    "cells": [
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      false,
+      false,
+      true,
+      false,
+      false,
+      false,
+      false,
+      true,
+      false,
+      true,
+      true,
+      true,
+      true,
+      false,
       false,
       false,
       false,
@@ -4318,36 +7878,1147 @@
     "history": [],
     "rewarded": false,
     "stones": [
-      1,
-      19
+      6,
+      18
     ],
-    "currents": [
-      13
-    ],
-    "stars": [
-      2
-    ],
-    "pearlTarget": 10,
-    "feature": "mixed",
-    "tapLimit": 42,
-    "contentRevision": 11,
-    "gaps": [
-      0,
-      4,
-      20,
-      24
-    ],
-    "rowCorals": [
-      11
-    ],
-    "columnCorals": [
-      8
-    ],
-    "verticals": [
-      7
-    ],
+    "currents": [],
+    "stars": [],
+    "verticals": [],
+    "rowCorals": [],
+    "columnCorals": [],
     "burstCorals": [
       12
-    ]
+    ],
+    "linkedPairs": [],
+    "cagedCorals": [],
+    "pearlTarget": null,
+    "feature": "mixed",
+    "tapLimit": 42,
+    "contentRevision": 15
+  },
+  {
+    "level": 166,
+    "size": 5,
+    "cells": [
+      false,
+      false,
+      false,
+      true,
+      false,
+      false,
+      false,
+      true,
+      true,
+      true,
+      true,
+      true,
+      false,
+      false,
+      true,
+      true,
+      true,
+      true,
+      false,
+      true,
+      false,
+      true,
+      false,
+      false,
+      true
+    ],
+    "moves": 0,
+    "history": [],
+    "rewarded": false,
+    "stones": [],
+    "currents": [],
+    "stars": [],
+    "verticals": [],
+    "rowCorals": [],
+    "columnCorals": [],
+    "burstCorals": [],
+    "linkedPairs": [
+      [
+        0,
+        24
+      ],
+      [
+        4,
+        20
+      ]
+    ],
+    "cagedCorals": [
+      12
+    ],
+    "pearlTarget": null,
+    "feature": "mixed",
+    "tapLimit": 42,
+    "contentRevision": 15
+  },
+  {
+    "level": 167,
+    "size": 5,
+    "cells": [
+      false,
+      true,
+      false,
+      false,
+      true,
+      true,
+      true,
+      false,
+      true,
+      true,
+      false,
+      false,
+      false,
+      true,
+      true,
+      true,
+      true,
+      false,
+      true,
+      true,
+      false,
+      false,
+      true,
+      true,
+      false
+    ],
+    "moves": 0,
+    "history": [],
+    "rewarded": false,
+    "stones": [],
+    "currents": [
+      2
+    ],
+    "stars": [],
+    "verticals": [
+      12
+    ],
+    "rowCorals": [],
+    "columnCorals": [],
+    "burstCorals": [],
+    "linkedPairs": [
+      [
+        0,
+        24
+      ]
+    ],
+    "cagedCorals": [],
+    "pearlTarget": null,
+    "feature": "mixed",
+    "tapLimit": 42,
+    "contentRevision": 15
+  },
+  {
+    "level": 168,
+    "size": 5,
+    "cells": [
+      true,
+      true,
+      true,
+      false,
+      false,
+      true,
+      true,
+      true,
+      true,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      true,
+      true,
+      false,
+      true,
+      false,
+      false,
+      false,
+      false,
+      true,
+      false
+    ],
+    "moves": 0,
+    "history": [],
+    "rewarded": false,
+    "stones": [],
+    "currents": [],
+    "stars": [],
+    "verticals": [],
+    "rowCorals": [
+      12
+    ],
+    "columnCorals": [],
+    "burstCorals": [],
+    "linkedPairs": [
+      [
+        4,
+        20
+      ]
+    ],
+    "cagedCorals": [],
+    "pearlTarget": null,
+    "feature": "mixed",
+    "tapLimit": 42,
+    "contentRevision": 15
+  },
+  {
+    "level": 169,
+    "size": 5,
+    "cells": [
+      false,
+      true,
+      false,
+      true,
+      true,
+      false,
+      false,
+      false,
+      false,
+      false,
+      true,
+      true,
+      false,
+      true,
+      false,
+      false,
+      false,
+      true,
+      true,
+      false,
+      true,
+      false,
+      true,
+      true,
+      true
+    ],
+    "moves": 0,
+    "history": [],
+    "rewarded": false,
+    "stones": [],
+    "currents": [],
+    "stars": [
+      12
+    ],
+    "verticals": [],
+    "rowCorals": [],
+    "columnCorals": [],
+    "burstCorals": [],
+    "linkedPairs": [
+      [
+        0,
+        24
+      ],
+      [
+        4,
+        20
+      ]
+    ],
+    "cagedCorals": [],
+    "pearlTarget": null,
+    "feature": "mixed",
+    "tapLimit": 42,
+    "contentRevision": 15
+  },
+  {
+    "level": 170,
+    "size": 5,
+    "cells": [
+      true,
+      true,
+      true,
+      true,
+      true,
+      false,
+      true,
+      false,
+      true,
+      true,
+      false,
+      true,
+      false,
+      true,
+      true,
+      false,
+      false,
+      false,
+      true,
+      true,
+      true,
+      false,
+      true,
+      true,
+      false
+    ],
+    "moves": 0,
+    "history": [],
+    "rewarded": false,
+    "stones": [],
+    "currents": [],
+    "stars": [],
+    "verticals": [],
+    "rowCorals": [],
+    "columnCorals": [],
+    "burstCorals": [],
+    "linkedPairs": [
+      [
+        0,
+        12,
+        24
+      ]
+    ],
+    "cagedCorals": [],
+    "pearlTarget": null,
+    "feature": "linkedGroup",
+    "tapLimit": 42,
+    "contentRevision": 15
+  },
+  {
+    "level": 171,
+    "size": 5,
+    "cells": [
+      true,
+      false,
+      false,
+      false,
+      true,
+      true,
+      true,
+      false,
+      false,
+      false,
+      false,
+      false,
+      true,
+      false,
+      true,
+      false,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      false,
+      true,
+      false
+    ],
+    "moves": 0,
+    "history": [],
+    "rewarded": false,
+    "stones": [
+      6,
+      18
+    ],
+    "currents": [],
+    "stars": [],
+    "verticals": [],
+    "rowCorals": [],
+    "columnCorals": [],
+    "burstCorals": [],
+    "linkedPairs": [
+      [
+        1,
+        12,
+        23
+      ]
+    ],
+    "cagedCorals": [],
+    "pearlTarget": null,
+    "feature": "mixed",
+    "tapLimit": 42,
+    "contentRevision": 15
+  },
+  {
+    "level": 172,
+    "size": 5,
+    "cells": [
+      false,
+      true,
+      false,
+      true,
+      true,
+      false,
+      true,
+      false,
+      false,
+      true,
+      true,
+      false,
+      false,
+      false,
+      true,
+      true,
+      false,
+      false,
+      true,
+      false,
+      true,
+      true,
+      true,
+      false,
+      true
+    ],
+    "moves": 0,
+    "history": [],
+    "rewarded": false,
+    "stones": [
+      6,
+      18
+    ],
+    "currents": [],
+    "stars": [],
+    "verticals": [],
+    "rowCorals": [],
+    "columnCorals": [],
+    "burstCorals": [
+      12
+    ],
+    "linkedPairs": [
+      [
+        0,
+        24
+      ]
+    ],
+    "cagedCorals": [],
+    "pearlTarget": null,
+    "feature": "mixed",
+    "tapLimit": 42,
+    "contentRevision": 15
+  },
+  {
+    "level": 173,
+    "size": 5,
+    "cells": [
+      false,
+      true,
+      false,
+      true,
+      true,
+      false,
+      true,
+      true,
+      true,
+      false,
+      true,
+      true,
+      false,
+      true,
+      true,
+      false,
+      true,
+      false,
+      true,
+      true,
+      true,
+      false,
+      true,
+      true,
+      false
+    ],
+    "moves": 0,
+    "history": [],
+    "rewarded": false,
+    "stones": [],
+    "currents": [],
+    "stars": [],
+    "verticals": [
+      12
+    ],
+    "rowCorals": [],
+    "columnCorals": [],
+    "burstCorals": [],
+    "linkedPairs": [
+      [
+        0,
+        24
+      ],
+      [
+        4,
+        20
+      ]
+    ],
+    "cagedCorals": [],
+    "pearlTarget": null,
+    "feature": "mixed",
+    "tapLimit": 42,
+    "contentRevision": 15
+  },
+  {
+    "level": 174,
+    "size": 5,
+    "cells": [
+      true,
+      true,
+      false,
+      true,
+      true,
+      true,
+      true,
+      false,
+      false,
+      true,
+      false,
+      false,
+      false,
+      true,
+      false,
+      true,
+      true,
+      false,
+      false,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true
+    ],
+    "moves": 0,
+    "history": [],
+    "rewarded": false,
+    "stones": [],
+    "currents": [],
+    "stars": [],
+    "verticals": [],
+    "rowCorals": [],
+    "columnCorals": [],
+    "burstCorals": [],
+    "linkedPairs": [
+      [
+        0,
+        12,
+        24
+      ]
+    ],
+    "cagedCorals": [
+      18
+    ],
+    "pearlTarget": null,
+    "feature": "mixed",
+    "tapLimit": 42,
+    "contentRevision": 15
+  },
+  {
+    "level": 175,
+    "size": 5,
+    "cells": [
+      true,
+      true,
+      false,
+      false,
+      false,
+      true,
+      true,
+      false,
+      true,
+      false,
+      true,
+      false,
+      false,
+      true,
+      true,
+      false,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true
+    ],
+    "moves": 0,
+    "history": [],
+    "rewarded": false,
+    "stones": [],
+    "currents": [],
+    "stars": [],
+    "verticals": [],
+    "rowCorals": [],
+    "columnCorals": [
+      12
+    ],
+    "burstCorals": [],
+    "linkedPairs": [
+      [
+        4,
+        20
+      ]
+    ],
+    "cagedCorals": [],
+    "pearlTarget": null,
+    "feature": "mixed",
+    "tapLimit": 42,
+    "contentRevision": 15
+  },
+  {
+    "level": 176,
+    "size": 5,
+    "cells": [
+      true,
+      false,
+      true,
+      false,
+      false,
+      true,
+      true,
+      true,
+      true,
+      false,
+      false,
+      true,
+      false,
+      true,
+      true,
+      true,
+      false,
+      false,
+      true,
+      false,
+      true,
+      true,
+      false,
+      true,
+      false
+    ],
+    "moves": 0,
+    "history": [],
+    "rewarded": false,
+    "stones": [
+      18
+    ],
+    "currents": [],
+    "stars": [
+      6
+    ],
+    "verticals": [],
+    "rowCorals": [],
+    "columnCorals": [],
+    "burstCorals": [],
+    "linkedPairs": [
+      [
+        1,
+        12,
+        23
+      ]
+    ],
+    "cagedCorals": [],
+    "pearlTarget": null,
+    "feature": "mixed",
+    "tapLimit": 42,
+    "contentRevision": 15
+  },
+  {
+    "level": 177,
+    "size": 5,
+    "cells": [
+      false,
+      false,
+      true,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      true,
+      false,
+      false,
+      false,
+      true,
+      true,
+      false,
+      false,
+      true,
+      true,
+      true,
+      true,
+      false,
+      false,
+      true
+    ],
+    "moves": 0,
+    "history": [],
+    "rewarded": false,
+    "stones": [],
+    "currents": [],
+    "stars": [],
+    "verticals": [],
+    "rowCorals": [],
+    "columnCorals": [],
+    "burstCorals": [
+      12
+    ],
+    "linkedPairs": [
+      [
+        0,
+        24
+      ]
+    ],
+    "cagedCorals": [],
+    "pearlTarget": null,
+    "feature": "mixed",
+    "tapLimit": 42,
+    "contentRevision": 15
+  },
+  {
+    "level": 178,
+    "size": 5,
+    "cells": [
+      false,
+      true,
+      true,
+      false,
+      true,
+      true,
+      true,
+      false,
+      false,
+      true,
+      true,
+      false,
+      false,
+      false,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      false,
+      true,
+      true,
+      true,
+      false
+    ],
+    "moves": 0,
+    "history": [],
+    "rewarded": false,
+    "stones": [],
+    "currents": [],
+    "stars": [],
+    "verticals": [],
+    "rowCorals": [],
+    "columnCorals": [],
+    "burstCorals": [],
+    "linkedPairs": [
+      [
+        0,
+        24
+      ],
+      [
+        4,
+        20
+      ]
+    ],
+    "cagedCorals": [
+      12
+    ],
+    "pearlTarget": null,
+    "feature": "mixed",
+    "tapLimit": 42,
+    "contentRevision": 15
+  },
+  {
+    "level": 179,
+    "size": 5,
+    "cells": [
+      false,
+      true,
+      false,
+      true,
+      true,
+      true,
+      false,
+      false,
+      true,
+      true,
+      true,
+      false,
+      false,
+      true,
+      true,
+      false,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      false
+    ],
+    "moves": 0,
+    "history": [],
+    "rewarded": false,
+    "stones": [],
+    "currents": [
+      6
+    ],
+    "stars": [],
+    "verticals": [],
+    "rowCorals": [],
+    "columnCorals": [],
+    "burstCorals": [],
+    "linkedPairs": [
+      [
+        0,
+        12,
+        24
+      ]
+    ],
+    "cagedCorals": [],
+    "pearlTarget": null,
+    "feature": "mixed",
+    "tapLimit": 42,
+    "contentRevision": 15
+  },
+  {
+    "level": 180,
+    "size": 5,
+    "cells": [
+      true,
+      false,
+      true,
+      true,
+      true,
+      true,
+      false,
+      true,
+      true,
+      true,
+      false,
+      true,
+      false,
+      false,
+      true,
+      true,
+      true,
+      true,
+      false,
+      false,
+      true,
+      true,
+      true,
+      true,
+      false
+    ],
+    "moves": 0,
+    "history": [],
+    "rewarded": false,
+    "stones": [],
+    "currents": [],
+    "stars": [],
+    "verticals": [
+      6
+    ],
+    "rowCorals": [
+      12
+    ],
+    "columnCorals": [],
+    "burstCorals": [],
+    "linkedPairs": [],
+    "cagedCorals": [],
+    "pearlTarget": null,
+    "feature": "mixed",
+    "tapLimit": 42,
+    "contentRevision": 15
+  },
+  {
+    "level": 181,
+    "size": 5,
+    "cells": [
+      true,
+      false,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      false,
+      true,
+      false,
+      true,
+      false,
+      true,
+      true,
+      false,
+      true,
+      true,
+      true,
+      true,
+      true
+    ],
+    "moves": 0,
+    "history": [],
+    "rewarded": false,
+    "stones": [
+      6,
+      18
+    ],
+    "currents": [],
+    "stars": [],
+    "verticals": [
+      20
+    ],
+    "rowCorals": [],
+    "columnCorals": [],
+    "burstCorals": [],
+    "linkedPairs": [
+      [
+        0,
+        12,
+        24
+      ]
+    ],
+    "cagedCorals": [],
+    "pearlTarget": null,
+    "feature": "mixed",
+    "tapLimit": 42,
+    "contentRevision": 15
+  },
+  {
+    "level": 182,
+    "size": 5,
+    "cells": [
+      false,
+      false,
+      true,
+      false,
+      false,
+      true,
+      true,
+      false,
+      true,
+      false,
+      false,
+      false,
+      true,
+      true,
+      false,
+      true,
+      true,
+      true,
+      true,
+      true,
+      false,
+      false,
+      true,
+      true,
+      false
+    ],
+    "moves": 0,
+    "history": [],
+    "rewarded": false,
+    "stones": [
+      6,
+      18
+    ],
+    "currents": [],
+    "stars": [],
+    "verticals": [],
+    "rowCorals": [],
+    "columnCorals": [],
+    "burstCorals": [
+      12
+    ],
+    "linkedPairs": [
+      [
+        0,
+        24
+      ],
+      [
+        4,
+        20
+      ]
+    ],
+    "cagedCorals": [],
+    "pearlTarget": null,
+    "feature": "mixed",
+    "tapLimit": 42,
+    "contentRevision": 15
+  },
+  {
+    "level": 183,
+    "size": 5,
+    "cells": [
+      true,
+      false,
+      false,
+      true,
+      false,
+      false,
+      false,
+      true,
+      false,
+      false,
+      true,
+      false,
+      false,
+      true,
+      true,
+      true,
+      true,
+      true,
+      false,
+      true,
+      false,
+      false,
+      true,
+      false,
+      false
+    ],
+    "moves": 0,
+    "history": [],
+    "rewarded": false,
+    "stones": [],
+    "currents": [],
+    "stars": [
+      18
+    ],
+    "verticals": [],
+    "rowCorals": [],
+    "columnCorals": [],
+    "burstCorals": [],
+    "linkedPairs": [
+      [
+        1,
+        12,
+        23
+      ]
+    ],
+    "cagedCorals": [
+      6
+    ],
+    "pearlTarget": null,
+    "feature": "mixed",
+    "tapLimit": 42,
+    "contentRevision": 15
+  },
+  {
+    "level": 184,
+    "size": 5,
+    "cells": [
+      true,
+      false,
+      true,
+      true,
+      true,
+      false,
+      false,
+      true,
+      false,
+      false,
+      true,
+      true,
+      false,
+      false,
+      true,
+      true,
+      true,
+      false,
+      false,
+      true,
+      true,
+      true,
+      false,
+      false,
+      false
+    ],
+    "moves": 0,
+    "history": [],
+    "rewarded": false,
+    "stones": [],
+    "currents": [
+      6
+    ],
+    "stars": [],
+    "verticals": [],
+    "rowCorals": [],
+    "columnCorals": [
+      12
+    ],
+    "burstCorals": [],
+    "linkedPairs": [
+      [
+        2,
+        22
+      ]
+    ],
+    "cagedCorals": [],
+    "pearlTarget": null,
+    "feature": "mixed",
+    "tapLimit": 42,
+    "contentRevision": 15
+  },
+  {
+    "level": 185,
+    "size": 5,
+    "cells": [
+      false,
+      false,
+      true,
+      false,
+      false,
+      false,
+      false,
+      true,
+      true,
+      false,
+      false,
+      false,
+      true,
+      false,
+      true,
+      false,
+      true,
+      false,
+      false,
+      true,
+      false,
+      false,
+      true,
+      false,
+      true
+    ],
+    "moves": 0,
+    "history": [],
+    "rewarded": false,
+    "stones": [],
+    "currents": [],
+    "stars": [],
+    "verticals": [],
+    "rowCorals": [
+      16
+    ],
+    "columnCorals": [],
+    "burstCorals": [],
+    "linkedPairs": [
+      [
+        0,
+        12,
+        24
+      ],
+      [
+        4,
+        20
+      ]
+    ],
+    "cagedCorals": [],
+    "pearlTarget": null,
+    "feature": "mixed",
+    "tapLimit": 42,
+    "contentRevision": 15
   }
 ]

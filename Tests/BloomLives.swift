@@ -141,7 +141,7 @@ import Foundation
         let migrateDir=root.appendingPathComponent("gift-migration")
         try ReefSaveFile(defaults:defaults,directory:migrateDir).write(oldSave)
         let migrated=ReefStore(defaults:defaults,saveDirectory:migrateDir)
-        precondition(migrated.progress.version==28 && migrated.progress.supplies==oldSave.supplies && migrated.progress.lifeGiftSeed==oldSave.lifeGiftSeed)
+        precondition(migrated.progress.version==31 && migrated.progress.supplies==oldSave.supplies && migrated.progress.lifeGiftSeed==oldSave.lifeGiftSeed)
         print("Exact 3%/5%/0.5% reward buckets; native win grants; refill adds no unlimited time; overflow and format-17 migration preserved")
 
 

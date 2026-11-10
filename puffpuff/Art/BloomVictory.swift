@@ -6,7 +6,8 @@ enum BloomVictoryStyle: String, CaseIterable {
     case hop, doubleHop, wiggle, swoop, bob, drift, lap, bubbleSpin
 
     static func choose(level: Int, size: Int, feature: String, pearlTarget: Int?) -> Self {
-        if level == 100 || feature == "burst" || feature == "star" || feature == "mixed" || (pearlTarget ?? 0) >= 12 { return .bubbleSpin }
+        if level == 100 || feature == "burst" || feature == "star" || feature == "mixed" ||
+            feature == "cage" || feature == "mini" || (pearlTarget ?? 0) >= 12 { return .bubbleSpin }
         if feature == "stone" || feature == "current" || feature == "vertical" || size >= 5 { return .lap }
         let gentle: [Self] = [.hop, .wiggle, .swoop, .doubleHop, .bob, .drift]
         return gentle[(max(1, level) - 1) % gentle.count]
@@ -149,8 +150,8 @@ enum BloomBubbleReward: Identifiable, Equatable {
     }
     var title: String {
         switch self {
-        case .glow: "+3 Glow"
-        case .pearl: "+4 Glow"
+        case .glow: "+3 Lumes"
+        case .pearl: "+4 Lumes"
         case .hint(let count): "+\(count) \(count == 1 ? "hint":"hints")"
         case .lighter: "+1 lighter"
         case .futureTeller: "+1 Future Teller"
@@ -182,8 +183,8 @@ enum BloomBubbleReward: Identifiable, Equatable {
     }
     var accessibility: String {
         switch self {
-        case .glow: "3 Glow earned"
-        case .pearl: "4 Glow earned"
+        case .glow: "3 Lumes earned"
+        case .pearl: "4 Lumes earned"
         case .refill: "Lives refilled to at least five. No unlimited time added."
         case .instant: "15 minutes of unlimited lives activated. Lives refilled."
         case .stored: "15-minute unlimited-lives boost saved for later."
@@ -200,15 +201,15 @@ enum BloomBubbleReward: Identifiable, Equatable {
     var explanation: String {
         switch self {
         case .glow, .pearl: "Lights the Trail, clears obstacles and opens treasure chests."
-        case .hint: "Highlights one useful coral to tap in Bloom. Uses no taps."
+        case .hint: "Highlights one useful coral to tap in Glow. Uses no taps."
         case .futureTeller: "Glimpse a possible final arrangement and its winning tap. Work out how to get there, and reopen the glimpse freely this attempt."
-        case .shot, .doubleShot: "Each shot lets Puff Puff take one putt in golf or a Trail challenge."
-        case .refill: "Refills your Bloom lives."
-        case .instant: "Refills your Bloom lives and starts 15 minutes of unlimited lives immediately."
-        case .stored: "Save it for later. Use it from Your treasure for a life refill and 15 minutes of unlimited Bloom lives."
-        case .lighter: "Keeps one chosen coral glowing for the rest of the Bloom attempt. Uses no taps."
-        case .currentAdder: "Place a current and choose its direction to push Puff Puff or enemy fish. Lasts until Retry."
-        case .bouncyBlock: "Place a block to bounce Puff Puff or enemy fish. Lasts until Retry."
+        case .shot, .doubleShot: "Each shot lets PuffPuff take one putt in golf or a Trail challenge."
+        case .refill: "Refills your Glow lives."
+        case .instant: "Refills your Glow lives and starts 15 minutes of unlimited lives immediately."
+        case .stored: "Save it for later. Use it from Your treasure for a life refill and 15 minutes of unlimited Glow lives."
+        case .lighter: "Keeps one chosen coral glowing for the rest of the Glow attempt. Uses no taps."
+        case .currentAdder: "Place a current and choose its direction to push PuffPuff or enemy fish. Lasts until Retry."
+        case .bouncyBlock: "Place a block to bounce PuffPuff or enemy fish. Lasts until Retry."
         }
     }
     static func forGift(_ gift:BloomLifeGift)->Self {
@@ -434,9 +435,9 @@ struct BloomTapInfo: View {
                 Text("Finished in \(moves) \(moves == 1 ? "tap" : "taps")")
                     .reefFont(size: 25, weight: .semibold)
                 if bonus {
-                    ReefIconLabel("+1 Glow", .glow, size: 40).reefFont(size: 21, weight: .semibold)
+                    ReefIconLabel("+1 Lume", .glow, size: 40).reefFont(size: 21, weight: .semibold)
                         .overlay { BloomTapBonusSparkles() }
-                        .accessibilityLabel("Tap bonus: 1 extra Glow")
+                        .accessibilityLabel("Tap bonus: 1 extra Lume")
                 }
             }
         }
@@ -579,7 +580,7 @@ enum BloomVictoryArt {
             : restingPose(in:restingFrame,happy:happy,reinflating:reinflating,time:time)
         if swimming {
             let count = style == .bubbleSpin ? 10 : style == .lap ? 7 : 4
-            // Only the wake fades. Puff Puff stays fully visible throughout.
+            // Only the wake fades. PuffPuff stays fully visible throughout.
             let fade = min(1,time/90)*min(1,(style.duration-time)/200)
             for i in 1...count {
                 let past = max(0,time-Double(i)*32.5)

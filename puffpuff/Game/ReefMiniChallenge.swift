@@ -96,7 +96,7 @@ enum ReefMiniChallenge {
         return (objects.firstIndex{$0.id==id} ?? 0)+1
     }
     static func timedEncounter(_ id:String)->Bool {
-        let enemies=FirstReef.destinations.flatMap{ReefCove.objects(in:$0.id)}.filter{$0.challengeKind == .enemy}
+        let enemies=FirstReef.destinations.flatMap{ReefCove.objects(in:$0.id)}.filter{$0.legacyChallengeKind == .enemy}
         return (enemies.firstIndex{$0.id==id} ?? 0).isMultiple(of:3)
     }
     static func route(_ layout:Int)->[ReefPoint] {
@@ -289,7 +289,7 @@ enum ReefMiniChallenge {
                         let normal=distance>0.001 ? delta*(1/distance):ReefPoint(x:0,y:-1)
                         let approach=(velocity-enemyVelocity[i]).dot(normal)
                         if approach>0 {
-                            // Puff Puff passes most of the push to the small fish.
+                            // PuffPuff passes most of the push to the small fish.
                             struck.insert(i)
                             let impulse=approach*1.25
                             enemyVelocity[i]=enemyVelocity[i]+normal*impulse

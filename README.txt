@@ -1,7 +1,53 @@
+PuffPuff: Glow Puzzle
+
+Current direction — November 7, 2026
+
+Store-listing title: PuffPuff: Glow Puzzle. Pause/settings title: puffpuff.
+Homescreen label stays puffpuff. Puzzle: Glow. Currency: Lumes.
+
+World 1, The Faded Garden: a storm dimmed the reef. Relight three coral gardens,
+find PuffPuff's cottage, and relight home. Pale, chipped, drooping coral and silt
+become colorful and lively as each patch is restored. The mystery-house outline
+in the goal bar opens the story; there is no named fish target in this world.
+Cheapest required route remains 220 Lumes (55–74 Glow wins); straightforward route
+242. Optional treasure and furnishings cost extra. Existing paid work stays done.
+
+World 2 The Hidden Reef will rescue Bailey, the little clownfish. The turtle reunion
+and Seabiscuit stories follow later. They are planned, not playable. There are 100
+playable Glow puzzles and one Trail. See REEF_WORLD_PLAN.txt.
+
+The Trail has no footer. Restoring home unlocks a cottage button to enter its room;
+previously owned furniture remains usable. Friend visits await approved character art.
+Tap to swim, pinch/drag to explore, or use the room-area symbols. A furniture crate
+shows owned items; the shell-awning shop unlocks after World 1. Shell seat 12 Lumes,
+coral planter 15, pearl lantern 18. Place, move, flip or store owned items for free.
+Rest in the seat, toggle the lantern, or play with coral bubbles. Arrangements persist.
+Editable masters: Design/CoralHome/Coral-Cottage-Spacious-Room.af and House-Controls.af.
+Restoration style study: Design/Trail/Reef-Restoration.af.
+
+Save format 31 preserves puzzle/checkpoint, resources, reveals and golf history.
+The legacy bubbaRescued key now means home restored, not a future Bailey rescue.
+No player save reset or new required payment.
+
+The native Mac preview is puffpuff.app. Canonical Xcode project: puffpuff.xcodeproj.
+Mac and iPhone simulator builds pass; Release/device compilation also passes
+without signing changes. Run scripts/check-glow-path.sh for route, migration,
+one-time purchase and rollback checks, plus the existing puzzle/life/playback checks.
+
+Character art is DRAFT ONLY: Design/RescueFriends/Reef-Friends-Family-Draft.af.
+The user is editing the characters in Affinity; do not import them until approved.
+The earlier thin-outline concept remains in Reef-Friends-and-Home.af.
+Official PuffPuff and the original coral cottage masters remain unchanged.
+
+Golf screens and rewards are removed. Source/assets are retained in Archive/Golf
+and /Users/gtgchlode/code/puffpuff-golf/puffpuff-golf-source-2026-11-07.zip.
+
+Historical development notes
+
 puffpuff — first native SwiftUI chapter
 
 APP NAMES
-Selected App Store listing name: PuffPuff: Golf & Glow
+Selected App Store listing name: PuffPuff: Glow Puzzle
 Home Screen name: puffpuff
 The listing name is set separately in App Store Connect. Keep the Xcode
 bundle display name lowercase, with no spaces.
@@ -111,13 +157,13 @@ lit corals bend gently with the current. All use the shared ocean clock and
 respect pause and Reduce Motion. Unlit corals and pebbles remain still.
 
 CONTENT
-100 authored Bloom boards live in Resources/BloomLevels.json. All 100 are playable; burst coral starts at 85 with a free practice.
+185 authored Bloom boards live in Resources/BloomLevels.json. Levels 1–100 remain unchanged; linked coral, caged coral and the coupled mini-board extend play through 185.
 The first 10 boards are authored as a gentler introduction. The remaining
 boards are generated from legal moves and saved as data. Every tap budget
 covers a solution, with room for mistakes beyond the first one-tap lesson.
 Tap budgets give room to experiment: 6/10/12/14 for patches 1–4,
 18 for 5–9, 24 for 10–19, 30 for 20–40, 34 for 41–60,
-38 for 61–80 and 42 for 81–100. Existing attempts and replay checkpoints
+38 for 61–80; 42 for 81–100 and 101–149; 34 for 150–154; and 42 for 155–185. Existing attempts and replay checkpoints
 receive increases without losing their pattern, moves or added taps.
 Later difficulty still needs play tuning. Candidate additions are
 data-controlled and can be moved, mixed, or disabled while tuning:
@@ -139,11 +185,11 @@ data-controlled and can be moved, mixed, or disabled while tuning:
   60–70: whole rows/columns mixed with earlier tiles; 63/67 have no whole lines
   71–84: mixed line/directional/diagonal boards and breathers
   85–88: burst coral introduction, overlap practice and pebbles
-  89–100: selective mixes and breathers; 100 ends this chapter
+  89–99: selective mixes and breathers; 100: oversized Century Reef special level; 101–160 add linked coral, cages and a coupled mini-board; 161–185 mix linked pairs and trios with existing tiles
 
 Legacy ten-stage data is retained for save compatibility; only the new
 first reef is exposed through Home → Trail.
-Bloom stops at 100. Replay lets you practice the just-won level for free, without rewards;
+Bloom stops at 185. Replay lets you practice the just-won level for free, without rewards;
 Home returns to the saved Trail cove. Shots are first-clear milestones only. Later saved progress is preserved.
 Saved native progress is independent of the earlier browser demo.
 Existing unfinished levels 1–10 migrate to the new lesson at the same
@@ -248,13 +294,13 @@ Home offers Bloom and Trail. Gameplay has a Pause button with Resume and
 Home; the bottom toolbar is removed. Bloom's heading is just the patch.
 
 Choosing Bloom opens Start from beginning or Start from level. Type any
-number from 1–100. The field starts at the current patch; starting that
+number from 1–185. The field starts at the current patch; starting that
 level resumes its board. A different level starts a fresh board and keeps
 the original checkpoint. The saved checkpoint level is shown when it
 differs; type that number to restore it. Beginning replays patch 1 while
 keeping resources, Trail progress and the original board. Invalid input
 cannot start a game. This level picker is temporary and available in local Debug/simulator builds and
-verified TestFlight installations. Public App Store builds hide testing tools.
+all current beta builds (see the November 7 TestFlight notes below).
 The normal Bloom button resumes the current board directly from the Trail.
 Save format 8 supports jumping above or below the checkpoint, preserves it
 across launches, and prevents older builds from overwriting the newer save.
@@ -331,7 +377,7 @@ tutorial preference remembers dismissal. Existing board attempts stay intact.
 
 Reward update — October 27, 2026
 Win: 3 Glow, plus 1 for meeting an optional pearl target. First clears of levels
-5, 10, 15... award one hint and one shot; shots no longer drop on every win.
+5, 10, 15...185 award one hint and one shot; shots no longer drop on every win.
 After first clears above level 4 and one-time Trail finds, a stable roll gives
 10% instant life boosts or 0.5% saved boosts. Instant boosts fill lives to at
 least five and start 15 minutes immediately. Saved boosts stay in inventory
@@ -393,7 +439,7 @@ discoveries remain unlocked, without a retroactive charge.
 First-item explanations appear at their actual reward reveal; old queued
 records no longer pop up after navigation or launch. Some easy Bloom wins
 use a little hop or double hop in place. The hint refill panel has a centered
-shell icon and a padded 44-point close button. Bloom currently ends at 100.
+shell icon and a padded 44-point close button. Bloom currently ends at 185.
 
 NOVEMBER 2 PATH GOALS & CLOSED CHESTS
 The path has no footer. Goals show snacks and home; optional chests do not
@@ -408,11 +454,17 @@ November 3 Trail refinement: local prices are now 8–24 Glow (small finds 8–1
 November 6: Burst coral flips its 3×3 neighborhood, excluding water, pebbles and lighter-held coral. All 100 boards are solvable with native rules. Existing started/completed attempts and checkpoints survive the format-27 upgrade. Current-Adder.af/SVG and the runtime icon place the plus at (50,50).
 
 
-TESTFLIGHT TESTING TOOLS (November 6, 2026)
-Archive the normal puffpuff scheme in Release and upload a new build to TestFlight.
-Settings includes Debug refills, Debug levels, Playground and Restart everything
-in Xcode/simulator and verified TestFlight installations. Cleared Trail challenges
-also show Replay. Public App Store installations hide and reject testing actions.
-StoreKit checks the signed app environment; no extra scheme or DEBUG flag is needed.
-An initial environment check may need connectivity; reopening Settings retries it.
-Existing TestFlight uploads cannot change; install the newly uploaded build.
+TESTFLIGHT TESTING TOOLS (November 7, 2026)
+Build 2026110701 explicitly enables testing tools for EVERYONE using this beta.
+Archive the normal puffpuff scheme (Release), upload it, then install the new build.
+Settings has Debug refills, Debug levels and Restart everything immediately, even
+offline. No Apple sandbox/account check is required. Reset still asks for confirmation
+and backs up the current game. Opening Settings does not grant or reset anything.
+Both build configurations define PUFFPUFF_BETA_TOOLS. Remove that flag from Release
+before a future public App Store launch; Release keeps normal optimization and does
+not define DEBUG. Existing uploads cannot change; testers must install the new build.
+
+November 7, build 2026110702: export-compliance metadata is included in every new
+archive (ITSAppUsesNonExemptEncryption = false), so the no-non-exempt-encryption
+answer travels with the build. Includes the everyone-gets-Debug beta fix. Previously
+uploaded builds still need their existing compliance questions completed.

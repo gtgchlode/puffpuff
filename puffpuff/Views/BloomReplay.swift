@@ -134,6 +134,8 @@ struct BloomMoveShow: View {
     private func board(at frame: BloomMoveFrame) -> CoralPuzzle {
         var board = original
         board.cells = frame.cells; board.lighterCorals = frame.held; board.moves = frame.taps
+        board.miniCells = frame.miniCells ?? board.miniCells
+        board.miniStep = frame.miniStep ?? board.miniStep
         return board
     }
 }
@@ -234,29 +236,45 @@ private struct BloomReviewBoard: View {
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
 
     var body: some View {
-        LazyVGrid(columns: Array(repeating: GridItem(.flexible(), spacing: 8), count: puzzle.size), spacing: 8) {
-            ForEach(puzzle.cells.indices, id: \.self) { i in
-                if puzzle.isGap(i) {
-                    Color.clear.aspectRatio(1, contentMode: .fit).accessibilityHidden(true)
-                } else {
-                    CoralCell(lit: puzzle.cells[i], stone: puzzle.stones.contains(i),
-                        current: puzzle.currents.contains(i), vertical: puzzle.isVertical(i), star: puzzle.stars.contains(i),
-                        wholeRow: puzzle.isRowCoral(i), wholeColumn: puzzle.isColumnCoral(i), burst: puzzle.isBurst(i), hint: focus == i,
-                        seed: Double(i), species: CoralSpecies(rawValue: (i + i / puzzle.size) % 3) ?? .peachSprig,
-                        bloom: puzzle.isComplete ? 1 : 0,
-                        swell: reduceMotion ? 0 : (frame?.affected.contains(i) == true ? sin(.pi * pulse) * 0.6 : 0)) { onTap?(i) }
-                        .allowsHitTesting(onTap != nil && puzzle.canTap(i))
-                        .accessibilityLabel("Row \(i / puzzle.size + 1), column \(i % puzzle.size + 1), \(puzzle.stones.contains(i) ? "pebble" : puzzle.cells[i] ? "glowing coral" : "sleepy coral")")
-                        .animation(reduceMotion ? nil : .easeOut(duration: 0.16), value: puzzle.cells[i])
+        VStack(spacing: 12) {
+            if puzzle.hasMiniBoard { BloomMiniBoard(puzzle: puzzle) }
+            LazyVGrid(columns: Array(repeating: GridItem(.flexible(), spacing: 8), count: puzzle.size), spacing: 8) {
+                ForEach(puzzle.cells.indices, id: \.self) { i in
+                    if puzzle.isGap(i) {
+                        Color.clear.aspectRatio(1, contentMode: .fit).accessibilityHidden(true)
+                    } else {
+                        CoralCell(lit: puzzle.cells[i], stone: puzzle.stones.contains(i),
+                            current: puzzle.currents.contains(i), vertical: puzzle.isVertical(i), star: puzzle.stars.contains(i),
+                            wholeRow: puzzle.isRowCoral(i), wholeColumn: puzzle.isColumnCoral(i), burst: puzzle.isBurst(i), hint: focus == i,
+                            seed: Double(i), species: CoralSpecies(rawValue: (i + i / puzzle.size) % 3) ?? .peachSprig,
+                            linkedGroupID: puzzle.linkedGroupID(at:i), bloom: puzzle.isComplete ? 1 : 0,
+                            swell: reduceMotion ? 0 : (frame?.affected.contains(i) == true ? sin(.pi * pulse) * 0.6 : 0)) { onTap?(i) }
+                            .allowsHitTesting(onTap != nil && puzzle.canTap(i))
+                            .overlay { CoralSpecialMarks(caged: puzzle.isCaged(i), miniColor: puzzle.miniColorID(at:i)) }
+                            .accessibilityLabel(tileLabel(i))
+                            .animation(reduceMotion ? nil : .easeOut(duration: 0.16), value: puzzle.cells[i])
+                    }
                 }
-            }
-        }.padding(12).frame(maxWidth: puzzle.size == 1 ? 126 : puzzle.size == 2 ? 228 : 320)
-            .background(BloomReefBed(size: puzzle.size, gaps: puzzle.gaps ?? [], complete: puzzle.isComplete))
-            .overlay {
-                if let frame, let move = frame.move, !reduceMotion, pulse < 1 {
-                    BloomMoveGleam(size: puzzle.size, origin: move.index, targets: frame.affected, phase: pulse)
+            }.padding(12).frame(maxWidth: puzzle.size == 1 ? 126 : puzzle.size == 2 ? 228 : puzzle.size > 5 ? 360 : 320)
+                .background(BloomReefBed(size: puzzle.size, gaps: puzzle.gaps ?? [], complete: puzzle.isComplete))
+                .overlay {
+                    if let frame, let move = frame.move, !reduceMotion, pulse < 1 {
+                        BloomMoveGleam(size: puzzle.size, origin: move.index, targets: frame.affected, phase: pulse)
+                    }
                 }
-            }
+        }
+    }
+
+    private func tileLabel(_ index: Int) -> String {
+        let kind: String
+        if puzzle.stones.contains(index) { kind = "pebble" }
+        else if puzzle.isCaged(index) { kind = "caged coral" }
+        else if let groupID = puzzle.linkedGroupID(at:index) {
+            kind = "\(BloomLinkedPalette.name(groupID)) linked coral, group of \(puzzle.linkedGroup(at:index).count)"
+        }
+        else if let color = puzzle.miniColorID(at: index) { kind = "\(BloomMiniColor.name(color)) mini-board coral" }
+        else { kind = puzzle.cells[index] ? "glowing coral" : "sleepy coral" }
+        return "Row \(index / puzzle.size + 1), column \(index % puzzle.size + 1), \(kind)"
     }
 }
 

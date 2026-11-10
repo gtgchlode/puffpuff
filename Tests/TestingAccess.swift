@@ -17,7 +17,33 @@ import Foundation
             try ReefSaveFile(defaults: defaults, directory: dir).write(p)
             return (ReefStore(defaults: defaults, saveDirectory: dir, testingEnvironment: check), dir)
         }
-        precondition(!ReefTestingEnvironment.isLocalBuild, "Run this test without DEBUG on macOS")
+        #if PUFFPUFF_BETA_TOOLS
+        #if DEBUG
+        preconditionFailure("Test beta archives without DEBUG, using optimized Release code")
+        #endif
+        precondition(ReefTestingEnvironment.isTestingBuild)
+        var verificationCalls = 0
+        let (beta, betaDir) = try fixture("beta") { verificationCalls += 1; return false }
+        let betaBefore = beta.progress
+        precondition(beta.testingToolsEnabled, "Every tester has tools immediately, before an environment check")
+        await beta.refreshTestingAccess()
+        precondition(verificationCalls == 0 && beta.testingToolsEnabled)
+        precondition(equal(beta.progress, betaBefore), "Enabling tools does not edit player data")
+        precondition(beta.addDebugSupply(.glow) && beta.progress.glow == 25)
+        precondition(beta.addDebugSupply(.hints) && beta.progress.hints == 7)
+        precondition(equal(beta.puzzle, betaBefore.puzzle))
+        precondition(beta.startDebugLevel(58) && beta.puzzle.level == 58)
+        precondition(equal(beta.progress.bloomResumePuzzle, betaBefore.puzzle))
+        await beta.refreshTestingAccess()
+        precondition(verificationCalls == 0 && beta.testingToolsEnabled)
+        let reloadedBeta = ReefStore(defaults: defaults, saveDirectory: betaDir, testingEnvironment: { false })
+        precondition(reloadedBeta.testingToolsEnabled && reloadedBeta.puzzle.level == 58)
+        precondition(reloadedBeta.startFromBeginning() && reloadedBeta.puzzle.level == 1)
+        precondition(reloadedBeta.restartEverything())
+        precondition(FileManager.default.fileExists(atPath: betaDir.appendingPathComponent("reset-backups").path))
+        print("Optimized beta archive: tools on immediately; failed/offline StoreKit never called; refills, replay, relaunch and backed-up reset work.")
+        #else
+        precondition(!ReefTestingEnvironment.isTestingBuild, "Run this test without DEBUG on macOS")
         var sandbox = false
         let (app, dir) = try fixture("access") { sandbox }
         let before = app.progress
@@ -35,10 +61,11 @@ import Foundation
         // An App Store installation loading a beta save must not inherit access.
         let production = ReefStore(defaults: defaults, saveDirectory: dir, testingEnvironment: { false })
         await production.refreshTestingAccess()
-        precondition(!production.testingToolsEnabled && !production.addDebugSupply(.shots))
+        precondition(!production.testingToolsEnabled && !production.addDebugSupply(.hints))
         sandbox = false; await app.refreshTestingAccess()
         precondition(!app.testingToolsEnabled && !app.restartEverything())
         print("Release tools default off; sandbox enables refills/level picker; production/recheck revokes access; saves cannot transfer permission.")
+        #endif
 
         let (referral, referralDir) = try fixture("referral") { false }
         let trail = referral.progress.firstReef, board = referral.puzzle, balances = referral.progress.supplies

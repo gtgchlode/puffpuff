@@ -11,7 +11,7 @@ struct PipView: View {
                 .animation(reduceMotion ? nil : .timingCurve(0.23, 1, 0.32, 1, duration: 0.7), value: happy)
         }
         .accessibilityElement(children: .ignore)
-        .accessibilityLabel(happy ? "Puff Puff, relaxed and smiling" : "Puff Puff, a puffed-up golden pufferfish")
+        .accessibilityLabel(happy ? "PuffPuff, relaxed and smiling" : "PuffPuff, a puffed-up golden pufferfish")
         .allowsHitTesting(false)
     }
 }

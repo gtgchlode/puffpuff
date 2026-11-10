@@ -1,4 +1,112 @@
+# App Store title — November 9, 2026
+
+The exact App Store listing title is **PuffPuff: Glow Puzzle**. This is a store-only name.
+Keep home-screen, pause and Settings labels as puffpuff; the character remains PuffPuff.
+Do not rename the Xcode project/scheme, bundle ID, save keys or in-game screens.
+APP_STORE_METADATA.txt records the listing name; changing it does not update Apple automatically.
+
+# Storm restoration and Bailey — November 7, 2026
+
+World 1 remains The Faded Garden: a storm damaged the reef and dimmed its coral.
+PuffPuff relights three gardens and his cottage to make it livable again. Its goal
+is an outlined mystery house with a question mark, then a check when restored.
+Tap goals to read the short story. No visible Bubba name/fish target in World 1.
+House visits unlock after restoring home; grandfather any existing owned furniture.
+The shop still requires completed World 1. Treasure and furniture stay optional.
+
+World 2 The Hidden Reef will rescue Bailey (the clownfish previously called Bubba).
+Turtle reunion and Seabiscuit move to later planned worlds. Only World 1 is playable.
+Never ship draft friend artwork before the user approves it, or rename the official
+PuffPuff. Old Affinity layer names remain intact while the user edits the drafts.
+
+Preserve all saved progress: bubbaRescued is a legacy serialized key now read as
+hasRestoredHome, and home:2 keeps its existing paid credit/cost. This does not award
+any future Bailey rescue. No new save schema or costs. Three garden IDs stay as food.
+
+Unrestored scenery is pale, chipped, drooping and silted. Paths begin dark, matte and low-glint, then brighten as their cove is restored. Each paid patch restores
+its own colors, shape and gentle motion; no whole-cove instant restoration. Darkness
+and price/readability remain. The same saved lighting/finite reveal clock animates
+restoration and honors Reduce Motion. Design/Trail/Reef-Restoration.svg/.af/.png
+is the editable style study, derived from existing faceless coral paths.
+
+# Everyone gets beta tools — November 7, 2026
+
+The user explicitly wants everyone using current builds to have Debug. Both Debug
+and Release define PUFFPUFF_BETA_TOOLS; the normal Release archive enables Settings
+Debug refills, Debug levels and Restart everything immediately, without StoreKit,
+network, receipts or account state. Keep Release optimization; do not add DEBUG to
+Release. Permission is build-derived, never saved. Existing reset confirmation,
+backup and save-failure protections remain. No new artwork or gameplay migration.
+Remove PUFFPUFF_BETA_TOOLS from Release before a future public App Store launch;
+without it the existing verified-sandbox runtime gate remains. This supersedes the
+older sandbox-only TestFlight instructions. Build 2026110701 is the first fixed beta.
+An already-uploaded TestFlight build cannot be changed; distribute a fresh archive.
+
+Character name: **PuffPuff**, exactly (not Puffpuff or Puff Puff). Use this in game copy and accessibility labels. Keep existing bundle IDs, file paths, saved keys and separately chosen store/home-screen labels unchanged.
+
+# Expanded house — November 7, 2026
+
+House navigation uses symbols only: enter/leave doorway, map to Trail, shell-awning
+shop, and a furniture crate for owned items. The shop unlocks only when World 1 is
+complete; gate both the UI and purchase API. Existing owned furniture stays usable
+before that point. The crate never mixes in unowned items. Keep short item titles
+and placement/error guidance only when needed. House-Controls.af/.svg/.png are in
+Design/CoralHome. Screen-reader labels remain descriptive.
+
+
+The house is an explorable room, not a fixed furnished thumbnail. Tap to swim; idle
+PuffPuff wanders gently. Use the room/window/nook/coral symbols or pinch/drag to view it.
+One continuous swim starts from the current visible position, including retargeting.
+Reduce Motion settles movement; backgrounding stops it. Character drafts remain excluded.
+
+Owned furniture can be moved, flipped or put away for free. Tap/drag a placement
+preview, then Place saves it; Cancel/Outside/Trail abandon only that preview. Stored
+items stay owned and can be placed again without buying. Furniture actions: rest in
+the shell seat, toggle the pearl lantern, swim over and play with coral bubbles.
+No interaction grants resources or changes puzzles/trail goals. Existing one-time
+purchase prices remain 12/18/15 Lumes. Purchases and arrangements roll back on save failure.
+
+Format31 adds optional homeRoom (normalized placements, flip flags and lantern state).
+Old owned furniture uses default spots; absent/stored placements remain distinct.
+Reject unowned/unknown/non-finite/outside/overlapping placement without changing anything.
+Controls stay outside the room camera in a bounded scrolling tray. New editable room:
+Design/CoralHome/Coral-Cottage-Spacious-Room.af, matching SVG/PNG. Original exterior,
+older interiors and all user-editable rescue-character drafts remain preserved.
+
+# Character artwork hold — November 7, 2026
+
+The user is perfecting the Affinity character designs. DO NOT import or show any new
+rescue character artwork in the game until the user explicitly approves the finished
+masters. Reef-Friends-Family-Draft.af is an editable draft with larger adult-turtle
+proportions, not approved game art. Prior color/style sheets remain untouched.
+The rescue story/save state and house stay; visitor rendering is pending art approval.
+This instruction supersedes the character integration notes below.
+
+# Reef rescue and home — November 7, 2026
+
+Latest direction supersedes older snack/home and golf notes below.
+Store listing: PuffPuff: Glow Puzzle. Pause/settings title: puffpuff. Homescreen stays puffpuff.
+World 1 The Faded Garden: relight three coral gardens and rescue Bubba the clownfish.
+World 2 The Deep Blue: awaken coral lights and reunite a baby turtle with its mom.
+World 3 The Kelp Maze: light a safe kelp route and rescue Seabiscuit the seahorse.
+Required-world pacing targets: 50–100 / 75–125 / 100–150 Glow wins; optional treasure and house purchases are extra. Only World 1 is implemented. Future worlds stay visibly coming later.
+The old food IDs/serialized set now preserve the three garden restorations. home:2 is the paid Bubba rescue. Schema 30 credits old home visits as rescues without charging again; preserves puzzle, balances, opened finds and golf history.
+Puffpuff has a separate coral cottage with an enterable interior. Rescued Bubba visits. Three optional one-time furnishings cost Lumes, save atomically, and never gate rescue/progression. Keep the existing official fish and cottage masters unchanged. New named vector layers are in Design/RescueFriends. The current master is Reef-Friends-Color-Study.af; match the official Puffpuff outlines and expressive faces, with distinct character palettes and subtle eye variations. Keep earlier sheets as concept history.
+
 # puffpuff project guidance
+
+## Current direction — November 7, 2026
+
+App Store listing title: PuffPuff: Glow Puzzle. Homescreen label: puffpuff.
+Puzzle mode: Glow. Currency: Lumes. Keep internal Bloom/glow names, bundle IDs and serialized keys stable so existing saves continue working.
+
+Golf is reserved for a separate future game. The live app has no bonus putt, kelp/enemy challenge, golf playground, golf inventory controls or golf reward drops. Spending Lumes clears obstacles and opens finds. Three snacks plus home complete the trail and unlock progression; optional exploration remains open afterward. Only the first trail is playable. Keep the no-footer layout.
+
+Base prices of 8–24 Lumes replace the old 4× mini-challenge bypass prices. The cheapest required route is 200 Lumes (50–67 Glow wins at 3–4 per win); a straightforward route is 222. Optional discoveries add cost. New supply caches award hints/lighters and clearing rewards are puzzle supplies. Preserve already-opened finds without re-awarding replacements.
+
+Save format 29 preserves boards, checkpoints, balances, reveals and legacy golf history; completed trails unlock immediately without a golf claim. Legacy golf models remain for decoding/validation only. All editable art stays in Design. Golf-only screens and experiments are under Archive/Golf, excluded from the target except the shared icon drawing catalogue. The full pre-split source, assets, tests and Affinity masters are verified in /Users/gtgchlode/code/puffpuff-golf/puffpuff-golf-source-2026-11-07.zip, with a SHA256 manifest.
+
+These current rules supersede historical golf and naming notes below. Use scripts/check-glow-path.sh for the new path/migration rules plus the existing puzzle/lives/playback/Future Teller/testing-access checks. The older golf-specific checks are historical and retained with the golf archive.
 
 Coral artwork must have no faces. Keep product copy sparse: no decorative subtitles, slogans, or repeated instructions. Keep short guidance when it teaches a new rule, explains a cost, or communicates an error. The user selected Lagoon: sunlit mint water, warm sand, organic sea-glass pebbles, and dark teal type. Refine this direction. Keep Honey Puffs low, wide and ruffled, with no tall central stalk. Chalkboard SE is the fixed app typeface, using regular and bold weights with Dynamic Type scaling. Settings has no font picker; old typeface preferences are ignored.
 
@@ -20,7 +128,7 @@ Before replacing the delivered Mac app, quit it and preserve the previous app un
 
 Trail is Home. Launch into the saved close-up cove with a clear Bloom button in its heading. Bloom resumes the exact board; Pause → Home returns to Trail. Keep the quest world visible instead of a separate game-choice menu. No bottom navigation toolbar. Pause blocks input and freezes decorative clocks; a Trail swim settles at its saved destination. Keep Glow/shot balances in Pause, lives only in Bloom and Settings, and save-attention notices intact.
 
-Settings → Debug levels provides Start from beginning and Start from level (typed 1–100), compiled only with DEBUG. The normal Trail → Bloom button resumes directly. Same-level choices resume an unfinished board; explicitly choosing a completed level in the debug picker starts a fresh replay and retains the original checkpoint. Jumps retain the original checkpoint; replacing a disposable replay is abandonment. Preserve original board, resources and Trail data. Normal progression stops after 100. Never erase legacy progress above 60.
+Settings → Debug levels provides Start from beginning and Start from level (typed 1–185), compiled only with DEBUG. The normal Trail → Bloom button resumes directly. Same-level choices resume an unfinished board; explicitly choosing a completed level in the debug picker starts a fresh replay and retains the original checkpoint. Jumps retain the original checkpoint; replacing a disposable replay is abandonment. Preserve original board, resources and Trail data. Normal progression stops after 185. Never erase legacy progress above 60.
 
 ## Bloom completion
 
@@ -62,7 +170,7 @@ Bloom-earned Glow lights the reef locally when a hiding place is uncovered. Each
 
 Bonus golf fits its whole fairway on screen, with the tee and home visible together. Keep the reward ladder collapsed initially, available through the gift button. Opening Trail defaults to close-up exploration (except an already collected bonus); Bonus putt resumes an existing attempt, while Retry explicitly starts a fresh one. Keep hit areas at least 44 points. Use the adaptive Lagoon/Deep Sea palette and organic controls. Timed Bloom lives and a stored 15-minute unlimited-lives boost are implemented; unlimited taps remains backlog.
 
-`Design/Trail/First-Reef-Art.af` is the new editable Affinity master for kelp, sand, enemy fish, food and mint/coral/gold chests (closed and open). The matching SVG and native TrailArt paths share the same geometry. Preserve later user edits. Kelp fronds, their leaves and veins move together around individual root pivots, with staggered 8- and 12-second currents; the roots and sand stay still. Lit Bloom coral has a small rooted bend, branch sway and breathing motion. Sleepy coral and pebbles stay still. Both use the shared 48-second ocean clock with matching loop endpoints and no new timers; Reduce Motion disables motion, pause freezes it.
+`Design/Trail/First-Reef-Art.af` is the new editable Affinity master for kelp, sand, enemy fish, food and mint/coral/gold chests (closed and open). The matching SVG and native TrailArt paths share the same base geometry. A runtime hooked-beak/hooded-brow overlay and slow circling patrol make enemy fish read as scavengers; preserve the user-editable Affinity master and later user edits. Kelp fronds, their leaves and veins move together around individual root pivots, with staggered 8- and 12-second currents; the roots and sand stay still. Lit Bloom coral has a small rooted bend, branch sway and breathing motion. Sleepy coral and pebbles stay still. Both use the shared 48-second ocean clock with matching loop endpoints and no new timers; Reduce Motion disables motion, pause freezes it.
 
 `Design/CoralHome/Coral-Cottage.af` is the editable house master; the matching SVG and native `CoralHomeArt.swift` contain the same 52 layers. Respect later user edits to this master. The current generated SVG/native geometry comes from `scripts/make-coral-home.py`.
 
@@ -349,7 +457,7 @@ Kelp barriers draw visibly around their Glow key, above the water shadow. Paying
 
 
 ## App naming — November 5, 2026
-The user selected PuffPuff: Golf & Glow as the App Store listing title (21 characters). Keep the Home Screen name exactly puffpuff, lowercase with no spaces, through CFBundleDisplayName. App Store naming is separate from the Xcode project, scheme and bundle identifier; do not rename those or change save identity for the listing title.
+The App Store listing title is PuffPuff: Glow Puzzle (19 characters), superseding the earlier Golf & Glow title. Keep the Home Screen name exactly puffpuff, lowercase with no spaces, through CFBundleDisplayName. App Store naming is separate from the Xcode project, scheme and bundle identifier; do not rename those or change save identity for the listing title.
 
 
 ## Shared golf aids and timed-school continuity — November 5, 2026
@@ -379,7 +487,7 @@ A completed board offers Replay until Next advances. Replay is a memory-only att
 
 
 ## Approved Bloom mix through 70 — November 6, 2026
-Historical November 6 approval through 70; DEBUG level picker uses the shared cap. The later 71–100 approval below supersedes the draft cap. User approved the exact 60–70 mix in BLOOM_LEVEL_GUIDE.txt. Preserve level 60 as its whole-row/whole-column introduction. Levels 63 and 67 are the only no-whole-line boards in this range; 63 has two diagonals/two pebbles, 67 two diagonals/no pebbles. Other levels vary row/column, up/down, left/right, diagonal and pebbles, across square and shaped footprints. New boards have content revision 10 and 38 taps; all shortest solutions use their selected special rules and take 4–7 taps. 70 keeps pearl target 9. Preserve played/completed/checkpoint attempts; only untouched drafts or fresh starts adopt the new pack. Do not add protective covers before 100.
+Historical November 6 approval through 70; DEBUG level picker uses the shared cap. The later 71–100 approval below supersedes the draft cap. User approved the exact 60–70 mix in BLOOM_LEVEL_GUIDE.txt. Preserve level 60 as its whole-row/whole-column introduction. Levels 63 and 67 are the only no-whole-line boards in this range; 63 has two diagonals/two pebbles, 67 two diagonals/no pebbles. Other levels vary row/column, up/down, left/right, diagonal and pebbles, across square and shaped footprints. New boards have content revision 10 and 38 taps; all shortest solutions use their selected special rules and take 4–7 taps. 70 keeps pearl target 9. Preserve played/completed/checkpoint attempts; only untouched drafts or fresh starts adopt the new pack. Do not add protective covers before 185.
 
 
 ## First-trail difficulty and Bloom playback polish — November 6, 2026
@@ -394,7 +502,7 @@ Keep puzzle.moves as the full physical tap count and recording as all actual act
 
 
 ## Approved Bloom through 100 and centered current adders — November 6, 2026
-100 levels are playable. Keep levels 1–70 unchanged; see BLOOM_LEVEL_GUIDE.txt for the exact approved 71–100 counts and shapes. New boards use content revision 11; 71–80 allow 38 taps and 81–100 allow 42. Shortest solutions span 2–8 taps, including a gentle two-tap level 85. Preserve initiated/completed/checkpoint boards; untouched drafts and fresh starts adopt the new content. A previously completed level 70 can advance to 71 without re-awarding its win; completion now ends at 100. Clear the old chapter-complete flag unless 100 was completed. Covers remain after 100.
+Historical approval through 100; superseded by the current 101–185 extension below. The 71–100 content, mechanics and saved attempts remain preserved.
 Burst coral flips itself and all eight adjacent coral, clipping at edges and skipping water, pebbles and held-on lighters. It is reversible like other coral and respects tap refunds, native hints, free practice and recorded playback. Optional burstCorals is saved in format 27; older saves decode with none. Save validation rejects overlapping/out-of-bounds rule positions. 85–87 introduce one, one and two bursts without other special types; 88 adds pebbles; 89 is a plain breather; 90 adds a whole row. Bursts recur at 92,95,98,100, not on every later board. The free unnumbered practice appears before first seeing a burst and is remembered with puffpuff.tutorial.burstCoral; Debug reset clears it.
 The faceless rounded anemone master is Design/Corals/Burst-Coral.af, with matching SVG and native CoralPaths. Ordinary coral still uses its original three species. Burst uses a centered eight-ray sunburst glyph and existing shared-clock rooted movement/Reduce Motion. Level 100 uses the bubble-spin finish.
 Current adders retain their existing swirl and coral badge; move the badge/plus to the center (50,50). Design/Powerups/Current-Adder.af, matching SVG and ReefCurrentArt share the placement. Do not change the current changer or power-up behavior.
@@ -419,5 +527,12 @@ Gameplay Hint and Future Teller controls show their custom icons and counts, wit
 
 ## TestFlight tools and navigation — November 6, 2026
 Testing tools are available in local Debug/simulator builds and verified StoreKit sandbox/Xcode app environments, including TestFlight. Release includes their code but hides all entry points until AppTransaction.shared verifies the bundle and sandbox environment. Production, unverified, unavailable or failed checks leave them off. Never persist this permission, infer it from a save/UserDefaults/receipt filename, enable DEBUG in Release, or change signing identities. Check on foreground and Settings; no purchase, account sync or sign-in prompt. Gate refills, reset and debug level replay in the store as well as UI. Playground and cleared kelp/enemy practice replays use the same runtime permission. Reset keeps its confirmation and backup. Existing gameplay/save schema is unchanged.
-Insufficient Glow for a confirmed Trail reveal/paid route resumes Bloom directly. Show one short nonmodal line explaining that Bloom earns Glow for lighting the trail; clear it once the player taps or returns. Never spend resources, clear the obstacle, abandon the board, or navigate if saving the resume fails.
+If a Trail reveal or paid route costs more Lumes than the player has, show the exact cost and balance first, with Go to Glow and Not now actions. Only Go to Glow resumes the current puzzle; dismissing the prompt keeps the player on the Trail and changes nothing. Never spend resources, clear the obstacle, abandon the board, or navigate before the choice and successful save.
 Bloom has a compact folded-map button in the upper-right corner, above Pause. It returns to the exact Trail location through the normal save-preserving Home action. The header treasure button remains. Trail and bonus introductions use finger-following horizontal paging, vertical scrolling within long slides, and equal Back/Next buttons. Back is disabled on the first slide; swiping at the last slide cannot finish/acknowledge the intro. Only Skip/final action acknowledges it. Honor Reduce Motion and keep controls on screen.
+
+
+## Approved Bloom through 185 — revised November 10, 2026
+Levels 1–100 and their saved attempts remain unchanged. Levels 101–185 are authored in BLOOM_LEVEL_GUIDE.txt and Resources/BloomLevels.json. The extension introduces linked pairs at 105, caged coral at 125 and the coupled mini-board at 150. From 161–185, linked groups contain at most three coral; most boards use one pair or trio and some use two separate pairs. Level 170 introduces the trio. These levels mix existing special tiles with linked coral, except link-free palate cleansers 165 (burst, two pebbles) and 180 (whole-row, up/down). Level 185 has a trio and a separate pair. Linked groups keep their same-color center chain marks and have no connector lines; each member flips once without a second ripple. Caged coral cannot be tapped directly, but any ripple that reaches it flips it; it counts toward the all-lit goal. The mini-board starts with an alternating on/off pattern; its four ordered color patterns leave every mini light on. Wrong-order colors still affect the main Glow board but do not advance the mini sequence; both boards must be all lit to win. Preserve levels 1–160 and all started attempts; only untouched revised boards adopt new authored data. Content revision 15 migrates untouched levels 161–185; saved attempts retain their current boards until Restart. The DEBUG picker, progression cap, save validation and progress display use 185. Budgets are 42 through 149, 34 for 150–154 and 42 for 155–185.
+
+## Century Reef special level — November 9, 2026
+Level 100 is the 6×6 Century Reef, marked SPECIAL LEVEL in Bloom and preserved as a milestone. It uses existing row, column, up/down, left/right, diagonal, burst and pebble mechanics. The bonus reward types/payouts are not yet decided; do not invent or grant them. Save validation permits size 6 for this board. Keep existing started attempts intact; untouched level 100 and fresh replays use the oversized content.

@@ -71,46 +71,37 @@ struct ReefStop: Identifiable {
 enum ReefScreen: String, Codable { case bloom, trail }
 
 enum ReefDebugSupply: String, CaseIterable, Identifiable {
-    case glow, shots, hints, lives, lighters, boosts, currents, currentAdders, bouncyBlocks, futureTellers
+    case glow, hints, lives, lighters, boosts, futureTellers
 
     var id: String { rawValue }
-    var name: String { self == .futureTellers ? "Future Tellers" : self == .bouncyBlocks ? "bouncy blocks" : self == .currentAdders ? "current adders" : self == .currents ? "current changers" : self == .glow ? "Glow" : self == .boosts ? "saved boost" : rawValue }
+    var name: String { self == .futureTellers ? "Future Tellers" : self == .glow ? "Lumes" : self == .boosts ? "saved boost" : rawValue }
     var amount: Int {
         switch self {
         case .glow: 25
-        case .shots: 5
         case .hints: 3
         case .lives: 5
         case .lighters: 3
         case .boosts: 1
-        case .currents, .currentAdders, .bouncyBlocks, .futureTellers: 3
+        case .futureTellers: 3
         }
     }
     var symbol: String {
         switch self {
         case .glow: "sparkles"
-        case .shots: "wind"
         case .hints: "lightbulb.fill"
         case .lives: "heart.fill"
         case .lighters: "flame.fill"
         case .boosts: "infinity"
-        case .currents: "arrow.trianglehead.2.clockwise.rotate.90"
-        case .currentAdders: "plus"
-        case .bouncyBlocks: "arrow.uturn.up"
         case .futureTellers: "sparkles"
         }
     }
     var balance: WritableKeyPath<ReefProgress, Int> {
         switch self {
         case .glow: \.glow
-        case .shots: \.shots
         case .hints: \.hints
         case .lives: \.supplies.lives
         case .lighters: \.supplies.lighters
         case .boosts: \.supplies.unlimitedBoosts
-        case .currents: \.currentChangers
-        case .currentAdders: \.currentAdders
-        case .bouncyBlocks: \.bouncyBlocks
         case .futureTellers: \.futureTellers
         }
     }
@@ -201,23 +192,24 @@ struct BloomSupplies: Codable, Equatable {
 enum ReefDiscovery:String,Codable,CaseIterable,Identifiable {
     case glow,snack,hint,life,lighter,instantBoost,storedBoost,shot,current,currentAdder,bouncyBlock,futureTeller
     var id:String {rawValue}
+    var isGolfSupply: Bool { [.shot,.current,.currentAdder,.bouncyBlock].contains(self) }
 }
 
 /// A session-only receipt. Saved tutorial records never schedule popups on their own.
 struct ReefDiscoveryReceipt: Identifiable {
-    enum Source: Equatable { case bloom(Int), trail, bonus }
+    enum Source: Equatable { case bloom(Int), trail }
     let id = UUID()
     let source: Source
     let items: [ReefDiscovery]
 }
 
-enum ReefIntroKind { case trail, bonus }
+enum ReefIntroKind { case trail }
 
 struct ReefProgress: Codable {
-    var version = 28
+    var version = 32
     var firstReef = FirstReefProgress()
     var glow = 0
-    var shots = 1 // One welcome shot to meet Pip before the first Bloom.
+    var shots = 0 // Legacy golf inventory: retained for existing saves, never granted or spent here.
     var hints = 3
     var currentChangers = 0
     var currentAdders = 0
@@ -227,7 +219,6 @@ struct ReefProgress: Codable {
     var bloomRewardWins = 0
     var hasSeenTrailIntro = false
     var hasSeenBonusIntro = false
-    var bloomWinsTowardShot: Int { bloomRewardWins % 5 }
     var supplies = BloomSupplies()
     var learnedDiscoveries:Set<ReefDiscovery> = []
     var pendingDiscoveries:[ReefDiscovery] = []
@@ -264,7 +255,7 @@ struct ReefProgress: Codable {
     init(from decoder: Decoder) throws {
         let values = try decoder.container(keyedBy: CodingKeys.self)
         let storedVersion = try values.decode(Int.self, forKey: .version)
-        guard (1...28).contains(storedVersion) else { throw ReefSaveError.newerVersion }
+        guard (1...32).contains(storedVersion) else { throw ReefSaveError.newerVersion }
         version = storedVersion
         hasSeenTrailIntro = try values.decodeIfPresent(Bool.self, forKey: .hasSeenTrailIntro) ?? false
         hasSeenBonusIntro = try values.decodeIfPresent(Bool.self, forKey: .hasSeenBonusIntro) ?? false
@@ -282,7 +273,7 @@ struct ReefProgress: Codable {
         shots = try values.decode(Int.self, forKey: .shots)
         puzzle = try values.decode(CoralPuzzle.self, forKey: .puzzle)
         bloomResumePuzzle = try values.decodeIfPresent(CoralPuzzle.self, forKey: .bloomResumePuzzle)
-        guard (1...100).contains(puzzle.level) else { throw ReefSaveError.invalidData }
+        guard (1...185).contains(puzzle.level) else { throw ReefSaveError.invalidData }
         clearedObjects = try values.decode(Set<String>.self, forKey: .clearedObjects)
         restoredStops = try values.decode(Set<Int>.self, forKey: .restoredStops)
         distances = try values.decode([String: Double].self, forKey: .distances)
@@ -343,15 +334,6 @@ struct PuffResult {
 
 @MainActor @Observable
 final class ReefStore {
-    static let bloomWinsPerShot = 5
-    /// Stable per win, including replays and retries after a failed save.
-    static func hasBonusShot(seed: UInt64, win: Int) -> Bool {
-        var value=seed &+ UInt64(win) &* 0x9E3779B97F4A7C15
-        value=(value ^ (value >> 30)) &* 0xBF58476D1CE4E5B9
-        value=(value ^ (value >> 27)) &* 0x94D049BB133111EB
-        value ^= value >> 31
-        return value % 1000 < 100
-    }
     /// Separate salted streams keep the win and pearl hint chances independent.
     /// The saved win ordinal makes retries/reloads repeat the same outcome.
     static func bonusHints(seed:UInt64,win:Int,pearl:Bool)->Int {
@@ -365,21 +347,6 @@ final class ReefStore {
         let winHint=roll(0x48494E545F57494E)<80 ? 1:0
         let pearlHints=pearl && roll(0x504541524C48494E)<50 ? 2:0
         return winHint+pearlHints
-    }
-    static func hasCurrentAdder(seed:UInt64,win:Int)->Bool {
-        var value=(seed ^ 0x4355525241444445) &+ UInt64(win) &* 0x9E3779B97F4A7C15
-        value=(value ^ (value >> 30)) &* 0xBF58476D1CE4E5B9
-        value=(value ^ (value >> 27)) &* 0x94D049BB133111EB
-        value ^= value >> 31
-        return value % 1000 < 50
-    }
-    static func hasBouncyBlock(seed:UInt64,win:Int)->Bool {
-        // Independent 5% stream: existing reward rolls and seeds stay unchanged.
-        var value=(seed ^ 0x424F554E4359424C) &+ UInt64(win) &* 0x9E3779B97F4A7C15
-        value=(value ^ (value >> 30)) &* 0xBF58476D1CE4E5B9
-        value=(value ^ (value >> 27)) &* 0x94D049BB133111EB
-        value ^= value >> 31
-        return value % 1000 < 50
     }
     static func hasFutureTeller(seed: UInt64, win: Int) -> Bool {
         // Rare, independent 2% stream. The saved ordinal prevents rerolling.
@@ -398,8 +365,8 @@ final class ReefStore {
         return receipt.items.filter{progress.pendingDiscoveries.contains($0) && !progress.learnedDiscoveries.contains($0)}
     }
 
-    // Later authored levels remain drafts until the next design pass.
-    static let levelLimit = 100
+    // The authored Glow campaign currently runs through level 185.
+    static let levelLimit = 185
     static let refillTapCount = 5
     static let hintBundleCount = 3
     private(set) var progress: ReefProgress
@@ -407,7 +374,7 @@ final class ReefStore {
     var hintMessage: String?
     var notice: String?
     private(set) var bloomTrailGuidance = false
-    private(set) var testingToolsEnabled = ReefTestingEnvironment.isLocalBuild
+    private(set) var testingToolsEnabled = ReefTestingEnvironment.isTestingBuild
     @ObservationIgnored private var checkingTestingEnvironment = false
     @ObservationIgnored private let testingEnvironment: () async -> Bool
     private let saveFile: ReefSaveFile
@@ -420,21 +387,20 @@ final class ReefStore {
         saveFile = ReefSaveFile(defaults: defaults, directory: saveDirectory)
         let loaded = saveFile.load()
         progress = loaded.progress ?? ReefProgress()
-        progress.version = 28
+        progress.version = 32
         isSaveBlocked = loaded.blocked
         notice = loaded.message
         guard !isSaveBlocked else { return }
         let contentChanged = refreshPuzzleContent()
         let trailChanged = refreshFirstReefLayout()
-        let miniChanged = refreshMiniChallengeLimits()
-        if loaded.needsSave || contentChanged || trailChanged || miniChanged { save() }
+        if loaded.needsSave || contentChanged || trailChanged { save() }
         refreshGuidance()
         refreshLives()
     }
 
-    /// Never persist this flag: a TestFlight save must not unlock App Store tools.
+    /// Build access is immediate. Future public builds may verify sandbox access; never save permission.
     func refreshTestingAccess() async {
-        guard !ReefTestingEnvironment.isLocalBuild, !checkingTestingEnvironment else { return }
+        guard !ReefTestingEnvironment.isTestingBuild, !checkingTestingEnvironment else { return }
         checkingTestingEnvironment = true
         defer { checkingTestingEnvironment = false }
         testingToolsEnabled = await testingEnvironment()
@@ -455,20 +421,6 @@ final class ReefStore {
         return true
     }
 
-    private func refreshMiniChallengeLimits() -> Bool {
-        guard var attempts = progress.firstReef.miniChallenges else { return false }
-        var changed = false
-        for (id, existing) in attempts where existing.kind == .enemy && existing.timedEnemies != true && existing.result != .won && existing.moveLimit < 8 {
-            var attempt = existing
-            attempt.shotAllowance = 8
-            if attempt.result == .outOfShots { attempt.result = .playing }
-            attempts[id] = attempt
-            changed = true
-        }
-        if changed { progress.firstReef.miniChallenges = attempts }
-        return changed
-    }
-
     private func refreshFirstReefLayout() -> Bool {
         var changed = false
         if (progress.firstReef.layoutRevision ?? 1) < 3 {
@@ -479,15 +431,27 @@ final class ReefStore {
             progress.firstReef = ReefCove.migrate(progress.firstReef)
             changed = true
         }
-        if var bonus = progress.firstReef.bonus, bonus.courseRevision != BonusCourse.revision || bonus.currents == nil {
-            // Keep putts, prior best and claimed rewards; move only geometry that
-            // cannot exist on the new fairway. Retry still begins a fresh round.
-            bonus.position = bonus.holed ? BonusCourse.home : bonus.strokes == 0 ? BonusCourse.tee :
-                BonusCourse.safePosition(bonus.position, cleared: progress.firstReef.cleared)
-            bonus.courseRevision = BonusCourse.revision
-            bonus.currents = BonusCourse.initialCurrents(progress.firstReef)
-            progress.firstReef.bonus = bonus
+        if progress.firstReef.glowPuzzleRevision == nil {
+            // Keep already-opened golf caches open without pretending they awarded Bloom items.
+            let oldSupplyAreas: Set<String> = ["south","ribbon-cove","shell-shelf","fin-lookout","dead-end"]
+            progress.firstReef.legacyGolfFinds = Set(FirstReef.destinations.flatMap { ReefCove.objects(in:$0.id) }.filter {
+                (progress.firstReef.coveSearches ?? []).contains($0.id)
+                    && ($0.slot == 4 || oldSupplyAreas.contains($0.area) && $0.isGift)
+            }.map(\.id))
+            progress.firstReef.glowPuzzleRevision = 1
+            progress.firstReef.nextWorldUnlocked = progress.firstReef.completed
             changed = true
+        }
+        if progress.firstReef.rescueRevision == nil {
+            // Past visits and paid quest items keep their credit. No balances or boards change.
+            let rescued=progress.firstReef.hasFoundHome
+            progress.firstReef.rescueRevision=1
+            progress.firstReef.bubbaRescued=rescued
+            progress.firstReef.homeDecorations=[]
+            if rescued { progress.firstReef.coveSearches=(progress.firstReef.coveSearches ?? []).union(["home:2"]) }
+            progress.firstReef.completed=rescued && progress.firstReef.food.count == 3
+            progress.firstReef.nextWorldUnlocked=progress.firstReef.completed
+            changed=true
         }
         return changed
     }
@@ -508,13 +472,22 @@ final class ReefStore {
                        (puzzle.level >= 46 && puzzle.level <= 60 && (puzzle.contentRevision ?? 0) < 9) ||
                        (puzzle.level >= 61 && puzzle.level <= 70 && (puzzle.contentRevision ?? 0) < 10) ||
                        (puzzle.level >= 71 && (puzzle.contentRevision ?? 0) < 11) ||
+                       (!(puzzle.cagedCorals ?? []).isEmpty && (puzzle.contentRevision ?? 0) < 14) ||
+                       ((161...185).contains(puzzle.level) && (puzzle.contentRevision ?? 0) < 15) ||
                        (puzzle.gaps ?? []) != (updated.gaps ?? []) ||
                        puzzle.stones != updated.stones || puzzle.currents != updated.currents ||
                        puzzle.stars != updated.stars ||
                        (puzzle.verticals ?? []) != (updated.verticals ?? []) ||
                        (puzzle.rowCorals ?? []) != (updated.rowCorals ?? []) ||
                        (puzzle.columnCorals ?? []) != (updated.columnCorals ?? []) ||
-                       (puzzle.burstCorals ?? []) != (updated.burstCorals ?? [])), puzzle.moves == 0,
+                       (puzzle.burstCorals ?? []) != (updated.burstCorals ?? []) ||
+                       (puzzle.linkedPairs ?? []) != (updated.linkedPairs ?? []) ||
+                       (puzzle.cagedCorals ?? []) != (updated.cagedCorals ?? []) ||
+                       puzzle.miniCells != updated.miniCells ||
+                       (puzzle.miniColorCorals ?? []) != (updated.miniColorCorals ?? []) ||
+                       (puzzle.miniPatterns ?? []) != (updated.miniPatterns ?? []) ||
+                       (puzzle.miniOrder ?? []) != (updated.miniOrder ?? []) ||
+                       puzzle.specialLevel != updated.specialLevel), puzzle.moves == 0,
                       (puzzle.level < 71 || puzzle.attemptStarted != true),
                       puzzle.history.isEmpty, puzzle.revealedHint == nil, puzzle.futureTellerFinalTap == nil,
                       (puzzle.lighterCorals ?? []).isEmpty,
@@ -740,7 +713,7 @@ final class ReefStore {
         if let saved = loaded.progress,
            isSaveBlocked || (!lastSaveFailed && (saved.savedAt ?? .distantPast) > (progress.savedAt ?? .distantPast)) {
             progress = saved
-            progress.version = 28
+            progress.version = 32
             isSaveBlocked = false
             let contentChanged = refreshPuzzleContent()
             let trailChanged = refreshFirstReefLayout()
@@ -792,22 +765,6 @@ final class ReefStore {
                 progress.puzzle.earnedHint=true
                 progress.puzzle.earnedHints=hints
             }
-            let regularShot=progress.bloomWinsTowardShot == 0 ? 1:0
-            let bonusShot=Self.hasBonusShot(seed:progress.lifeGiftSeed,win:progress.bloomRewardWins) ? 1:0
-            let earnedShots=regularShot+bonusShot
-            if earnedShots>0 {
-                progress.shots += earnedShots
-                progress.puzzle.earnedShot = true
-                progress.puzzle.earnedShots = earnedShots
-            }
-            if Self.hasCurrentAdder(seed:progress.lifeGiftSeed,win:progress.bloomRewardWins) {
-                progress.currentAdders += 1
-                progress.puzzle.earnedCurrentAdder=true
-            }
-            if Self.hasBouncyBlock(seed:progress.lifeGiftSeed,win:progress.bloomRewardWins) {
-                progress.bouncyBlocks += 1
-                progress.puzzle.earnedBouncyBlock=true
-            }
             if progress.futureTellerUnlocked,
                Self.hasFutureTeller(seed: progress.lifeGiftSeed, win: progress.bloomRewardWins) {
                 progress.futureTellers += 1
@@ -847,11 +804,12 @@ final class ReefStore {
 
     @discardableResult
     func lightCoral(_ index: Int) -> Bool {
-        guard !isSaveBlocked, canPlayBloom, !isComplete, puzzle.isCoral(index),
+        guard !isSaveBlocked, canPlayBloom, !isComplete, puzzle.isCoral(index), !puzzle.isCaged(index),
               !puzzle.cells[index], progress.supplies.lighters > 0 else { return false }
         let previous = progress
         progress.puzzle.record(.init(kind: .lighter, index: index))
         progress.puzzle.undoTap = nil
+        progress.puzzle.undoTapRefundable = nil
         progress.supplies.lighters -= 1
         progress.puzzle.cells[index] = true
         progress.puzzle.lighterCorals = (puzzle.lighterCorals ?? []) + [index]
@@ -976,40 +934,6 @@ final class ReefStore {
         refreshGuidance()
     }
 
-    func isOpen(_ stop: ReefStop) -> Bool { stop.id == 0 || progress.restoredStops.contains(stop.id - 1) }
-    func distance(at stop: ReefStop) -> Double { progress.distances[String(stop.id)] ?? 0 }
-    func isCleared(_ obstacle: ReefObstacle) -> Bool { progress.clearedObjects.contains(obstacle.id) }
-
-    func clear(_ obstacle: ReefObstacle, at stop: ReefStop) {
-        guard !isSaveBlocked, isOpen(stop), stop.obstacles.contains(where: { $0.id == obstacle.id }),
-              !isCleared(obstacle), progress.glow >= obstacle.cost else { return }
-        progress.glow -= obstacle.cost
-        progress.clearedObjects.insert(obstacle.id)
-        save()
-    }
-
-    // Aim has a modest effect on distance; objects are the main constraint.
-    // Progress and purchases persist. There are no random miss rolls or physics simulation.
-    func puff(at stop: ReefStop, aim: Double) -> PuffResult? {
-        guard !isSaveBlocked, isOpen(stop), progress.shots > 0, !progress.restoredStops.contains(stop.id) else { return nil }
-        let from = distance(at: stop)
-        let accuracy = min(1, max(0, aim))
-        var to = min(1, from + 0.42 + 0.16 * accuracy)
-        var blocker: String?
-        if let obstacle = stop.obstacles.first(where: { !isCleared($0) && $0.position > from && $0.position <= to + 0.035 }) {
-            to = max(from, obstacle.position - 0.035)
-            blocker = obstacle.name
-        }
-        progress.shots -= 1
-        progress.distances[String(stop.id)] = to
-        if to >= 1 {
-            progress.restoredStops.insert(stop.id)
-            progress.hints += 1
-        }
-        save()
-        return PuffResult(from: from, to: to, aim: accuracy, blockedBy: blocker)
-    }
-
     /// Finish and Skip acknowledge the same introduction. Merely opening it does not.
     @discardableResult
     func finishIntro(_ kind: ReefIntroKind) -> Bool {
@@ -1019,10 +943,6 @@ final class ReefStore {
         case .trail:
             if progress.hasSeenTrailIntro { return true }
             progress.hasSeenTrailIntro = true
-        case .bonus:
-            guard progress.firstReef.completed else { return false }
-            if progress.hasSeenBonusIntro { return true }
-            progress.hasSeenBonusIntro = true
         }
         if save() { return true }
         progress = previous
@@ -1044,7 +964,7 @@ final class ReefStore {
     }
 
     func visitFirstReef(_ id: String) -> ReefJourney? {
-        guard !isSaveBlocked, progress.firstReef.bonus?.claimed != true,
+        guard !isSaveBlocked,
               let destination = FirstReef.destinations.first(where: { $0.id == id }) else { return nil }
         let cost = FirstReef.cost(to: destination, from: progress.firstReef)
         guard progress.glow >= cost,
@@ -1055,7 +975,6 @@ final class ReefStore {
         for treasureID in journey.newTreasures {
             let loot=FirstReef.node(treasureID).loot
             progress.hints += loot.hints
-            progress.shots += loot.shots
             progress.supplies.lighters += loot.lighters
             if loot.lives > 0 { progress.supplies.addLives(loot.lives) }
             if loot.instantBoost {
@@ -1075,6 +994,50 @@ final class ReefStore {
         return nil
     }
 
+    var canVisitHome:Bool { progress.firstReef.hasRestoredHome || !(progress.firstReef.homeDecorations ?? []).isEmpty }
+    var isHomeShopUnlocked:Bool { progress.firstReef.completed }
+
+    @discardableResult
+    func buyHomeItem(_ item:ReefHomeItem)->Bool {
+        guard !isSaveBlocked,isHomeShopUnlocked,progress.glow>=item.cost,
+              !(progress.firstReef.homeDecorations ?? []).contains(item.rawValue) else{return false}
+        let previous=progress
+        var room=progress.firstReef.furnishedRoom
+        guard let space=room.firstSpace(for:item) else{return false}
+        room.placements[item.id] = .init(position:space)
+        progress.glow -= item.cost
+        progress.firstReef.homeDecorations=(progress.firstReef.homeDecorations ?? []).union([item.rawValue])
+        progress.firstReef.homeRoom=room
+        if save() {return true}
+        progress=previous;return false
+    }
+
+    /// Moving, storing and using owned furnishings never spend or grant resources.
+    @discardableResult
+    func arrangeHomeItem(_ item:ReefHomeItem,placement:ReefHomePlacement?)->Bool {
+        guard !isSaveBlocked,(progress.firstReef.homeDecorations ?? []).contains(item.id) else{return false}
+        var room=progress.firstReef.furnishedRoom
+        if let placement {
+            guard room.canPlace(item,at:placement.position) else{return false}
+            room.placements[item.id]=placement
+        } else {room.placements.removeValue(forKey:item.id)}
+        guard room != progress.firstReef.furnishedRoom else{return true}
+        let previous=progress
+        progress.firstReef.homeRoom=room
+        if save() {return true}
+        progress=previous;return false
+    }
+
+    @discardableResult
+    func setHomeLantern(_ lit:Bool)->Bool {
+        guard !isSaveBlocked,progress.firstReef.furnishedRoom.placements[ReefHomeItem.pearlLantern.id] != nil else{return false}
+        var room=progress.firstReef.furnishedRoom
+        guard room.lanternOn != lit else{return true}
+        let previous=progress;room.lanternOn=lit;progress.firstReef.homeRoom=room
+        if save() {return true}
+        progress=previous;return false
+    }
+
     func uncoverCove(_ id:String)->ReefJourney? {
         guard !isSaveBlocked,
               let object=ReefCove.objects(in:progress.firstReef.location ?? "start").first(where:{$0.id == id}),
@@ -1092,12 +1055,9 @@ final class ReefStore {
         progress.firstReef=journey.outcome
         if let reward=journey.outcome.clearingRewards?[object.id] {
             switch reward {
-            case .shot:progress.shots += 1
             case .hint:progress.hints += 1
             case .life:progress.supplies.addLives(1)
             case .lighter:progress.supplies.lighters += 1
-            case .currentAdder:progress.currentAdders += 1
-            case .bouncyBlock:progress.bouncyBlocks += 1
             default:break
             }
         }
@@ -1105,13 +1065,11 @@ final class ReefStore {
         case .hint:progress.hints += 1
         case .lives:progress.supplies.addLives(2)
         case .lighter:progress.supplies.lighters += 1
-        case .current:progress.currentChangers += 1
-        case .shot:progress.shots += ReefCove.shotsPerFind
         default:break
         }
         for treasure in journey.newTreasures {
             let loot=FirstReef.node(treasure).loot
-            progress.hints += loot.hints;progress.shots += loot.shots
+            progress.hints += loot.hints
             progress.supplies.lighters += loot.lighters
             if loot.lives>0 {progress.supplies.addLives(loot.lives)}
             if loot.instantBoost {grantLifeGift(.instant);journey.lifeGift = .instant}
@@ -1121,139 +1079,6 @@ final class ReefStore {
            let gift=lifeGift(for:"trail-\(object.area)") {
             grantLifeGift(gift);journey.lifeGift=gift
         }
-    }
-
-    @discardableResult
-    func beginCoveChallenge(_ id:String,retry:Bool=false)->Bool {
-        guard !isSaveBlocked,progress.firstReef.bonus?.claimed != true,
-              let object=ReefCove.objects(in:progress.firstReef.location ?? "start").first(where:{$0.id==id}),
-              let kind=object.challengeKind,!(progress.firstReef.coveSearches ?? []).contains(id) else{return false}
-        if !retry,progress.firstReef.miniChallenges?[id] != nil {return true}
-        let previous=progress
-        var attempts=progress.firstReef.miniChallenges ?? [:];attempts[id] = .fresh(kind,layout:progress.firstReef.miniChallenges?[id]?.layout ?? ReefMiniChallenge.layout(for:id),timed:kind == .enemy && (progress.firstReef.miniChallenges?[id]?.timedEnemies ?? ReefMiniChallenge.timedEncounter(id)))
-        progress.firstReef.miniChallenges=attempts
-        if save() {return true}
-        progress=previous;return false
-    }
-
-    func shootCoveChallenge(_ id:String,drag:ReefPoint,patrolTime:Double?=nil)->ReefMiniShot? {
-        guard !isSaveBlocked,progress.shots>0,progress.firstReef.bonus?.claimed != true,
-              let object=ReefCove.objects(in:progress.firstReef.location ?? "start").first(where:{$0.id==id}),
-              !(progress.firstReef.coveSearches ?? []).contains(id),
-              let attempt=progress.firstReef.miniChallenges?[id],attempt.kind==object.challengeKind,
-              let flight=ReefMiniChallenge.shoot(drag,from:attempt,patrolTime:attempt.timedEnemies == true ? patrolTime:nil) else{return nil}
-        let previous=progress
-        progress.shots -= 1
-        progress.firstReef.miniChallenges?[id]=flight.outcome
-        var discovery:ReefJourney?
-        if flight.outcome.result == .won {
-            guard var reveal=ReefCove.uncover(object,from:progress.firstReef) else{progress=previous;return nil}
-            applyCoveReward(object,journey:&reveal);discovery=reveal
-            queueDiscoveries(from:previous,source:.trail)
-        }
-        if save() {return .init(flight:flight,discovery:discovery)}
-        progress=previous;return nil
-    }
-
-    @discardableResult
-    func redirectReefCurrent(_ index:Int,to direction:Int)->Bool {
-        guard !isSaveBlocked,progress.currentChangers>0,(0..<3).contains(index),(0..<8).contains(direction),
-              var bonus=progress.firstReef.bonus,!bonus.claimed,!bonus.finished else{return false}
-        var currents=BonusCourse.initialCurrents(progress.firstReef)
-        guard currents[index] != direction else{return false}
-        let previous=progress
-        currents[index]=direction;bonus.currents=currents
-        progress.firstReef.bonus=bonus;progress.currentChangers -= 1
-        if save() {return true}
-        progress=previous;return false
-    }
-
-    @discardableResult
-    func addReefCurrent(at point:ReefPoint,direction:Int)->Bool {
-        guard !isSaveBlocked,progress.currentAdders>0,(0..<8).contains(direction),
-              var bonus=progress.firstReef.bonus,!bonus.finished,!bonus.claimed,
-              BonusCourse.canPlaceCurrent(at:point,in:progress.firstReef) else{return false}
-        let previous=progress
-        bonus.addedCurrents=(bonus.addedCurrents ?? [])+[.init(position:point,direction:direction)]
-        progress.firstReef.bonus=bonus;progress.currentAdders -= 1
-        if save() {return true}
-        progress=previous;return false
-    }
-
-    @discardableResult
-    func addReefBlock(at point:ReefPoint)->Bool {
-        guard !isSaveBlocked,progress.bouncyBlocks>0,
-              var bonus=progress.firstReef.bonus,!bonus.finished,!bonus.claimed,
-              (point-bonus.position).length>=45,
-              BonusCourse.canPlaceBlock(at:point,in:progress.firstReef) else{return false}
-        let previous=progress
-        bonus.bouncyBlocks=(bonus.bouncyBlocks ?? [])+[.init(position:point)]
-        progress.firstReef.bonus=bonus;progress.bouncyBlocks -= 1
-        if save() {return true}
-        progress=previous;return false
-    }
-
-    @discardableResult
-    func addCoveAid(_ aid:ReefGolfAid,to id:String,at point:ReefPoint,direction:Int=0)->Bool {
-        guard !isSaveBlocked,progress.firstReef.bonus?.claimed != true,
-              let object=ReefCove.objects(in:progress.firstReef.location ?? "start").first(where:{$0.id==id}),
-              object.challengeKind != nil,!(progress.firstReef.coveSearches ?? []).contains(id),
-              var attempt=progress.firstReef.miniChallenges?[id],!attempt.finished,
-              (0..<8).contains(direction),ReefMiniChallenge.canPlace(aid,at:point,in:attempt),
-              ReefMiniChallenge.clearOfFish(point,in:attempt),
-              aid == .current ? progress.currentAdders>0:progress.bouncyBlocks>0 else{return false}
-        let previous=progress
-        switch aid {
-        case .current:
-            attempt.addedCurrents=(attempt.addedCurrents ?? [])+[.init(position:point,direction:direction)]
-            progress.currentAdders -= 1
-        case .block:
-            attempt.bouncyBlocks=(attempt.bouncyBlocks ?? [])+[.init(position:point)]
-            progress.bouncyBlocks -= 1
-        }
-        progress.firstReef.miniChallenges?[id]=attempt
-        if save() {return true}
-        progress=previous;return false
-    }
-
-    @discardableResult
-    func startReefBonus(retry: Bool = false) -> Bool {
-        guard !isSaveBlocked, progress.firstReef.completed,
-              progress.firstReef.bonus?.claimed != true else { return false }
-        if !retry && progress.firstReef.bonus != nil { return true }
-        let previous = progress
-        progress.firstReef.bonus = FirstReef.newBonus(progress.firstReef)
-        if save() { return true }
-        progress = previous
-        return false
-    }
-
-    func puttFirstReef(drag: ReefPoint) -> ReefJourney? {
-        guard !isSaveBlocked, progress.shots > 0, let result = FirstReef.putt(drag: drag, from: progress.firstReef) else { return nil }
-        let previous = progress
-        progress.firstReef = result.outcome
-        progress.shots -= 1
-        if save() { return result }
-        progress = previous
-        return nil
-    }
-
-    @discardableResult
-    func collectReefBonus() -> Bool {
-        guard !isSaveBlocked, progress.firstReef.completed,
-              let bonus = progress.firstReef.bonus, bonus.canCollect,
-              let score = bonus.bestStrokes else { return false }
-        let previous = progress
-        let reward = FirstReef.reward(for: score)
-        progress.glow += reward.glow
-        progress.shots += reward.shots
-        progress.hints += reward.hints
-        progress.firstReef.bonus?.claimed = true
-        progress.firstReef.nextWorldUnlocked = true
-        queueDiscoveries(from:previous,source:.bonus)
-        if save() { return true }
-        progress = previous
-        return false
     }
 
     private func queueDiscoveries(from old:ReefProgress,source:ReefDiscoveryReceipt.Source? = nil) {
@@ -1266,10 +1091,6 @@ final class ReefStore {
         else if progress.supplies.lives>old.supplies.lives {gained.append(.life)}
         if progress.supplies.unlimitedBoosts>old.supplies.unlimitedBoosts {gained.append(.storedBoost)}
         if progress.supplies.lighters>old.supplies.lighters {gained.append(.lighter)}
-        if progress.shots>old.shots {gained.append(.shot)}
-        if progress.currentChangers>old.currentChangers {gained.append(.current)}
-        if progress.currentAdders>old.currentAdders {gained.append(.currentAdder)}
-        if progress.bouncyBlocks>old.bouncyBlocks {gained.append(.bouncyBlock)}
         let unlearned=gained.filter{!progress.learnedDiscoveries.contains($0)}
         if let source,!unlearned.isEmpty {
             stagedDiscoveryReceipt = .init(source:source,items:unlearned)
@@ -1323,8 +1144,10 @@ final class ReefStore {
 
 
 enum ReefTestingEnvironment {
-    static var isLocalBuild: Bool {
-        #if DEBUG || targetEnvironment(simulator)
+    /// Current beta archives deliberately expose tools to every tester, even offline.
+    /// Remove PUFFPUFF_BETA_TOOLS from Release before a public App Store release.
+    static var isTestingBuild: Bool {
+        #if DEBUG || PUFFPUFF_BETA_TOOLS || targetEnvironment(simulator)
         true
         #else
         false

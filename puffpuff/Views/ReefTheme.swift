@@ -129,7 +129,7 @@ struct ResourceOrb: View {
     let kind: ReefIconKind
     let count: Int
     let label: String
-    private var tint: Color { label == "Glow" ? ReefTheme.gold : ReefTheme.cyan }
+    private var tint: Color { label == "Lumes" ? ReefTheme.gold : ReefTheme.cyan }
     var body: some View {
         HStack(spacing: 5) {
             ReefIcon(kind, size: 30)
@@ -227,7 +227,6 @@ extension View {
 }
 
 struct ReefSettingsView: View {
-    @State private var showDesignLab = false
     @State private var showReset = false
     @Binding var appearance: ReefAppearance
     @AppStorage("puffpuff.celebrationAnimations") private var celebrationAnimations = true
@@ -239,14 +238,14 @@ struct ReefSettingsView: View {
             ScrollView {
                 VStack(spacing: 12) {
                     HStack {
-                        Text("Settings").reefFont(size: 30, weight: .semibold, display: true)
+                        Text("puffpuff").reefFont(size: 30, weight: .semibold, display: true)
                         Spacer()
                         Button("Done") { dismiss() }.buttonStyle(ReefButtonStyle(kind: .quiet))
                     }.padding(.bottom, 4)
                     BloomLivesButton()
                     ReefAppearanceOptions(selection: $appearance).padding(.bottom, 6)
                     Toggle(isOn: $celebrationAnimations) {
-                        Text("Bloom celebrations").reefFont(size: 15, weight: .semibold)
+                        Text("Glow celebrations").reefFont(size: 15, weight: .semibold)
                     }
                     .toggleStyle(.switch).tint(ReefTheme.cyan)
                     .padding(.horizontal, 9).frame(minHeight: 44)
@@ -257,8 +256,6 @@ struct ReefSettingsView: View {
                     .toggleStyle(.switch).tint(ReefTheme.cyan)
                     .padding(.horizontal, 9).frame(minHeight: 44)
                     if store.testingToolsEnabled {
-                    Button("Playground · golf & paths") { showDesignLab = true }
-                        .buttonStyle(ReefButtonStyle(kind: .action))
                     ReefDebugRefills().padding(.bottom, 6)
                     ReefBloomStartOptions { dismiss() }
                     Button("Restart everything") {showReset=true}
@@ -271,19 +268,16 @@ struct ReefSettingsView: View {
             Button("Cancel",role:.cancel) {}
             Button("Restart everything",role:.destructive) {
                 if store.restartEverything() {
-                    for key in ["verticalCoral", "diagonalCoral", "lineCoral", "burstCoral"] {
+                    for key in ["verticalCoral", "diagonalCoral", "lineCoral", "burstCoral", "linkedGroup"] {
                         UserDefaults.standard.removeObject(forKey:"puffpuff.tutorial." + key)
                     }
                     dismiss()
                 }
             }
         } message: {Text("All levels, Trail progress and supplies will restart. A backup of this game is kept.")}
-        .sheet(isPresented: $showDesignLab) {
-            if store.testingToolsEnabled { ReefDesignLab().presentationDetents([.large]).presentationBackground(.clear) }
-        }
         .task { await store.refreshTestingAccess() }
         .onChange(of: store.testingToolsEnabled) { _, enabled in
-            if !enabled { showDesignLab = false; showReset = false }
+            if !enabled { showReset = false }
         }
         .environment(\.colorScheme, appearance.colorScheme)
         .preferredColorScheme(appearance.colorScheme)
@@ -372,15 +366,11 @@ extension ReefDebugSupply {
     var iconKind: ReefIconKind {
         switch self {
         case .glow: .glow
-        case .shots: .shot
         case .hints: .hint
         case .futureTellers: .futureTeller
         case .lives: .life
         case .lighters: .lighter
         case .boosts: .boostStored
-        case .currents: .current
-        case .currentAdders: .currentAdder
-        case .bouncyBlocks: .bouncyBlock
         }
     }
 }

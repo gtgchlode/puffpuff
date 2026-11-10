@@ -21,7 +21,7 @@ struct ReefSaveView: View {
                             if let saved = store.progress.savedAt {
                                 Text(saved, format: .dateTime.month().day().hour().minute()).reefFont(.caption).foregroundStyle(ReefTheme.muted)
                             }
-                            Text("Your coral pattern, taps, hints, Glow, shots, and treasure trail save as you play. From Home, choose Bloom, then start from the prefilled level to resume your current board.")
+                            Text("Your coral pattern, taps, hints, Lumes and treasure trail save as you play. Choose Glow from the Trail to resume your current board.")
                                 .reefFont(.subheadline)
                             Button("Save again") { store.checkpoint() }.buttonStyle(ReefButtonStyle(kind: .quiet))
                         }
@@ -29,7 +29,7 @@ struct ReefSaveView: View {
                     HStack {
                         Label("\(store.puzzle.level)", systemImage: "camera.macro")
                         Spacer()
-                        Text("\(store.progress.completedBloomLevels.count) / 100 bloomed")
+                        Text("\(store.progress.completedBloomLevels.count) / 185 bloomed")
                     }.reefFont(.subheadline)
                     HStack {
                         Label("Treasure trail", systemImage: "water.waves")

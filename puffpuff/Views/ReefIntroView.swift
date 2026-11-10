@@ -1,13 +1,13 @@
 import SwiftUI
 
-/// A short, illustrated introduction. It never spends resources or starts a putt.
+/// A short, illustrated introduction. It never spends resources.
 struct ReefIntroView: View {
     let kind: ReefIntroKind
     let onFinish: () -> Bool
     @State private var page = 0
     @State private var saveFailed = false
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
-    private var count: Int { kind == .trail ? 3 : 2 }
+    private let count = 3
 
     var body: some View {
         GeometryReader { geometry in
@@ -64,7 +64,7 @@ struct ReefIntroView: View {
                     Button {
                         if page == count - 1 { finish() } else { changePage(1) }
                     } label: {
-                        Text(page < count - 1 ? "Next" : kind == .trail ? "Let's explore" : "Let's putt")
+                        Text(page < count - 1 ? "Next" : "Let's explore")
                             .frame(maxWidth: .infinity, minHeight: 32)
                     }.buttonStyle(ReefButtonStyle(filled: true))
                 }.padding(.top, 8)
@@ -78,8 +78,8 @@ struct ReefIntroView: View {
     }
 
     private func slide(_ index: Int, height: CGFloat) -> some View {
-        let scene = kind == .trail ? index : index + 3
-        let title = ["Find home", "Play Bloom for Glow", "Win bonuses", "Putt Puff Puff home", "Explore for an easier putt"][scene]
+        let scene = index
+        let title = ["The Faded Garden", "Play Glow for Lumes", "Make it your own"][scene]
         return ScrollView {
             VStack(spacing: 20) {
                 ReefIntroArt(scene: scene)
@@ -93,38 +93,27 @@ struct ReefIntroView: View {
     @ViewBuilder private func explanation(scene: Int) -> some View {
         switch scene {
         case 0:
-            Text("Explore the path. Complete your tasks.")
+            Text("A storm dimmed the reef. PuffPuff needs to find his way home.")
             HStack(spacing: 26) {
                 VStack(spacing: 4) {
                     HStack(spacing: 0) {
-                        ForEach(0..<3) { _ in IntroTrailAsset(asset: .food).frame(width: 38, height: 48) }
+                        ForEach(0..<3) { _ in CoralArt(species:.rosyFan).frame(width:38,height:48) }
                     }
-                    Text("3 snacks").reefFont(.subheadline, weight: .semibold)
+                    Text("Relight 3 gardens").reefFont(.subheadline, weight: .semibold)
                 }
                 VStack(spacing: 4) {
-                    IntroHome().frame(width: 60, height: 48)
                     Text("Find home").reefFont(.subheadline, weight: .semibold)
                 }
-            }.accessibilityElement(children: .ignore).accessibilityLabel("Tasks: find three snacks and find home")
+            }.accessibilityElement(children: .ignore).accessibilityLabel("Tasks: relight three coral gardens and find home")
         case 1:
-            Text("Win Bloom to earn Glow.")
+            Text("Win Glow to earn Lumes.")
             Text("Light the path. Open chests.").foregroundStyle(ReefTheme.muted)
-        case 2:
-            Text("Finish your tasks, then play Bonus putt.")
-            Text("Fewer putts, more treasure.").foregroundStyle(ReefTheme.muted)
-        case 3:
-            Text("Pull back to aim. Release to putt.")
-            ReefIconLabel("Each putt uses 1 shot", .shot, size: 32).reefFont(.subheadline)
-            Text("6 putts per round. Home in 4 or fewer wins bonuses. A hole in one wins them all.")
-                .reefFont(.subheadline).foregroundStyle(ReefTheme.muted)
         default:
-            Text("Cleared obstacles stay gone.")
-            ReefIconLabel("Spend 1 changer to steer a current.", .current, size: 38)
-                .reefFont(.subheadline)
-            Text("Retry or explore more. Collect your best bonuses once to unlock the next reef.")
-                .reefFont(.subheadline).foregroundStyle(ReefTheme.muted)
+            Text("Make your home warm and welcoming.")
+            Text("Find treasure. Add your favorite things.").foregroundStyle(ReefTheme.muted)
         }
     }
+
     private func changePage(_ step: Int) {
         withAnimation(reduceMotion ? nil : .easeOut(duration: 0.18)) {
             page = min(count - 1, max(0, page + step))
@@ -203,30 +192,19 @@ private struct ReefIntroArt: View {
             }
             CoralArt(species: .rosyFan).frame(width: 69, height: 69).position(x: 47, y: 129)
             CoralArt(species: .honeyCups).frame(width: 85, height: 85).position(x: 281, y: 215)
-            IntroHome().frame(width: 130, height: 130).position(x: 247, y: 61)
+            if scene != 0 { IntroHome().frame(width:130,height:130).position(x:247,y:61) }
+            else { ReefMysteryHome().frame(width:90,height:90).position(x:247,y:61) }
             if scene == 0 {
                 ForEach(0..<3) { index in
-                    IntroTrailAsset(asset: .food).frame(width: 51, height: 51)
+                    CoralArt(species:.rosyFan).frame(width:51,height:51)
                         .position(x: [159.0, 180.0, 159.0][index], y: [199.0, 142.0, 89.0][index])
                 }
-            } else if scene == 4 {
-                IntroTrailAsset(asset: .kelpForest).frame(width: 83, height: 83)
-                    .opacity(0.3).position(x: 176, y: 163)
-                Image(systemName: "checkmark").font(.system(size: 25, weight: .bold))
-                    .foregroundStyle(ReefTheme.cyan).position(x: 176, y: 152)
-                ReefIcon(.current, size: 65).position(x: 116, y: 61)
-                Image(systemName: "arrow.up.right").font(.system(size: 27, weight: .semibold))
-                    .foregroundStyle(ReefTheme.cyan).position(x: 204, y: 112)
-            } else if scene == 3 {
-                Image(systemName: "arrow.down.left").font(.system(size: 28, weight: .semibold))
-                    .foregroundStyle(ReefTheme.gold).position(x: 32, y: 242)
-                ReefIcon(.shot, size: 55).position(x: 178, y: 157)
             } else {
                 ReefIcon(.hint, size: 55).position(x: 135, y: 78)
                 ReefIcon(.glow, size: 50).position(x: 175, y: 144)
-                ReefIcon(.shot, size: 48).position(x: 233, y: 160)
+                ReefIcon(.lighter, size: 48).position(x: 233, y: 160)
             }
-            PipPoseArtwork(inflation: scene == 3 ? 0.65 : 0, joy: scene == 3 ? 0 : 1,
+            PipPoseArtwork(inflation: 0, joy: 1,
                            time: reduceMotion ? 0 : time)
                 .frame(width: 115, height: 95).position(x: 66, y: 204)
         }

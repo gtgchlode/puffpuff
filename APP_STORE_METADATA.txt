@@ -1,0 +1,13 @@
+Requested App Store title: PuffPuff: Glow Puzzle
+Pause and Settings title: puffpuff
+Homescreen display name: puffpuff
+Puzzle mode: Glow
+Currency: Lumes
+
+This records requested branding. App Store Connect metadata is separate; this code update does not publish a listing or upload a build.
+
+Export compliance (November 7, 2026): both configurations generate
+ITSAppUsesNonExemptEncryption = false in the app Info.plist. Current source uses
+no custom encryption or third-party crypto library; StoreKit is an Apple system
+framework. New uploads include the declaration automatically. Reassess if future
+features/dependencies add non-exempt encryption. First included in build 2026110702.

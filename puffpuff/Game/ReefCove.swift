@@ -2,24 +2,26 @@ import Foundation
 
 /// Stable authored discoveries inside the existing saved quest areas.
 enum ReefCove {
-    enum Find { case passage,food,treasure,coral,hint,lives,lighter,current,shot }
+    enum Find { case passage,food,home,treasure,coral,hint,lives,lighter }
     struct Object:Identifiable {
         let area:String
         let slot:Int
         let find:Find
         let barrier:ReefBumper.Kind
         let baseCost:Int
-        var challengeKind:ReefMiniKind? {
-            guard !isChest else{return nil}
+        var legacyChallengeKind:ReefMiniKind? {
+            guard !isGift,find != .food else{return nil}
             return barrier == .kelp ? .kelp:barrier == .enemy ? .enemy:nil
         }
-        var cost:Int {baseCost*(challengeKind == nil ? 1:4)}
+        var cost:Int {baseCost}
         var id:String {"\(area):\(slot)"}
-        var isGift:Bool {[Find.hint,.lives,.lighter,.current,.shot].contains(find)}
+        var isGift:Bool {[Find.hint,.lives,.lighter].contains(find)}
         // A closed chest may hide a quest item as well as optional supplies.
-        var isChest:Bool {isGift || find == .food}
+        var isChest:Bool {isGift}
         var action:String {
             if isChest { return "Open" }
+            if find == .food { return "Relight garden" }
+            if find == .home { return "Relight home" }
             return switch barrier {
             case .kelp:"Clear kelp"
             case .sand:"Sweep sand"
@@ -32,29 +34,24 @@ enum ReefCove {
             guard !isChest,find == .coral || find == .passage,
                   barrier == .kelp || barrier == .sand,
                   let index=FirstReef.destinations.firstIndex(where:{$0.id == area}) else{return nil}
-            // Selected optional finds add blocks without changing old supply assignments.
-            if ["south:2","food-garden:3","ribbon-cove:0","shell-shelf:2"].contains(id) {return .bouncyBlock}
-            let rewards:[ReefDiscovery]=[.shot,.hint,.life,.lighter,.currentAdder]
+            let rewards:[ReefDiscovery]=[.hint,.hint,.life,.lighter,.life]
             return rewards[(index+slot)%rewards.count]
         }
         var result:String {
             switch find {
-            case .passage: FirstReef.node(area).puttingBenefit ?? "Passage found"
-            case .food:"Snack found!"
+            case .passage: "Passage found"
+            case .food:"Garden glowing!"
+            case .home:"Home is glowing!"
             case .treasure:FirstReef.node(area).treasureReward
             case .coral:"Coral lit"
             case .hint:"+1 hint"
             case .lives:"+2 lives"
             case .lighter:"+1 lighter"
-            case .current:"+1 current changer"
-            case .shot:"+3 shots"
             }
         }
     }
-    static let shotAreas:Set<String> = ["start","south","lower","north","home","ribbon-cove","shell-shelf","fin-lookout"]
-    static let shotsPerFind = 3
+    static let supplyAreas:Set<String> = ["start","south","lower","north","home","ribbon-cove","shell-shelf","fin-lookout"]
     // Original base prices retain the 50–100 Bloom-win economy.
-    // Kelp/fish now offer a shot challenge or an intentionally costly 4× Glow bypass.
     private static let passageCosts:[String:Int] = [
         "start":10,"south":16,"food-sand":20,"lower":22,"food-garden":22,
         "north":22,"food-middle":22,"home":16,"hint-shell":20,"shot-pearl":22,
@@ -77,10 +74,11 @@ enum ReefCove {
             else if slot == prize {
                 if node.kind == .food {find = .food}
                 else if node.kind == .treasure {find = .treasure}
+                else if area == "home" {find = .home}
                 else if area == "start" {find = .hint}
                 else if area == "lower" {find = .lives}
                 else if area == "north" {find = .lighter}
-                else if ["south","ribbon-cove","shell-shelf","fin-lookout","dead-end"].contains(area) {find = .current}
+                else if ["south","ribbon-cove","shell-shelf","fin-lookout","dead-end"].contains(area) {find = index.isMultiple(of:2) ? .hint:.lighter}
                 else {find = .coral}
             } else {find = .coral}
             let barrier:[ReefBumper.Kind]=[.kelp,.sand,.enemy]
@@ -89,13 +87,14 @@ enum ReefCove {
             case .passage: cost = node.kind == .clearance ? node.glowCost : passageCosts[area] ?? 16
             case .treasure: cost = node.glowCost
             case .food: cost = snackCosts[area] ?? 22
+            case .home: cost = 20
             case .coral: cost = deepCoves.contains(area) ? 10:8
             default: cost = supplyCost(in:area)
             }
             return Object(area:area,slot:slot,find:find,
                           barrier:(find == .treasure || find == .passage && node.kind == .clearance) ? node.barrierKind ?? .kelp:barrier[(index+slot)%3],baseCost:cost)
         }
-        if shotAreas.contains(area) {objects.append(.init(area:area,slot:4,find:.shot,barrier:.sand,baseCost:supplyCost(in:area)))}
+        if supplyAreas.contains(area) {objects.append(.init(area:area,slot:4,find:.hint,barrier:.sand,baseCost:supplyCost(in:area)))}
         return objects
     }
     static func isComplete(_ area:String,in state:FirstReefProgress)->Bool {
@@ -230,7 +229,7 @@ enum ReefCove {
         return result
     }
     static func uncover(_ object:Object,from state:FirstReefProgress)->ReefJourney? {
-        guard state.bonus?.claimed != true,state.location == object.area,
+        guard state.location == object.area,
               objects(in:object.area).contains(where:{$0.id == object.id}),
               !(state.coveSearches ?? []).contains(object.id) else{return nil}
         var next=state
@@ -242,13 +241,14 @@ enum ReefCove {
         var clearance:String?
         switch object.find {
         case .food:next.food.insert(object.area)
+        case .home:next.bubbaRescued=true
         case .treasure:next.treasures.insert(object.area);clearance=object.area
         case .passage:
             if FirstReef.node(object.area).kind == .clearance {next.cleared.insert(object.area);clearance=object.area}
         default:break
         }
-        // Finding home before the last snack still counts. Optional finds never gate golf.
-        if next.food.count == FirstReef.food.count && next.hasFoundHome { next.completed=true }
+        // Gardens and the restored home are the only requirements; chests and home furnishings are optional.
+        if next.food.count == FirstReef.food.count && next.hasRestoredHome { next.completed=true; next.nextWorldUnlocked=true }
         let frames=[ReefFlightFrame(time:0,position:state.position,food:state.food,treasures:state.treasures),
                     .init(time:0.55,position:state.position,food:next.food,treasures:next.treasures)]
         return .init(puttBegins:nil,clearedObstacle:clearance,frames:frames,outcome:next,

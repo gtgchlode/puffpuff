@@ -2,7 +2,8 @@
 set -euo pipefail
 puffpuff_root="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 puffpuff_tests="$(mktemp -d "${TMPDIR:-/tmp}/puffpuff-layout-check.XXXXXX")"
-xcrun swiftc -module-cache-path "$puffpuff_tests/modules" \
+# This suite exercises the temporary level picker; production gating has its own Release suite.
+xcrun swiftc -D DEBUG -module-cache-path "$puffpuff_tests/modules" \
   "$puffpuff_root/puffpuff/Game/CoralPuzzle.swift" \
   "$puffpuff_root/puffpuff/Game/FirstReef.swift" \
   "$puffpuff_root/puffpuff/Game/ReefMiniChallenge.swift" \

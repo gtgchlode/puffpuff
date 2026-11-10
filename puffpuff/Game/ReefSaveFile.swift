@@ -31,7 +31,7 @@ struct ReefSaveFile {
                 let saved = try decode(Data(contentsOf: url))
                 return ReefLoadedSave(progress: saved,
                     message: index == 1 ? "Your last save couldn't be opened, so puffpuff recovered the previous backup. The original file is kept for recovery." : nil,
-                    needsSave: index == 1 || saved.version < 28)
+                    needsSave: index == 1 || saved.version < 32)
             } catch ReefSaveError.newerVersion {
                 return ReefLoadedSave(message: "This reef was saved by a newer version of puffpuff. Update the app to continue. Your save has been kept.", blocked: true)
             } catch { foundUnreadableSave = true }
@@ -94,7 +94,7 @@ struct ReefSaveFile {
         guard Set(progress.pendingDiscoveries).count == progress.pendingDiscoveries.count,
               progress.learnedDiscoveries.isDisjoint(with:progress.pendingDiscoveries) else {throw ReefSaveError.invalidData}
         guard progress.lastBloomTapTotals.allSatisfy({ key, value in
-            Int(key).map { (1...100).contains($0) } == true && value.valid
+            Int(key).map { (1...185).contains($0) } == true && value.valid
         }) else { throw ReefSaveError.invalidData }
         try validatePuzzle(progress.puzzle)
         if progress.version >= 11 {
@@ -121,6 +121,8 @@ struct ReefSaveFile {
               supplies.unlimitedUntil.map({ $0.timeIntervalSinceReferenceDate.isFinite }) ?? true
         else { throw ReefSaveError.invalidData }
         guard (0..<Int.max).contains(progress.bloomRewardWins),
+              (progress.version < 29 || progress.firstReef.glowPuzzleRevision == 1),
+              (progress.version < 30 || progress.firstReef.rescueRevision == 1),
               (progress.version < 8 || progress.firstReef.layoutRevision == 3), FirstReef.valid(progress.firstReef), progress.glow >= 0, progress.shots >= 0, progress.hints >= 0, progress.futureTellers >= 0, progress.currentChangers >= 0, progress.currentAdders >= 0, progress.bouncyBlocks >= 0,
               progress.version < 16 || progress.firstReef.coveSearches != nil,
               progress.version < 16 || progress.firstReef.bonus == nil ||
@@ -130,8 +132,8 @@ struct ReefSaveFile {
               progress.hintRefillHistory.allSatisfy({ $0.hints > 0 }),
               progress.clearedObjects.isSubset(of: obstacleIDs),
               progress.restoredStops.allSatisfy({ (0..<10).contains($0) }),
-              progress.completedBloomLevels.allSatisfy({ (1...100).contains($0) }),
-              progress.bestBloomMoves.allSatisfy({ key, moves in Int(key).map { (1...100).contains($0) } == true && moves >= 0 }),
+              progress.completedBloomLevels.allSatisfy({ (1...185).contains($0) }),
+              progress.bestBloomMoves.allSatisfy({ key, moves in Int(key).map { (1...185).contains($0) } == true && moves >= 0 }),
               progress.distances.allSatisfy({ key, distance in Int(key).map { (0..<10).contains($0) } == true && distance.isFinite && (0...1).contains(distance) }),
               progress.activeStopID.map({ (0..<10).contains($0) }) ?? true,
               progress.lastTrailStopID.map({ (0..<10).contains($0) }) ?? true
@@ -152,17 +154,25 @@ struct ReefSaveFile {
         guard puzzle.earnedCurrentAdder != true || (puzzle.isComplete && puzzle.rewarded) else {throw ReefSaveError.invalidData}
         guard puzzle.earnedLighter != true || (puzzle.isComplete && puzzle.rewarded) else { throw ReefSaveError.invalidData }
         guard BloomTapTotals(total: puzzle.moves, counted: puzzle.spentTaps).valid,
-              puzzle.undoTap == nil || (puzzle.isCoral(puzzle.undoTap!) && puzzle.spentTaps > 0)
+              puzzle.undoTap == nil || (puzzle.isCoral(puzzle.undoTap!) && puzzle.spentTaps > 0),
+              puzzle.undoTapRefundable != true || puzzle.undoTap != nil
         else { throw ReefSaveError.invalidData }
         let indices = Set(puzzle.cells.indices)
         let gaps = Set(puzzle.gaps ?? [])
         let verticals = Set(puzzle.verticals ?? [])
         let rows = Set(puzzle.rowCorals ?? []), columns = Set(puzzle.columnCorals ?? [])
         let bursts = Set(puzzle.burstCorals ?? [])
+        let linkedPairs = puzzle.linkedPairs ?? []
+        let linkedTiles = linkedPairs.flatMap { $0 }
+        let cages = Set(puzzle.cagedCorals ?? [])
+        let miniColors = puzzle.miniColorCorals ?? []
+        let miniPatterns = puzzle.miniPatterns ?? []
+        let miniOrder = puzzle.miniOrder ?? []
         let ruleTiles = [puzzle.stones, puzzle.currents, puzzle.stars, puzzle.verticals ?? [],
-                         puzzle.rowCorals ?? [], puzzle.columnCorals ?? [], puzzle.burstCorals ?? [], puzzle.gaps ?? []].flatMap { $0 }
+                         puzzle.rowCorals ?? [], puzzle.columnCorals ?? [], puzzle.burstCorals ?? [], puzzle.gaps ?? [],
+                         linkedTiles, Array(cages), miniColors].flatMap { $0 }
         let lighterCorals = Set(puzzle.lighterCorals ?? [])
-        guard (1...100).contains(puzzle.level), (1...5).contains(puzzle.size),
+        guard (1...185).contains(puzzle.level), (1...6).contains(puzzle.size),
               puzzle.cells.count == puzzle.size * puzzle.size, puzzle.moves >= 0,
               puzzle.history.count <= 100, puzzle.history.allSatisfy({ $0.count == puzzle.cells.count }),
               Set(puzzle.stones + puzzle.currents + puzzle.stars).isSubset(of: indices),
@@ -171,13 +181,28 @@ struct ReefSaveFile {
               verticals.isSubset(of: indices), verticals.count == (puzzle.verticals ?? []).count,
               verticals.isDisjoint(with: puzzle.stones + puzzle.currents + puzzle.stars + Array(gaps)),
               rows.isSubset(of: indices), columns.isSubset(of: indices), bursts.isSubset(of: indices),
+              linkedPairs.allSatisfy({ $0.count >= 2 && $0.count <= puzzle.cells.count && Set($0).count == $0.count }),
+              linkedTiles.count == Set(linkedTiles).count, Set(linkedTiles).isSubset(of: indices),
+              cages.count == (puzzle.cagedCorals ?? []).count, cages.isSubset(of: indices),
               Set(ruleTiles).count == ruleTiles.count,
               lighterCorals.count == (puzzle.lighterCorals ?? []).count,
               lighterCorals.allSatisfy({ puzzle.isCoral($0) && puzzle.cells[$0] }),
               gaps.allSatisfy({ puzzle.cells[$0] }), puzzle.coralCount > 0,
               puzzle.stones.allSatisfy({ puzzle.cells[$0] }),
+              cages.allSatisfy({ puzzle.isCoral($0) }),
               (puzzle.tapLimit ?? 1) > 0, (puzzle.extraTaps ?? 0) >= 0
         else { throw ReefSaveError.invalidData }
+        if let mini = puzzle.miniCells {
+            guard mini.count == 4, miniColors.count == 4, Set(miniColors).count == 4,
+                  miniColors.allSatisfy({ puzzle.isCoral($0) }),
+                  miniPatterns.count == 4,
+                  miniPatterns.allSatisfy({ !$0.isEmpty && Set($0).count == $0.count && $0.allSatisfy { (0..<mini.count).contains($0) } }),
+                  miniOrder.count == 4, Set(miniOrder) == Set(0..<4),
+                  (0...miniOrder.count).contains(puzzle.miniStep ?? 0)
+            else { throw ReefSaveError.invalidData }
+        } else if puzzle.miniColorCorals != nil || puzzle.miniPatterns != nil || puzzle.miniOrder != nil || puzzle.miniStep != nil {
+            throw ReefSaveError.invalidData
+        }
         if let final = puzzle.futureTellerFinalTap {
             guard puzzle.isCoral(final), !puzzle.isTutorial, !puzzle.isComplete,
                   !puzzle.affected(at: final).isEmpty else { throw ReefSaveError.invalidData }
